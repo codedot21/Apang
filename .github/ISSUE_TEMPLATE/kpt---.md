@@ -1,7 +1,7 @@
 ---
 name: KPT 회고
 about: KPT 회고
-title: "[KPT]"
+title: "[KPT] N주차 O요일"
 labels: ''
 assignees: ''
 
