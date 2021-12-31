@@ -1,7 +1,7 @@
 ---
 name: Dev Log
 about: Dev Log
-title: "[Dev-Log] 일일회고 N주차 O요일"
+title: "[Dev-Log] 일일회고 N주차 O요일 - OOO"
 labels: ''
 assignees: ''
 
