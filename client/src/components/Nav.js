@@ -12,7 +12,6 @@ export const NavContainer = styled(Container)`
   position: sticky;
   align-items: center;
   height: 8rem;
-  }
 `;
 
 export const LogoWrap = styled(Link)`
@@ -59,9 +58,9 @@ const DropDownList = styled.ul``;
 export const MenuBtn = styled.button`
   background: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.white};
-  font-size: 3rem
+  font-size: 3rem;
   font-weight: bold;
-  font-family: Noto Sans CJK KR; 
+  font-family: Noto Sans CJK KR;
   display: block;
   margin-right: auto;
   margin-left: auto;
@@ -76,11 +75,10 @@ export const MenuBtn = styled.button`
     background-color: ${({ theme }) => theme.color.button};
     color: black;
   }
-  
 `;
 
 export const Btn = styled.button`
-  font-family: Noto Sans CJK KR; 
+  font-family: Noto Sans CJK KR;
   display: flex;
   margin-right: auto;
   margin-left: auto;
@@ -89,7 +87,7 @@ export const Btn = styled.button`
   padding-right: 1rem;
   padding-left: 1rem;
   color: #3b7de0;
-  font-size: 3rem
+  font-size: 3rem;
   font-weight: bold;
   outline: none;
   border: none;
@@ -102,14 +100,14 @@ export const DocModal = styled.button`
   white-space: nowrap;
   padding: 10px 20px;
   color: #3b7de0;
-  font-size: 16px
+  font-size: 16px;
   outline: none;
   border: none;
   cursor: pointer;
   &:hover {
     transition: all 0.3s ease-out;
     background: #fff;
-    background-color: #63B5F6;
+    background-color: #63b5f6;
   }
   @media screen and (max-width: 960px) {
     width: 100%;

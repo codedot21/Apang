@@ -58,14 +58,13 @@ const UserNickNameTitle = styled.div`
 `;
 
 const NickName = styled.input`
-  float:left
+  float: left;
   margin-top: 40px;
   width: 30%;
   padding: 1rem;
   margin-top: 10px;
   border: 1px solid black;
   border-radius: 30px;
- 
 `;
 
 const DocNameTitle = styled.div`
