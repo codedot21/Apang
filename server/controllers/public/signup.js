@@ -15,7 +15,12 @@ module.exports = (req, res) => {
     users
       .findOrCreate({
         where: { email: userInfo.email },
-        defaults: { password: userInfo.password, nickname: userInfo.nickname },
+        defaults: {
+          password: userInfo.password,
+          nickname: userInfo.nickname,
+          profile_img: "미정",
+          auth: 2,
+        },
       })
       .then(([users, created]) => {
         // create => true : 중복되는 이메일이 없어서 새로 만들어줌.
