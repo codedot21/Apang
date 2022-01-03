@@ -1,7 +1,7 @@
 ---
 name: Error Handling
 about: Error Handling
-title: "[Error] [Client / Server] 간단한 에러 제목?"
+title: "[Error] [Client / Server / Deploy / Git] 간단한 에러 제목?"
 labels: ''
 assignees: ''
 
