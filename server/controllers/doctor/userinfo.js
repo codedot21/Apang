@@ -1,4 +1,4 @@
-const { doctors } = require("../../models/users");
+const { doctors } = require("../../models/doctors");
 const { isAuthorized } = require("../tokenFunctions");
 
 module.exports = (req, res) => {
