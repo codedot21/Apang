@@ -98,9 +98,9 @@ function SignUpModals({ open, close, docClose, docCloseA }) {
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
   return open ? (
-    <ModalBackGround onClick={close}>
+    <ModalBackGround>
       <ModalBox>
-        <LoginHeader>회원가입</LoginHeader>
+        <LoginHeader onClick={close}>회원가입</LoginHeader>
         <input type="radio" name="user" onClick={docClose} />
         <BtnMenu>의사</BtnMenu>
         <input type="radio" name="user" onClick={docCloseA} />

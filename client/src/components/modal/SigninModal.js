@@ -14,6 +14,7 @@ export const ModalBackGround = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 0;
 `;
 
 export const ModalBox = styled.div`
@@ -88,13 +89,20 @@ export const Button = styled.button`
   }
 `;
 
+export const ModalContainer = styled.div`
+  // TODO : Modal을 구현하는데 전체적으로 필요한 CSS를 구현합니다.
+  text-align: center;
+  padding: 8%;
+  border: 8%;
+`;
+
 function SigninModal({ open, close }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return open ? (
-    <ModalBackGround onClick={close}>
+    <ModalBackGround>
       <ModalBox>
-        <LoginHeader>로그인</LoginHeader>
+        <LoginHeader onClick={close}>로그인</LoginHeader>
         <LoginBody>
           <div>
             <input type="email" placeholder="Email" />
@@ -102,7 +110,7 @@ function SigninModal({ open, close }) {
           <div>
             <input type="password" placeholder="Password" />
           </div>
-          <Button onClick={close}>로그인</Button>
+          <Button onClick={close}>로그인 </Button>
         </LoginBody>
         <LoginFooter>
           <SocialLoginHeader>소셜로그인</SocialLoginHeader>

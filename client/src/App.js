@@ -8,10 +8,6 @@ import UserMypage from "./pages/UserMypage.js";
 import DocMypage from "./pages/DocMypage.js";
 import Footer from "./components/Footer.js";
 
-import SigninModal from "./components/modal/SigninModal.js";
-import SignUpModals from "./components/modal/SignUpModal.js";
-import SignUpDocModal from "./components/modal/SignUpDocModal.js";
-
 function App() {
   return (
     <>
@@ -21,9 +17,6 @@ function App() {
         <Route path="/authpage" element={<AuthPage />} />
         <Route path="/mypage/publicprofile" element={<UserMypage />} />
         <Route path="/mypage/doctorprofile" element={<DocMypage />} />
-        <Route path="/signin" element={<SigninModal />} />
-        <Route path="/public/signup" element={<SignUpModals />} />
-        <Route path="/doctor/signup" element={<SignUpDocModal />} />
       </Routes>
       <Footer />
     </>
