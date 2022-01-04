@@ -12,7 +12,6 @@ export const NavContainer = styled(Container)`
   position: sticky;
   align-items: center;
   height: 8rem;
-  }
 `;
 
 export const LogoWrap = styled(Link)`
@@ -156,7 +155,7 @@ function Nav() {
   return (
     <>
       <NavContainer>
-        <LogoWrap to="/">
+        <LogoWrap to="/mypage/publicprofile">
           <Logo src={Apang} />
         </LogoWrap>
         <NavBtn>

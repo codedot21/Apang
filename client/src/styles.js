@@ -35,7 +35,7 @@ export const Container = styled.div`
 `;
 
 export const Button = styled.button`
-  font-family: Noto Sans CJK KR; 
+  font-family: Noto Sans CJK KR;
   margin-right: auto;
   margin-left: auto;
   background: #ffffff;
@@ -51,7 +51,6 @@ export const Button = styled.button`
   &:hover {
     background-color: #63b5f6;
   }
-
 `;
 
 export default GlobalStyle;
