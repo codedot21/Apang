@@ -8,16 +8,17 @@ import SignUpModal from "../components/modal/SignUpModal.js";
 import SignUpDocModal from "../components/modal/SignUpDocModal.js";
 
 export const NavContainer = styled(Container)`
+  background: ${({ theme }) => theme.color.white};
   display: flex;
-  position: sticky;
+  position: fixed;
   align-items: center;
-  height: 8rem;
+  height: 6rem;
 `;
 
 export const LogoWrap = styled(Link)`
   display: flex;
-  margin-left: 3rem;
-  padding-top: 1rem;
+  margin-left: 25rem;
+  padding-top: 0.5rem;
   @media ${({ theme }) => theme.device.mobile} {
     margin-left: 0.5rem;
   } ;
@@ -26,7 +27,7 @@ export const LogoWrap = styled(Link)`
 export const Logo = styled.img`
   width: 10rem;
   @media ${({ theme }) => theme.device.mobile} {
-    width: 6rem;
+    width: 8rem;
   } ;
 `;
 
@@ -36,7 +37,11 @@ export const NavBtn = styled.li`
   align-items: center;
   text-align: center;
   list-style: none;
-  right: 3rem;
+  right: 32rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    right: 1rem;
+    bottom: 2.1rem;
+  } ;
 `;
 
 export const NavLink = styled(Link)`
@@ -45,21 +50,20 @@ export const NavLink = styled(Link)`
 
 export const NavMenu = styled.div``;
 
-const DropDownListContainer = styled.div`
+export const DropDownListContainer = styled.div`
   background: ${({ theme }) => theme.color.button};
   display: block;
   position: absolute;
-  right: 2.8rem;
-  width: 5.1rem;
+  right: 3.7rem;
+  width: 6.4rem;
 `;
 
-const DropDownList = styled.ul``;
+export const DropDownList = styled.ul``;
 
 export const MenuBtn = styled.button`
   background: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.white};
-  font-size: 3rem;
-  font-weight: bold;
+  font-size: 1rem;
   font-family: Noto Sans CJK KR;
   display: block;
   margin-right: auto;
@@ -87,7 +91,7 @@ export const Btn = styled.button`
   padding-right: 1rem;
   padding-left: 1rem;
   color: #3b7de0;
-  font-size: 3rem;
+  font-size: 1.3rem;
   font-weight: bold;
   outline: none;
   border: none;
@@ -165,7 +169,6 @@ function Nav() {
                 <DropDownList>
                   <MenuBtn onClick={openSigninModal}>로그인</MenuBtn>
                   <SigninModal open={loginOpen} close={openSigninModal} />
-
                   <MenuBtn onClick={openSignupModal}>회원가입</MenuBtn>
                   <SignUpModal
                     open={signOpen}
@@ -173,13 +176,21 @@ function Nav() {
                     docClose={openDocSign}
                     docCloseA={openPublicSign}
                   />
-
                   <MenuBtn onClick={openDocSignModal}>의사가입</MenuBtn>
                   <SignUpDocModal
                     open={docSignOpen}
                     close={openDocSignModal}
                     docClose={openDocSign}
                   />
+                  <NavLink to="/mypage/publicprofile">
+                    <MenuBtn>일반마이</MenuBtn>
+                  </NavLink>
+                  <NavLink to="/mypage/doctorprofile">
+                    <MenuBtn>의사마이</MenuBtn>
+                  </NavLink>
+                  <NavLink to="/authpage">
+                    <MenuBtn>관리자</MenuBtn>
+                  </NavLink>
                 </DropDownList>
               </DropDownListContainer>
             ) : null}

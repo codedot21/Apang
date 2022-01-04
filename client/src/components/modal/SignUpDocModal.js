@@ -97,9 +97,9 @@ export const BtnMenu = styled.button`
 
 function SignUpdocModals({ open, close }) {
   return open ? (
-    <ModalBackGround onClick={close}>
+    <ModalBackGround>
       <ModalBox>
-        <LoginHeader>회원가입</LoginHeader>
+        <LoginHeader onClick={close}>회원가입</LoginHeader>
         <input type="radio" name="user" />
         <BtnMenu>의사</BtnMenu>
         <input type="radio" name="user" onClick={close} />

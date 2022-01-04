@@ -27,7 +27,7 @@ export const theme = {
 export const Container = styled.div`
   z-index: 1;
   width: 100%;
-  max-width: 80rem;
+  // max-width: 1920px;
   margin-right: auto;
   margin-left: auto;
   padding-right: 1rem;
@@ -35,7 +35,7 @@ export const Container = styled.div`
 `;
 
 export const Button = styled.button`
-  font-family: Noto Sans CJK KR; 
+  font-family: Noto Sans CJK KR;
   margin-right: auto;
   margin-left: auto;
   background: #ffffff;
@@ -43,7 +43,7 @@ export const Button = styled.button`
   padding-right: 1rem;
   padding-left: 1rem;
   color: #3b7de0;
-  font-size: 3rem
+  font-size: 1.3rem;
   font-weight: bold;
   outline: none;
   border: none;
@@ -51,7 +51,6 @@ export const Button = styled.button`
   &:hover {
     background-color: #63b5f6;
   }
-
 `;
 
 export default GlobalStyle;

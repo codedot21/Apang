@@ -4,7 +4,8 @@ import { Container } from "../styles";
 
 export const DocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
-  padding: 2rem 2rem;
+  display: column;
+  padding: 4rem 2rem;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -58,7 +59,7 @@ const UserNickNameTitle = styled.div`
 `;
 
 const NickName = styled.input`
-  float: left;
+  // float: left;
   margin-top: 40px;
   width: 30%;
   padding: 1rem;
