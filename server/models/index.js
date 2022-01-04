@@ -43,4 +43,17 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+// associations
+const { users, comments, doctors, hashtag, qna, reviews } = sequelize.models;
+users.hasMany(reviews);
+reviews.belongsTo(users);
+users.hasMany(qna);
+qna.belongsTo(users);
+qna.hasMany(comments);
+comments.belongsTo(qna);
+doctors.hasMany(comments);
+comments.belongsTo(doctors);
+hashtag.hasMany(qna);
+qna.hasMany(hashtag);
+
 module.exports = db;

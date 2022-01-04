@@ -19,7 +19,11 @@ export const MainContainer = styled.div`
 export const MainWrap = styled.div`
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   align-items: center
+=======
+  align-items: center;
+>>>>>>> 54a21c22a5701a15c79ea57bc4e67137506bf1c1
   justify-content: center;
   text-align: left;
   margin-top: 2rem;
@@ -30,7 +34,11 @@ export const MainWrap = styled.div`
 export const MainWrapQna = styled.div`
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   align-items: center
+=======
+  align-items: center;
+>>>>>>> 54a21c22a5701a15c79ea57bc4e67137506bf1c1
   justify-content: center;
   text-align: left;
   margin-top: 8rem;

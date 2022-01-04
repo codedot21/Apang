@@ -158,7 +158,11 @@ function Nav() {
   return (
     <>
       <NavContainer>
+<<<<<<< HEAD
         <LogoWrap to="/mypage/publicprofile">
+=======
+        <LogoWrap to="/authpage">
+>>>>>>> 54a21c22a5701a15c79ea57bc4e67137506bf1c1
           <Logo src={Apang} />
         </LogoWrap>
         <NavBtn>

@@ -97,6 +97,7 @@ function SignUpModals({ open, close, docClose, docCloseA }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
+
   return open ? (
     <ModalBackGround>
       <ModalBox>
