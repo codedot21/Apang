@@ -1,4 +1,4 @@
-const { doctors } = require("../../models/doctors");
+const { doctors } = require("../../models");
 
 module.exports = (req, res) => {
   // console.log(req.body);
