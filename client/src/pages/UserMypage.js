@@ -4,7 +4,7 @@ import { Container } from "../styles";
 
 export const UserContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
-  padding: 2rem 2rem;
+  padding: 4rem 2rem;
   flex-direction: row;
   justify-content: center;
   align-items: center;

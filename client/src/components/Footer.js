@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 
-export const FooterContainer = styled(Container)`
+export const FooterContainer = styled.div`
   // background-color: #dee2e6;
   background-color: ${({ theme }) => theme.color.footer};
   display: flex;
