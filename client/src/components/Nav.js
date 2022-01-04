@@ -158,7 +158,7 @@ function Nav() {
   return (
     <>
       <NavContainer>
-        <LogoWrap to="/">
+        <LogoWrap to="/mypage/doctorprofile">
           <Logo src={Apang} />
         </LogoWrap>
         <NavBtn>

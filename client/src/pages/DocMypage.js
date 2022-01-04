@@ -59,7 +59,6 @@ const UserNickNameTitle = styled.div`
 `;
 
 const NickName = styled.input`
-  // float: left;
   margin-top: 40px;
   width: 30%;
   padding: 1rem;
@@ -205,13 +204,13 @@ function DocMypage() {
           <UserNickNameTitle>이름</UserNickNameTitle>
           <NickName type="text" placeholder="이름" />
 
-          <ProfileEditing>프로필수정</ProfileEditing>
+          <ProfileEditing>회원정보 수정</ProfileEditing>
 
-          <NickNameEdit>수정</NickNameEdit>
+          {/* <NickNameEdit>수정</NickNameEdit> */}
 
           <DocNameTitle>병원명</DocNameTitle>
           <HospitalName type="text" placeholder="병원명" />
-          <HospitalBtn>수정</HospitalBtn>
+          {/* <HospitalBtn>수정</HospitalBtn> */}
         </UserContainerLine>
 
         {/* 회원정보 끝 */}

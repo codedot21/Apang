@@ -59,14 +59,12 @@ const UserNickNameTitle = styled.div`
 `;
 
 const NickName = styled.input`
-  float:left
   margin-top: 40px;
   width: 30%;
   padding: 1rem;
   margin-top: 10px;
   border: 1px solid black;
   border-radius: 30px;
- 
 `;
 
 const ProfileEditing = styled.button`
@@ -169,8 +167,8 @@ function UserMypage() {
           <UserEmail>email</UserEmail>
           <UserNickNameTitle>닉네임</UserNickNameTitle>
           <NickName type="text" placeholder="닉네임" />
-          <ProfileEditing>프로필수정</ProfileEditing>
-          <NickNameEdit>수정</NickNameEdit>
+          <ProfileEditing>회원정보 수정</ProfileEditing>
+          {/* <NickNameEdit>수정</NickNameEdit> */}
         </UserContainerLine>
 
         {/* 회원정보 끝 */}
