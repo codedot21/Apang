@@ -19,7 +19,7 @@ export const MainContainer = styled.div`
 export const MainWrap = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center
+  align-items: center;
   justify-content: center;
   text-align: left;
   margin-top: 2rem;
@@ -30,7 +30,7 @@ export const MainWrap = styled.div`
 export const MainWrapQna = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center
+  align-items: center;
   justify-content: center;
   text-align: left;
   margin-top: 8rem;
