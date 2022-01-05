@@ -8,85 +8,73 @@ import Doc from "../images/doc.jpg";
 
 export const MainContainer = styled.div`
   background-color: ${({ theme }) => theme.color.white};
-  height: 65rem;
-  // width: 156rem;
-  width: 148rem;
+  height: 50em;
+  width: 88%;
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: 1920px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  @media screen and (max-width: 1023px) {
+    display: block;
+    text-align: center;
+    height: 100%;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    display: block;
+    text-align: center;
+    height: 100%;
+  }
 `;
 
 export const MainWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: left;
-  margin-top: 2rem;
-  margin-left: 8rem;
-  margin-right: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    display: block;
+    margin-left: 0;
+    margin-right: 0;
+  }
 `;
-
-export const MainWrapQna = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: left;
-  margin-top: 8rem;
-  margin-left: 4rem;
-  margin-right: 9rem;
-`;
-
-export const ContentWrapReview = styled.div`
-  text-align: center;
-`;
-
-export const ContentWrapQna = styled.div`
-  text-align: center;
-  margin-bottom: 4rem;
-`;
-
-export const ContentWrapFind = styled.div`
-  text-align: center;
-`;
-
-export const BoxWrapReview = styled.div`
-  text-align: center;
-`;
-
-export const BoxWrapQna = styled.div`
-  text-align: center;
-`;
-
-export const BoxWrapFind = styled.div`
-  text-align: center;
-  margin-top: 7rem;
-  margin-bottom: 3rem;
+export const ImgWrap = styled.div`
+  @media ${({ theme }) => theme.device.mobile} {
+    text-align: center;
+  }
 `;
 
 export const Title = styled.h1`
   font-size: 4.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
+
+  @media screen and (max-width: 1023px) {
+    font-size: 2.9rem;
+    text-align: center;
+    margin-bottom: 1.3rem;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
 `;
 
 export const Text = styled.p`
   font-size: 2.5rem;
   margin-bottom: 2rem;
   margin-right: 2rem;
-`;
 
-export const ContentTitle = styled.p`
-  font-size: 2.5rem;
-  margin-bottom: 0.7rem;
-  font-weight: 500;
-`;
-
-export const ContentText = styled.p`
-  font-size: 1.7rem;
-  margin-bottom: 1.5rem;
-  font-weight: 400;
+  @media screen and (max-width: 1023px) {
+    font-size: 1.7rem;
+    text-align: center;
+    margin-bottom: 1.3rem;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 0.8rem;
+    text-align: center;
+    margin-bottom: 1.3rem;
+  }
 `;
 
 export const Search = styled.p`
@@ -99,15 +87,115 @@ export const Search = styled.p`
     font-size: 1.5rem;
     border: 0.1rem solid black;
   }
+  @media screen and (max-width: 1023px) {
+    display: none;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    display: none;
+  }
 `;
 
 export const Img = styled.img`
   width: 65rem;
+  @media screen and (max-width: 1023px) {
+    width: 70rem;
+    max-width: 40rem;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 60rem;
+    max-width: 20rem;
+  }
+`;
+
+export const MainWrapQna = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    display: block;
+    margin-left: 0;
+    margin-right: 0;
+  }
+`;
+
+export const ContentWrapReview = styled.div`
+  text-align: center;
+  @media ${({ theme }) => theme.device.mobile} {
+    align-items: center;
+  }
+`;
+
+export const ContentWrapQna = styled.div`
+  text-align: center;
+  margin-bottom: 4rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    align-items: center;
+  }
+`;
+
+export const ContentWrapFind = styled.div`
+  text-align: center;
+  @media ${({ theme }) => theme.device.mobile} {
+    align-items: center;
+  }
+`;
+
+export const BoxWrapReview = styled.div`
+  text-align: center;
+  @media ${({ theme }) => theme.device.mobile} {
+    align-items: center;
+  }
+`;
+
+export const BoxWrapQna = styled.div`
+  text-align: center;
+  @media ${({ theme }) => theme.device.mobile} {
+    align-items: center;
+  }
+`;
+
+export const BoxWrapFind = styled.div`
+  text-align: center;
+  margin-top: 7rem;
+  margin-bottom: 3rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    align-items: center;
+  }
+`;
+
+export const ContentTitle = styled.p`
+  font-size: 2.5rem;
+  margin-bottom: 0.7rem;
+  font-weight: 500;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+`;
+
+export const ContentText = styled.p`
+  font-size: 1.7rem;
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 0.8rem;
+    text-align: center;
+    margin-bottom: 1.3rem;
+  }
 `;
 
 export const ImgThree = styled.img`
   width: 35rem;
   margin-bottom: 2rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 15rem;
+    max-width: 20rem;
+    align-items: center;
+  }
 `;
 
 export const Button = styled.button`
@@ -125,6 +213,24 @@ export const Button = styled.button`
     background: #fff;
     background-color: #002171;
   }
+  @media screen and (max-width: 1023px) {
+    font-size: 1.5rem;
+    width: 10rem;
+    max-width: 20rem;
+    margin-left: 6.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1.3rem;
+    padding: 0.3rem;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1rem;
+    width: 10rem;
+    max-width: 20rem;
+    margin-left: 6.5rem;
+    margin-top: 1rem;
+    padding: 0.3rem;
+  }
 `;
 
 function Main() {
@@ -138,7 +244,9 @@ function Main() {
             <input type="text" placeholder="입력해주세요" />
           </Search>
         </MainWrap>
-        <Img src={Hospital}></Img>
+        <ImgWrap>
+          <Img src={Hospital}></Img>
+        </ImgWrap>
       </MainContainer>
       <MainContainer>
         <ContentWrapReview>
