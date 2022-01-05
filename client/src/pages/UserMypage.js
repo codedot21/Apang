@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
+import axios from "axios";
 
 export const UserContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -155,6 +156,7 @@ const MyreviewTitle = styled.h2`
 // 마이 큐엔에이 시작
 // 마이 큐엔에이 끝
 
+// 상현 수정
 function UserMypage() {
   const [imgInfo, setImgInfo] = useState({
     file: [],
@@ -167,6 +169,25 @@ function UserMypage() {
       filepreview: URL.createObjectURL(e.target.files[0]),
     });
   };
+
+  // 수정
+  // const [isSucces, setSuccess] = useState(null);
+  const submit = async () => {
+    console.log("저장");
+    const formdata = new FormData();
+    formdata.append("apang", imgInfo.file);
+    console.log(formdata);
+    axios.post("http://localhost:80/public/profile", formdata, {
+      headers: { "Content-type": "multipart/form-data" },
+    });
+    // .then((res) => {
+    //   console.warn(res);
+    //   if (res.data.success === 1) {
+    //     setSuccess("이미지가 성공적으로 업데이트 되었습니다");
+    //   }
+    // });
+  };
+
   return (
     <>
       <UserContainer>
@@ -193,8 +214,8 @@ function UserMypage() {
           <UserEmail>email</UserEmail>
           <UserNickNameTitle>닉네임</UserNickNameTitle>
           <NickName type="text" placeholder="닉네임" />
-          <ProfileEditing>회원정보 수정</ProfileEditing>
-          {/* <NickNameEdit>수정</NickNameEdit> */}
+          <ProfileEditing onClick={() => submit()}>프로필수정</ProfileEditing>
+          <NickNameEdit>수정</NickNameEdit>
         </UserContainerLine>
 
         {/* 회원정보 끝 */}
