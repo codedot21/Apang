@@ -21,78 +21,65 @@ const Title = styled.h1`
 const UserContainerLine = styled.div`
   border: 1px solid #b5afaf;
   padding: 2rem;
-  height: 200px;
+  height: 190px;
   width: 80%;
   margin: 0 auto;
 `;
 
-const Profile = styled.input`
+const Profilecontainer = styled.div`
   float: left;
-  width: 30%;
-  height: 100px;
-  margin-right: 30px;
+  width: 40%;
   text-align: center;
-  border: 1px solid #b5afaf;
+  height: 80%;
+
+  object-fit: cover;
+`;
+
+const Profile = styled.input``;
+
+const ProfileEditing = styled.label`
+  border: 1px solid #63b5f6;
+  background-color: #63b5f6;
+  padding: 0.5vw;
+  color: #fff;
+  border-radius: 30px;
+  &:hover {
+    background-color: #002171;
+  }
+  position: relative;
+  top: 2vw;
+  right: 4vw;
 `;
 
 const UserEmailTitle = styled.div`
   float: left;
-  width: 20%;
   padding: 1rem;
-  text-align: center;
   font-weight: bold;
-`;
-
-const UserEmail = styled.div`
-  float: left;
-  width: 30%;
-  padding: 1rem;
-  border-radius: 30px;
-`;
-
-const UserNickNameTitle = styled.div`
-  float: left;
   width: 20%;
-  padding: 1rem;
-  margin-top: 10px;
-  text-align: center;
-  font-weight: bold;
 `;
 
-const NickName = styled.input`
-  margin-top: 40px;
-  width: 30%;
+const UserEmail = styled.input`
+  float: left;
   padding: 1rem;
-  margin-top: 10px;
   border: 1px solid black;
   border-radius: 30px;
+  width: 30%;
+  margin-bottom: 20px;
 `;
 
-const ProfileEditing = styled.button`
-  border: 1px solid #63b5f6;
-  background-color: #63b5f6;
-  padding: 5px;
-  color: #fff;
-  clear: both;
-  width: 10%;
-  float: left;
-  margin-left: 90px;
-  border-radius: 30px;
-  &:hover {
-    background-color: #002171;
-  }
-`;
-
-const NickNameEdit = styled.button`
+const Edting = styled.button`
+  width: 20%;
   border: 1px solid #63b5f6;
   background-color: #63b5f6;
   border-radius: 30px;
   color: #fff;
-  padding: 5px;
-  margin-left: 20px;
+  padding: 10px;
+  margin: 20px;
   &:hover {
     background-color: #002171;
   }
+  position: relative;
+  left: 35vw;
 `;
 
 // 회원정보 끝
@@ -106,6 +93,7 @@ const PasswordLine = styled.div`
   text-align: center;
   width: 80%;
   margin: 0 auto;
+  margin-top: 10px;
 `;
 
 const PassWordTitle = styled.span`
@@ -194,29 +182,46 @@ function UserMypage() {
         {/* 회원정보 시작 */}
         <Title>회원정보</Title>
         <UserContainerLine>
-          <ProfileEditing>
-            <label htmlFor="upload_file">이미지수정</label>
-          </ProfileEditing>
-          <Profile
+          {/* <Profile
             type="file"
             type="file"
             id="upload_file"
             style={{ display: "none" }}
             onChange={handleInputChange}
-          />
-          <Box>
+          /> */}
+          <Profilecontainer>
+            <Profile
+              type="file"
+              id="upload_file"
+              style={{
+                display: "none",
+              }}
+              onChange={handleInputChange}
+            />
+
             {imgInfo.filepreview !== null ? (
-              <img src={imgInfo.filepreview} alt="uploadimage" />
+              <img
+                src={imgInfo.filepreview}
+                alt="uploadimage"
+                style={{
+                  width: "100px",
+                  height: "90px",
+                  objectFit: "scale-down",
+                }}
+              />
             ) : null}
-          </Box>
+
+            <ProfileEditing htmlFor="upload_file" onClick={() => submit()}>
+              편집
+            </ProfileEditing>
+          </Profilecontainer>
 
           <UserEmailTitle>이메일</UserEmailTitle>
-          <UserEmail>email</UserEmail>
-          <UserNickNameTitle>닉네임</UserNickNameTitle>
-          <NickName type="text" placeholder="닉네임" />
-          <ProfileEditing onClick={() => submit()}>프로필수정</ProfileEditing>
-          <NickNameEdit>수정</NickNameEdit>
+          <UserEmail type="text" name="val" disabled />
+          <UserEmailTitle>닉네임</UserEmailTitle>
+          <UserEmail type="text" placeholder="닉네임" />
         </UserContainerLine>
+        <Edting>저장하기</Edting>
 
         {/* 회원정보 끝 */}
         <br />

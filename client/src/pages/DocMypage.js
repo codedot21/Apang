@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 
 export const DocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
-  display: column;
   padding: 4rem 2rem;
   flex-direction: row;
   justify-content: center;
@@ -26,69 +25,54 @@ const UserContainerLine = styled.div`
   margin: 0 auto;
 `;
 
-const Profile = styled.input`
+const Profilecontainer = styled.div`
   float: left;
-  width: 30%;
-  height: 100px;
-  margin-right: 30px;
+  width: 40%;
   text-align: center;
+`;
+
+const Profile = styled.div`
+  width: 50%;
+  height: 100px;
   border: 1px solid #b5afaf;
+  padding: 40px;
+  margin: 0 auto;
+`;
+
+const ProfileEditing = styled.label`
+  border: 1px solid #63b5f6;
+  background-color: #63b5f6;
+  padding: 0.5vw;
+  color: #fff;
+  border-radius: 30px;
+  &:hover {
+    background-color: #002171;
+  }
+  position: relative;
+  top: 2vw;
+`;
+
+const Usercontainer = styled.div`
+  width: 60%;
+  float: right;
+  height: 13vw;
 `;
 
 const UserEmailTitle = styled.div`
   float: left;
-  width: 20%;
   padding: 1rem;
-  text-align: center;
   font-weight: bold;
-`;
-
-const UserEmail = styled.div`
-  float: left;
   width: 30%;
-  padding: 1rem;
+  height: 23%;
 `;
 
-const UserNickNameTitle = styled.div`
+const UserEmail = styled.input`
   float: left;
-  width: 20%;
   padding: 1rem;
-  margin-top: 10px;
-  text-align: center;
-  font-weight: bold;
-`;
-
-const NickName = styled.input`
-  margin-top: 40px;
-  width: 30%;
-  padding: 1rem;
-  margin-top: 10px;
   border: 1px solid black;
   border-radius: 30px;
-`;
-
-const DocNameTitle = styled.div`
-  float: left;
-  position: relative;
-  left: 123px;
-  display: black;
-  width: 20%;
-  padding: 1rem;
-  margin-top: 10px;
-  text-align: center;
-  font-weight: bold;
-`;
-
-const HospitalName = styled.input`
-  float: left;
-  width: 30%;
-  position: relative;
-  left: 120px;
-  margin-top: 20px;
-  padding: 1rem;
-  margin-top: 10px;
-  border: 1px solid black;
-  border-radius: 30px;
+  width: 50%;
+  margin-bottom: 10px;
 `;
 
 const HospitalBtn = styled.button`
@@ -105,21 +89,6 @@ const HospitalBtn = styled.button`
   }
 `;
 
-const ProfileEditing = styled.button`
-  border: 1px solid #63b5f6;
-  background-color: #63b5f6;
-  padding: 5px;
-  color: #fff;
-  clear: both;
-  width: 10%;
-  float: left;
-  margin-left: 90px;
-  border-radius: 30px;
-  &:hover {
-    background-color: #002171;
-  }
-`;
-
 const NickNameEdit = styled.button`
   border: 1px solid #63b5f6;
   background-color: #63b5f6;
@@ -130,6 +99,21 @@ const NickNameEdit = styled.button`
   &:hover {
     background-color: #002171;
   }
+`;
+
+const Edting = styled.button`
+  width: 20%;
+  border: 1px solid #63b5f6;
+  background-color: #63b5f6;
+  border-radius: 30px;
+  color: #fff;
+  padding: 10px;
+  margin: 20px;
+  &:hover {
+    background-color: #002171;
+  }
+  position: relative;
+  left: 35vw;
 `;
 
 // 회원정보 끝
@@ -191,31 +175,55 @@ const MyreviewTitle = styled.h2`
 // 대답 끝
 
 function DocMypage() {
+  const [imgInfo, setImgInfo] = useState({
+    file: [],
+    filepreview: null,
+  });
+  const handleInputChange = (e) => {
+    setImgInfo({
+      ...imgInfo,
+      file: e.target.files[0],
+      filepreview: URL.createObjectURL(e.target.files[0]),
+    });
+  };
+
   return (
     <>
       <DocContainer>
         {/* 회원정보 시작 */}
-        <Title>의사 회원정보</Title>
+        <Title>회원정보</Title>
         <UserContainerLine>
-          <Profile type="file" />
-          <UserEmailTitle>이메일</UserEmailTitle>
-          <UserEmail type="email">email</UserEmail>
+          {/* <Profile
+          type="file"
+          type="file"
+          id="upload_file"
+          style={{ display: "none" }}
+          onChange={handleInputChange}
+        /> */}
+          <Profilecontainer>
+            <Profile>
+              {imgInfo.filepreview !== null ? (
+                <img src={imgInfo.filepreview} alt="uploadimage" />
+              ) : null}
+            </Profile>
+            <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
+          </Profilecontainer>
+          <Usercontainer>
+            <UserEmailTitle>이메일</UserEmailTitle>
+            <UserEmail type="text" name="val" disabled />
+            <UserEmailTitle>닉네임</UserEmailTitle>
+            <UserEmail type="text" placeholder="닉네임" />
+            {/* <NickNameEdit>수정</NickNameEdit> */}
 
-          <UserNickNameTitle>이름</UserNickNameTitle>
-          <NickName type="text" placeholder="이름" />
-
-          <ProfileEditing>회원정보 수정</ProfileEditing>
-
-          {/* <NickNameEdit>수정</NickNameEdit> */}
-
-          <DocNameTitle>병원명</DocNameTitle>
-          <HospitalName type="text" placeholder="병원명" />
-          {/* <HospitalBtn>수정</HospitalBtn> */}
+            <UserEmailTitle>병원명</UserEmailTitle>
+            <UserEmail type="text" placeholder="병원명" />
+            {/* <HospitalBtn>수정</HospitalBtn> */}
+          </Usercontainer>
         </UserContainerLine>
+        <Edting>저장하기</Edting>
 
         {/* 회원정보 끝 */}
         <br />
-        {/* 비밀번호 시작 */}
 
         <PasswordLine>
           <PassWordTitle>기존비밀번호</PassWordTitle>
