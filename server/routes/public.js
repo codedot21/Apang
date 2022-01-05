@@ -7,6 +7,6 @@ const publicProfile = require("../controllers/public/profile");
 
 router.post("/signup", publicSignup);
 router.get("/userinfo", publicUserinfo);
-router.put("/profile", publicProfile);
+router.post("/profile", publicProfile);
 
 module.exports = router;
