@@ -178,7 +178,6 @@ function UserMypage() {
           </ProfileEditing>
           <Profile
             type="file"
-            type="file"
             id="upload_file"
             style={{ display: "none" }}
             onChange={handleInputChange}

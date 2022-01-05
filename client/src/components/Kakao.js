@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Kakao = ({ LoginHanlder }) => {
+const Kakao = ({ LoginHandler }) => {
   const navigate = useNavigate();
   const code = new URL(window.location.href).searchParams.get("code"); //인가코드 받음.
+
   const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
   const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
 
@@ -43,7 +44,7 @@ const Kakao = ({ LoginHanlder }) => {
             nickname: user.data.properties.nickname,
             email: user.data.kakao_account.email,
           };
-          LoginHanlder(userInfo);
+          LoginHandler(userInfo);
           navigate("/");
         } else {
           window.alert("로그인에 실패하였습니다.");
