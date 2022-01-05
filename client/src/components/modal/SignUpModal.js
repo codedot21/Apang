@@ -100,10 +100,12 @@ function SignUpModal({ open, close }) {
     setIsSelect(e.target.value);
   };
 
+  // <ModalBackGround onClick={close}>
+  // <ModalBox onClick={(e) => e.stopPropagation()}>
   return open ? (
-    <ModalBackGround>
-      <ModalBox>
-        <LoginHeader onClick={close}>회원가입</LoginHeader>
+    <ModalBackGround onClick={close}>
+      <ModalBox onClick={(e) => e.stopPropagation()}>
+        <LoginHeader>회원가입</LoginHeader>
         <input
           type="radio"
           name="user"

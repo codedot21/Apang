@@ -8,7 +8,7 @@ import Doc from "../images/doc.jpg";
 
 export const MainContainer = styled.div`
   background-color: ${({ theme }) => theme.color.white};
-  height: 50em;
+  height: 50rem;
   width: 88%;
   display: flex;
   justify-content: center;

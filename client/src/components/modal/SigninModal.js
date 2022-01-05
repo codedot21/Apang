@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import kakao from "../../images/kakao.png";
 import google from "../../images/google.png";
+import { KAKAO_AUTH_URL } from "../OAuthKakao";
 
 export const ModalBackGround = styled.div`
   position: fixed;
@@ -71,7 +72,8 @@ export const SocialLoginHeader = styled.div`
   background-color: #fbf3ed;
 `;
 
-export const SocialLogin = styled(Link)``;
+// export const SocialLogin = styled(Link)``;
+export const SocialLogin = styled.a``;
 
 export const Button = styled.button`
   margin: 0.7rem 2rem;
@@ -100,9 +102,9 @@ function SigninModal({ open, close }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return open ? (
-    <ModalBackGround>
-      <ModalBox>
-        <LoginHeader onClick={close}>로그인</LoginHeader>
+    <ModalBackGround onClick={close}>
+      <ModalBox onClick={(e) => e.stopPropagation()}>
+        <LoginHeader>로그인</LoginHeader>
         <LoginBody>
           <div>
             <input type="email" placeholder="Email" />
@@ -110,16 +112,16 @@ function SigninModal({ open, close }) {
           <div>
             <input type="password" placeholder="Password" />
           </div>
-          <Button onClick={close}>로그인 </Button>
+          <Button onClick={close}>로그인</Button>
         </LoginBody>
         <LoginFooter>
           <SocialLoginHeader>소셜로그인</SocialLoginHeader>
-          <SocialLogin to="/" onClick={close}>
-            <img src={kakao} width="48rem"></img>
+          <SocialLogin href={KAKAO_AUTH_URL} onClick={close}>
+            <img src={kakao} alt="kakaologin" width="48rem"></img>
           </SocialLogin>
           <span> </span>
-          <SocialLogin to="/" onClick={close}>
-            <img src={google} width="48rem"></img>
+          <SocialLogin href="/" onClick={close}>
+            <img src={google} alt="googlelogin" width="48rem"></img>
           </SocialLogin>
         </LoginFooter>
       </ModalBox>
