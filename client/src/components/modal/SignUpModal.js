@@ -18,7 +18,7 @@ export const ModalBox = styled.div`
   width: 100%;
   height: 100%;
   max-width: 30rem;
-  max-height: 25rem;
+  max-height: 30rem;
   border-radius: 0.3rem;
   background-color: #fbf3ed;
   overflow: hidden;
@@ -93,35 +93,70 @@ export const BtnMenu = styled.button`
   border: none;
 `;
 
-function SignUpModals({ open, close, docClose, docCloseA }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [nickname, setNickname] = useState("");
+function SignUpModal({ open, close }) {
+  const [isSelect, setIsSelect] = useState("public");
+
+  const handleClick = (e) => {
+    setIsSelect(e.target.value);
+  };
 
   return open ? (
     <ModalBackGround>
       <ModalBox>
         <LoginHeader onClick={close}>회원가입</LoginHeader>
-        <input type="radio" name="user" onClick={docClose} />
+        <input
+          type="radio"
+          name="user"
+          value="doctor"
+          onClick={handleClick}
+          defaultChecked={false}
+        />
         <BtnMenu>의사</BtnMenu>
-        <input type="radio" name="user" onClick={docCloseA} />
+        <input
+          type="radio"
+          name="user"
+          value="public"
+          onChange={handleClick}
+          defaultChecked={true}
+        />
         <BtnMenu>일반</BtnMenu>
-        <LoginBody>
-          <div>
-            <input type="email" placeholder="Email" />
-          </div>
-          <div>
-            <input type="password" placeholder="Password" />
-          </div>
-          <div>
-            <input type="text" placeholder="Nickname" />
-          </div>
-          <Button onClick={close}>가입하기</Button>
-        </LoginBody>
+        {isSelect === "public" ? (
+          <LoginBody>
+            <div>
+              <input type="email" placeholder="Email" />
+            </div>
+            <div>
+              <input type="password" placeholder="Password" />
+            </div>
+            <div>
+              <input type="text" placeholder="Nickname" />
+            </div>
+            <Button>가입하기</Button>
+          </LoginBody>
+        ) : (
+          <LoginBody>
+            <div>
+              <input type="email" placeholder="Email" />
+            </div>
+            <div>
+              <input type="password" placeholder="Password" />
+            </div>
+            <div>
+              <input type="text" placeholder="Name" />
+            </div>
+            <div>
+              <input type="number" placeholder="Lisense Number" />
+            </div>
+            <div>
+              <input type="text" placeholder="Where do you work" />
+            </div>
+            <Button>신청하기</Button>
+          </LoginBody>
+        )}
         <LoginFooter></LoginFooter>
       </ModalBox>
     </ModalBackGround>
   ) : null;
 }
 
-export default SignUpModals;
+export default SignUpModal;
