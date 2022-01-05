@@ -16,6 +16,7 @@ app.use(
     methods: ["GET", "POST", "OPTION", "PUT", "DELETE"],
   })
 );
+app.use(cookieParser());
 app.use("/", indexRouter);
 
 module.exports = app.listen(PORT, () => {

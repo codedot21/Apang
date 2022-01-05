@@ -38,7 +38,9 @@ const Kakao = ({ LoginHandler }) => {
       .then((res) => {
         if (res.status === 201 || res.status === 200) {
           const user = res.data;
-          console.log("user : ", user);
+          console.log("user : ", user.data.id);
+          console.log(user.accessToken);
+          localStorage.setItem("userid", user.data.id);
           const userInfo = {
             id: user.data.id,
             nickname: user.data.properties.nickname,

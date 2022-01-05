@@ -10,6 +10,10 @@ module.exports = (req, res) => {
       },
     })
     .then((data) => {
-      res.status(200).send({ data: data.data, message: "Kakao Ok" });
+      res.status(200).send({
+        data: data.data,
+        accessToken: token,
+        message: "Kakao Ok",
+      });
     });
 };

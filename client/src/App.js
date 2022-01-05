@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
 import Nav from "./components/Nav.js";
@@ -16,19 +16,29 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
 
-  const LoginHandler = (data) => {
-    setUserInfo(data);
-    console.log(userInfo);
-    setIsLogin(true);
-  };
+  // const LoginHandler = (data) => {
+  //   KakaoLogin(data);
+  // };
+
+  // const KakaoLogin = (data) => {
+  //   setUserInfo(data);
+  //   console.log(userInfo);
+  //   setIsLogin(true);
+  // };
+
+  // useEffect(() => KakaoLogin(), [userInfo]);
 
   const handleLogout = () => {
-    axios.get("http://localhost:80/common/signout").then((res) => {
-      setUserInfo("");
-      setIsLogin(false);
-      alert("로그아웃이 되었습니다.");
-      navigate("/");
-    });
+    axios
+      .post("http://localhost:80/common/kakaosignout", {
+        userid: localStorage.getItem("userid"),
+      })
+      .then((res) => {
+        setUserInfo("");
+        setIsLogin(false);
+        alert("로그아웃이 되었습니다.");
+        navigate("/");
+      });
   };
 
   return (
@@ -39,10 +49,7 @@ function App() {
         <Route path="/authpage" element={<AuthPage />} />
         <Route path="/mypage/publicprofile" element={<UserMypage />} />
         <Route path="/mypage/doctorprofile" element={<DocMypage />} />
-        <Route
-          path="/oauth/callback/kakao"
-          element={<Kakao LoginHandler={LoginHandler} />}
-        />
+        <Route path="/oauth/callback/kakao" element={<Kakao />} />
       </Routes>
       <Footer />
     </>
