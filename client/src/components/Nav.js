@@ -16,7 +16,7 @@ export const NavContainer = styled(Container)`
 
 export const LogoWrap = styled(Link)`
   display: flex;
-  margin-left: 5rem;
+  margin-left: 1rem;
   padding-top: 0.5rem;
   @media ${({ theme }) => theme.device.mobile} {
     margin-left: 0.5rem;
@@ -36,7 +36,7 @@ export const NavBtn = styled.li`
   align-items: center;
   text-align: center;
   list-style: none;
-  right: 10rem;
+  right: 1rem;
   @media ${({ theme }) => theme.device.mobile} {
     right: 1rem;
   } ;

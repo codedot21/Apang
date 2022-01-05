@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
+import axios from "axios";
 
 export const DocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -187,6 +188,23 @@ function DocMypage() {
     });
   };
 
+  // 수정
+  // const [isSucces, setSuccess] = useState(null);
+  const submit = async () => {
+    console.log("저장");
+    const formdata = new FormData();
+    formdata.append("apang", imgInfo.file);
+    console.log(formdata);
+    axios.post("http://localhost:80/public/profile", formdata, {
+      headers: { "Content-type": "multipart/form-data" },
+    });
+    // .then((res) => {
+    //   console.warn(res);
+    //   if (res.data.success === 1) {
+    //     setSuccess("이미지가 성공적으로 업데이트 되었습니다");
+    //   }
+    // });
+  };
   return (
     <>
       <DocContainer>
