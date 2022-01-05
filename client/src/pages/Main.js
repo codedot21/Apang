@@ -1,24 +1,19 @@
 import React from "react";
 import styled from "styled-components";
+import { Container } from "../styles";
 import Hospital from "../images/hospital.jpg";
 import Qna from "../images/qna.png";
 import Review from "../images/review.png";
 import Find from "../images/search.png";
 import Doc from "../images/doc.jpg";
 
-export const MainContainer = styled.div`
+export const MainContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
-  height: 70rem;
-  width: 88%;
+  height: 65rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 1300px;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 1rem;
-  padding-left: 1rem;
-  @media screen and (max-width: 1023px) {
+  @media ${({ theme }) => theme.device.ipad} {
     display: block;
     text-align: center;
     height: 100%;
@@ -31,7 +26,7 @@ export const MainContainer = styled.div`
 `;
 
 export const MainWrap = styled.div`
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.ipad} {
     display: block;
     margin-left: 0;
     margin-right: 0;
@@ -44,11 +39,11 @@ export const ImgWrap = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 4.5rem;
+  font-size: 3.4rem;
   font-weight: 600;
   margin-bottom: 1rem;
 
-  @media screen and (max-width: 1023px) {
+  @media ${({ theme }) => theme.device.ipad} {
     font-size: 2.9rem;
     text-align: center;
     margin-bottom: 1.3rem;
@@ -65,7 +60,7 @@ export const Text = styled.p`
   margin-bottom: 2rem;
   margin-right: 2rem;
 
-  @media screen and (max-width: 1023px) {
+  @media ${({ theme }) => theme.device.ipad} {
     font-size: 1.7rem;
     text-align: center;
     margin-bottom: 1.3rem;
@@ -87,7 +82,7 @@ export const Search = styled.p`
     font-size: 1.5rem;
     border: 0.1rem solid black;
   }
-  @media screen and (max-width: 1023px) {
+  @media ${({ theme }) => theme.device.ipad} {
     display: none;
   }
   @media ${({ theme }) => theme.device.mobile} {
@@ -96,8 +91,8 @@ export const Search = styled.p`
 `;
 
 export const Img = styled.img`
-  width: 65rem;
-  @media screen and (max-width: 1023px) {
+  width: 56rem;
+  @media ${({ theme }) => theme.device.ipad} {
     width: 70rem;
     max-width: 40rem;
   }
@@ -189,7 +184,7 @@ export const ContentText = styled.p`
 `;
 
 export const ImgThree = styled.img`
-  width: 35rem;
+  width: 26rem;
   margin-bottom: 2rem;
   @media ${({ theme }) => theme.device.mobile} {
     width: 15rem;
@@ -213,7 +208,7 @@ export const Button = styled.button`
     background: #fff;
     background-color: #002171;
   }
-  @media screen and (max-width: 1023px) {
+  @media ${({ theme }) => theme.device.ipad} {
     font-size: 1.5rem;
     width: 10rem;
     max-width: 20rem;
