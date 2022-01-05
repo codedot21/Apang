@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 
@@ -156,13 +156,39 @@ const MyreviewTitle = styled.h2`
 // 마이 큐엔에이 끝
 
 function UserMypage() {
+  const [imgInfo, setImgInfo] = useState({
+    file: [],
+    filepreview: null,
+  });
+  const handleInputChange = (e) => {
+    setImgInfo({
+      ...imgInfo,
+      file: e.target.files[0],
+      filepreview: URL.createObjectURL(e.target.files[0]),
+    });
+  };
   return (
     <>
       <UserContainer>
         {/* 회원정보 시작 */}
         <Title>회원정보</Title>
         <UserContainerLine>
-          <Profile type="file" />
+          <ProfileEditing>
+            <label htmlFor="upload_file">이미지수정</label>
+          </ProfileEditing>
+          <Profile
+            type="file"
+            type="file"
+            id="upload_file"
+            style={{ display: "none" }}
+            onChange={handleInputChange}
+          />
+          <Box>
+            {imgInfo.filepreview !== null ? (
+              <img src={imgInfo.filepreview} alt="uploadimage" />
+            ) : null}
+          </Box>
+
           <UserEmailTitle>이메일</UserEmailTitle>
           <UserEmail>email</UserEmail>
           <UserNickNameTitle>닉네임</UserNickNameTitle>
