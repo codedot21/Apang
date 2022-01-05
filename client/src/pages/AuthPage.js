@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import Customer from "./Customer";
@@ -7,6 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
+import { Checkbox } from "@material-ui/core";
 
 export const AuthContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -55,6 +56,8 @@ const customers = [
 ];
 
 function AuthPage() {
+  const [agrees, setAgrees] = useState("false");
+
   return (
     <>
       <AuthContainer>
@@ -79,10 +82,11 @@ function AuthPage() {
                   name={c.name}
                   hospital={c.hospital}
                   license={c.license}
-                  agree={c.agree}
+                  agree={agrees}
                 />
               );
             })}
+            <button onClick={() => setAgrees("true")}>승낙</button>
           </TableBody>
           <Table />
         </AuthLine>
