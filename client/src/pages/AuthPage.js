@@ -65,6 +65,7 @@ function AuthPage() {
         <AuthLine>
           <TableHead>
             <TableRow>
+              <TableCell>번호</TableCell>
               <TableCell>이메일</TableCell>
               <TableCell>이름</TableCell>
               <TableCell>병원명</TableCell>
@@ -74,19 +75,18 @@ function AuthPage() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map((c) => {
-              return (
-                <Customer
-                  key={c.id}
-                  email={c.email}
-                  name={c.name}
-                  hospital={c.hospital}
-                  license={c.license}
-                  agree={agrees}
-                />
-              );
+            
+            {customers.map(({ id, email, name, hospital, license }, i) => {
+              <TableRow key={id}>
+                <TableCell>{i + 1}</TableCell>
+                <TableCell>{email}</TableCell>
+                <TableCell>{name}</TableCell>
+                <TableCell>{hospital}</TableCell>
+                <TableCell>{license}</TableCell>
+                {/* <TableCell>버튼</TableCell> */}
+              </TableRow>;
             })}
-            <button onClick={() => setAgrees("true")}>승낙</button>
+            
           </TableBody>
           <Table />
         </AuthLine>

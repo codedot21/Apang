@@ -3,7 +3,7 @@ const { isAuthorized } = require("../tokenFunctions");
 
 module.exports = (req, res) => {
   // body 내용 확인
-  // console.log(req.body);
+  console.log("userinfo : ", req);
 
   // 권한이 유효한지 먼저 확인하기
   const accessToken = isAuthorized(req);

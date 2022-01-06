@@ -1,9 +1,9 @@
 require("dotenv").config();
-const { sign, verify } = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
   generateAccessToken: (data) => {
-    const token = sign(data, process.env.ACCESS_SECRET, {
+    const token = jwt.sign(data, process.env.ACCESS_SECRET, {
       expiresIn: "2d",
     });
     return token;
@@ -21,12 +21,17 @@ module.exports = {
   },
   isAuthorized: (req) => {
     const token = req.cookies.jwt;
-    const userinfo = verify(
+    console.log("token : ", token);
+    const userinfo = jwt.verify(
       token,
       process.env.ACCESS_SECRET,
       (err, decoded) => {
+        console.log("이쪽응로왔나?");
+        console.log("decoded : ", decoded);
         if (decoded) {
           return decoded;
+        } else {
+          console.log(err);
         }
       }
     );
