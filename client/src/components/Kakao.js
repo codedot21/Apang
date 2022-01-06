@@ -38,7 +38,7 @@ const Kakao = ({ LoginHandler }) => {
       .then((res) => {
         if (res.status === 201 || res.status === 200) {
           const user = res.data;
-          console.log("user : ", user.data.id);
+          console.log("user : ", user);
           console.log(user.accessToken);
           localStorage.setItem("userid", user.data.id);
           const userInfo = {
@@ -46,7 +46,7 @@ const Kakao = ({ LoginHandler }) => {
             nickname: user.data.properties.nickname,
             email: user.data.kakao_account.email,
           };
-          LoginHandler(userInfo);
+          //LoginHandler(userInfo); //이게 있으면 POST 400 bad request 요청이 2번이나 더 보내진다.
           navigate("/");
         } else {
           window.alert("로그인에 실패하였습니다.");

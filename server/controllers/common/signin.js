@@ -5,10 +5,12 @@ module.exports = async (req, res) => {
   const userInfo = await users.findOne({
     where: { email: req.body.email, password: req.body.password },
   });
+
   if (userInfo === true) {
     delete userInfo.dataValues.password;
     const accessToken = generateAccessToken(userInfo.dataValues);
     sendAccessToken(res, accessToken);
+    
   } else if (userInfo === false) {
     const doctorInfo = await doctors.findOne({
       where: { email: req.body.email, password: req.body.password },

@@ -16,17 +16,11 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
 
-  // const LoginHandler = (data) => {
-  //   KakaoLogin(data);
-  // };
-
-  // const KakaoLogin = (data) => {
-  //   setUserInfo(data);
-  //   console.log(userInfo);
-  //   setIsLogin(true);
-  // };
-
-  // useEffect(() => KakaoLogin(), [userInfo]);
+  const LoginHandler = (data) => {
+    setUserInfo(data);
+    console.log(userInfo);
+    setIsLogin(true);
+  };
 
   const handleLogout = () => {
     axios
@@ -36,6 +30,7 @@ function App() {
       .then((res) => {
         setUserInfo("");
         setIsLogin(false);
+        localStorage.removeItem("userid");
         alert("로그아웃이 되었습니다.");
         navigate("/");
       });
@@ -49,7 +44,10 @@ function App() {
         <Route path="/authpage" element={<AuthPage />} />
         <Route path="/mypage/publicprofile" element={<UserMypage />} />
         <Route path="/mypage/doctorprofile" element={<DocMypage />} />
-        <Route path="/oauth/callback/kakao" element={<Kakao />} />
+        <Route
+          path="/oauth/callback/kakao"
+          element={<Kakao LoginHandler={LoginHandler} />}
+        />
       </Routes>
       <Footer />
     </>

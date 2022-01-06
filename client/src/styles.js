@@ -21,13 +21,14 @@ export const theme = {
 
   device: {
     mobile: `screen and (max-width: 767px)`,
+    ipad: `screen and (max-width: 1023px)`,
   },
 };
 
 export const Container = styled.div`
   z-index: 1;
   width: 100%;
-  // max-width: 1920px;
+  max-width: 1300px;
   margin-right: auto;
   margin-left: auto;
   padding-right: 1rem;
