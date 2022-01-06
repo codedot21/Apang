@@ -6,98 +6,113 @@ const path = require("path");
 const storage = multer.diskStorage({
   destination: path.join(__dirname, "../../../client/src/storage/", "uploads"),
   filename: function (req, file, cb) {
+    fileName = file.originalname;
     console.log("들어왔나?", file);
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
 module.exports = (req, res) => {
-  // // body 내용 확인
-  // // console.log(req.body);
-  // // 권한이 유효한지 먼저 확인하기
-  // const accessToken = isAuthorized(req);
-  // // 토큰이 유효하지 않을 때
-  // if (!accessToken) {
-  //   res.status(401).send({ message: "Invalid Token" });
-  // }
-  // // 토큰이 유효할 때
-  // else {
-  //   // 닉네임이 동일한지 여부를 판단하기위해 수정한 닉네임을 조건으로 findOne 함수를 써서 찾아본다.
-  //   const userInfo = users.findOne({
-  //     where: {
-  //       nickname: accessToken.nickname,
-  //     },
-  //   });
-  //   // 바꾸려는 닉네임으로 유저인포가 이미 존재하면 동일한 닉네임이 존재하므로 거절 메세지
-  //   if (userInfo) {
-  //     res.status(409).send({ message: "Nickname Exist" });
-  //   }
-  //   // 없다면 닉네임을 포함해서 이미지까지 수정을 해준다.
-  //   // 닉네임, 프로필 사진을 수정할 때 바꾸든 안바꾸든 데이터 다같이 넘겨주기 수정할거라면 수정할 데이터로 그게아니면 원래 값으로 데이터를 넘겨주기.
-  //   else {
-  //     // 새 비밀번호값이 ''이거나 undefined면 닉네임과 프로필수정버튼을 누른게 되니 그 두가지만 수정해준다.
-  //     if (
-  //       accessToken.newPassowrd === "" ||
-  //       accessToken.newPassword === undefined
-  //     ) {
-  //       users
-  //         .update(
-  //           {
-  //             nickname: accessToken.nickname,
-  //             profile_img: accessToken.profile_img,
-  //           },
-  //           {
-  //             where: {
-  //               id: accessToken.id,
-  //             },
-  //           }
-  //         )
-  //         .then(
-  //           // 여기서 userInfo는 위의 userInfo하고 다른거임 여기서 유저인포는 그냥 클라이언트에다가 userInfo라는 변수에 담아 보내주기위한 key값임.
-  //           res.status(200).send({
-  //             message: "Nickname, Profile_img Modify Ok",
-  //             userInfo: accessToken,
-  //           })
-  //         );
-  //     }
-  //     // 그렇지않고 새 비밀번호값이 있으면 비밀번호 수정을 누른게 되니 비밀번호만 바꿔주면 된다.
-  //     else if (accessToken.newPassword) {
-  //       users
-  //         .update(
-  //           {
-  //             // 새로운 비밀번호는 newPassword로 담을 예정 => 클라이언트랑 상의하고 바꿀예정
-  //             password: accessToken.newPassword,
-  //           },
-  //           {
-  //             where: {
-  //               id: accessToken.id,
-  //             },
-  //           }
-  //         )
-  //         .then(
-  //           res
-  //             .status(200)
-  //             .send({ message: "Password Modify Ok", userInfo: accessToken })
-  //         );
-  //     }
-  //   }
-  // }
-  try {
-    let upload = multer({
-      storage: storage,
-    }).single("apang");
+  // console.log(req.cookies.jwt);
+  // console.log(req.body);
 
-    upload(req, res, function (err) {
-      if (!req.file) {
-        console.log("이거?", req.file);
-        return res.send("이미지를 올려주세요");
-      } else if (err instanceof multer.MulterError) {
-        return res.send(err);
-      } else if (err) {
-        return res.send(err);
-      }
+  const userInfo = isAuthorized(req);
+  // console.log("userInfo : ", userInfo);
+  if (req.body.password === undefined) {
+    try {
+      let upload = multer({
+        storage: storage,
+      }).single("apang");
+
+      upload(req, res, function (err) {
+        // console.log("req : ", JSON.stringify(req.body.nickname));
+        let nickname = JSON.stringify(req.body.nickname);
+        nickname = nickname.replaceAll('"', "");
+        // console.log("nickname : ", nickname);
+        // console.log(userInfo.id);
+        console.log("req : ", req);
+        console.log("req.file : ", req.file);
+        let filename = req.file.filename;
+        if (!req.file) {
+          // console.log("이거?", req.file);
+          return res.send("이미지를 올려주세요");
+        } else if (err instanceof multer.MulterError) {
+          return res.send(err);
+        } else if (err) {
+          return res.send(err);
+        }
+
+        // nickname값이 '' 빈문자열이라면 이미지만 수정한다는 뜻임 그러므로 프로필이미지만 수정을 해줌.
+        if (nickname === "") {
+          users.update(
+            {
+              profile_img: filename,
+            },
+            {
+              where: {
+                id: userInfo.id,
+              },
+            }
+          );
+          res.status(200).send({ message: "닉네임 수정 완료" });
+          // 그게 아니라면 닉네임도 같이 수정을 함.
+        } else {
+          // 먼저 바꾼 닉네임이 존재하는지 일반유저 테이블에 찾아본다.
+          // const isExist = users.findOne({
+          //   where: {
+          //     nickname: nickname,
+          //   },
+          // });
+          // // 해당 닉네임을 가진 유저가 존재하지 않는다면 닉네임과 프로필을 수정해준다.
+          // if (!isExist) {
+          users.update(
+            {
+              profile_img: filename,
+              nickname: nickname,
+            },
+            {
+              where: {
+                id: userInfo.id,
+              },
+            }
+          );
+          res.status(200).send({ message: "닉네임, 프로필사진 수정 완료" });
+          // 그렇지 않으면 (닉네임이 존재하면)
+          // } else {
+          //   // 409에러로 이미존재한다는 에러를 띄워준다.
+          //   res.status(409).send({ message: "닉네임이 존재합니다." });
+          // }
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    // 여기서부터는 비밀번호 변경
+  } else {
+    // 현재비밀번호도 입력하기 때문에 현재비밀번호와 유저아이디를 가진사람을 찾아준다.
+    const user = users.findOne({
+      where: {
+        id: userInfo.id,
+        password: req.body.password,
+      },
     });
-  } catch (err) {
-    console.log(err);
+    // 여기서 user가 false라는것은 비밀번호가 일치하지 않기때문에 비밀번호가 맞지않다는 에러를 띄워준다.
+    if (!user) {
+      res.status(401).send({ message: "비밀번호가 맞지 않습니다." });
+      // 그게아니라면 비밀번호가 일치하고 해당 유저아이디가 있기때문에
+    } else {
+      // 비밀번호를 수정해준다.
+      users.update(
+        {
+          password: req.body.newPassword,
+        },
+        {
+          where: {
+            id: userInfo.id,
+          },
+        }
+      );
+      res.status(200).send({ message: "비밀번호 수정 완료" });
+    }
   }
 };

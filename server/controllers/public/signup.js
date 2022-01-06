@@ -1,7 +1,7 @@
 const { users } = require("../../models");
 
 module.exports = (req, res) => {
-  // console.log(req.body);
+  console.log("일반 회원가입 : ", req.body);
   // req.body에 회원가입 할 정보가 담겨있음.
   const userInfo = req.body;
   if (
