@@ -32,7 +32,7 @@ const Kakao = ({ LoginHandler }) => {
   }).then((res) => {
     const ACCESS_TOKEN = res.data.access_token;
     axios
-      .post("http://localhost:80/oauth/kakao", {
+      .post("http://localhost:4000/oauth/kakao", {
         access_token: ACCESS_TOKEN,
       })
       .then((res) => {

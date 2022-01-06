@@ -176,10 +176,7 @@ function UserMypage() {
     const formdata = new FormData();
     formdata.append("apang", imgInfo.file);
     // console.log(formdata);
-<<<<<<< HEAD
-=======
     formdata.append("nickname", userInfo.nickname);
->>>>>>> 35845abc561fc9c236c1c8e530ab1dae28f59128
     axios.post("http://localhost:4000/public/profile", formdata, {
       headers: { "Content-type": "multipart/form-data" },
       withCredentials: true,

@@ -6,6 +6,6 @@ const doctorProfile = require("../controllers/doctor/profile");
 
 router.post("/signup", doctorSignup);
 router.get("/userinfo", doctorUserinfo);
-router.put("/profile", doctorProfile);
+router.post("/profile", doctorProfile);
 
 module.exports = router;

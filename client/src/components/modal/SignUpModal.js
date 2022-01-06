@@ -52,9 +52,9 @@ export const LoginBody = styled.div`
     padding-left: 0.5rem;
     width: 17rem;
     height: 2rem;
-    font-size: 1rem;
+    font-size: 0.8rem;
     border: 0.1rem solid #dee2e6;
-    border-radius: 30px;
+    border-radius: 10px;
   }
 `;
 
@@ -78,7 +78,7 @@ export const Button = styled.button`
   outline: none;
   border: none;
   cursor: pointer;
-  border-radius: 30px;
+  border-radius: 10px;
   &:hover {
     background: #fff;
     background-color: #002171;
@@ -155,13 +155,13 @@ function SignUpModal({ open, close }) {
         {isSelect === "public" ? (
           <LoginBody>
             <div>
-              <input type="email" placeholder="Email" />
+              <input type="email" placeholder="이메일" />
             </div>
             <div>
-              <input type="password" placeholder="Password" />
+              <input type="password" placeholder="비밀번호" />
             </div>
             <div>
-              <input type="text" placeholder="Nickname" />
+              <input type="text" placeholder="닉네임" />
             </div>
             <Button onClick={publicSignUp}>가입하기</Button>
           </LoginBody>
@@ -170,35 +170,35 @@ function SignUpModal({ open, close }) {
             <div>
               <input
                 type="email"
-                placeholder="Email"
+                placeholder="이메일"
                 onChange={doctorChange("email")}
               />
             </div>
             <div>
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="비밀번호"
                 onChange={doctorChange("password")}
               />
             </div>
             <div>
               <input
                 type="text"
-                placeholder="Name"
+                placeholder="이름"
                 onChange={doctorChange("name")}
               />
             </div>
             <div>
               <input
                 type="number"
-                placeholder="Lisense Number"
+                placeholder="의사 라이센스 번호"
                 onChange={doctorChange("license")}
               />
             </div>
             <div>
               <input
                 type="text"
-                placeholder="Where do you work"
+                placeholder="어디서 근무하시나요?"
                 onChange={doctorChange("hospital")}
               />
             </div>

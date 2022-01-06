@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import kakao from "../../images/kakao.png";
 import google from "../../images/google.png";
 import { KAKAO_AUTH_URL } from "../OAuthKakao";
+import { GOOGLE_AUTHORIZE_URL } from "../OAuthGoogle";
 import axios from "axios";
 
 export const ModalBackGround = styled.div`
@@ -56,9 +56,9 @@ export const LoginBody = styled.div`
     padding-left: 0.5rem;
     width: 17rem;
     height: 2rem;
-    font-size: 1rem;
+    font-size: 0.8rem;
     border: 0.1rem solid #dee2e6;
-    border-radius: 30px;
+    border-radius: 10px;
   }
 `;
 
@@ -85,7 +85,7 @@ export const Button = styled.button`
   outline: none;
   border: none;
   cursor: pointer;
-  border-radius: 30px;
+  border-radius: 10px;
   &:hover {
     background: #fff;
     background-color: #002171;
@@ -113,6 +113,7 @@ function SigninModal({ open, close }) {
   };
 
   const handleSignIn = () => {
+    console.log("로그인");
     axios
       .post("http://localhost:4000/common/signin", userInfo, {
         withCredentials: true,
@@ -130,14 +131,14 @@ function SigninModal({ open, close }) {
           <div>
             <input
               type="email"
-              placeholder="Email"
+              placeholder="이메일"
               onChange={handleInputChange("email")}
             />
           </div>
           <div>
             <input
               type="password"
-              placeholder="Password"
+              placeholder="비밀번호"
               onChange={handleInputChange("password")}
             />
           </div>
@@ -149,7 +150,7 @@ function SigninModal({ open, close }) {
             <img src={kakao} alt="kakaologin" width="48rem"></img>
           </SocialLogin>
           <span> </span>
-          <SocialLogin href="/" onClick={close}>
+          <SocialLogin href={GOOGLE_AUTHORIZE_URL} onClick={close}>
             <img src={google} alt="googlelogin" width="48rem"></img>
           </SocialLogin>
         </LoginFooter>
