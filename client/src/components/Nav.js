@@ -99,7 +99,7 @@ export const Btn = styled.button`
   }
 `;
 
-function Nav() {
+function Nav({ handleLogout }) {
   const [isDropOpen, setIsDropOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [signOpen, setSignOpen] = useState(false);
@@ -165,6 +165,7 @@ function Nav() {
                   <NavLink to="/authpage">
                     <MenuBtn>관리자</MenuBtn>
                   </NavLink>
+                  <MenuBtn onClick={handleLogout}>로그아웃</MenuBtn>
                 </DropDownList>
               </DropDownListContainer>
             ) : null}
