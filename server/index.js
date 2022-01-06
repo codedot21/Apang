@@ -16,23 +16,8 @@ app.use(
     methods: ["GET", "POST", "OPTION", "PUT", "DELETE"],
   })
 );
+app.use(cookieParser());
 app.use("/", indexRouter);
-// app.get("/", (req, res) => {
-//   res.send("hello world");
-// });
-
-// let server;
-// if (fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")) {
-//   const privateKey = fs.readFileSync(__dirname + "/key.pem", "utf8");
-//   const certificate = fs.readFileSync(__dirname + "/cert.pem", "utf8");
-//   const credentials = { key: privateKey, cert: certificate };
-
-//   server = https.createServer(credentials, app);
-//   server.listen(PORT, () => console.log("https server runnning"));
-// } else {
-//   server = app.listen(PORT, () => console.log("http server runnning"));
-// }
-// module.exports = server;
 
 module.exports = app.listen(PORT, () => {
   console.log(`Server Start on ${PORT}`);
