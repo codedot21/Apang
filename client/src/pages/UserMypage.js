@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
@@ -150,23 +150,36 @@ function UserMypage() {
     file: [],
     filepreview: null,
   });
-  const handleInputChange = (e) => {
+  const [userInfo, setUserInfo] = useState({
+    nickname: "",
+    password: "",
+    newPassword: "",
+  });
+  const handleImgChange = (e) => {
     setImgInfo({
       ...imgInfo,
       file: e.target.files[0],
       filepreview: URL.createObjectURL(e.target.files[0]),
     });
   };
+  const handleInputChange = (key) => (e) => {
+    setUserInfo({
+      ...userInfo,
+      [key]: e.target.value,
+    });
+  };
 
   // 수정
   // const [isSucces, setSuccess] = useState(null);
-  const submit = async () => {
-    console.log("저장");
+  const submit = () => {
+    // console.log("저장");
     const formdata = new FormData();
     formdata.append("apang", imgInfo.file);
-    console.log(formdata);
-    axios.post("http://localhost:80/public/profile", formdata, {
+    // console.log(formdata);
+    formdata.append("nickname", userInfo.nickname);
+    axios.post("http://localhost:4000/public/profile", formdata, {
       headers: { "Content-type": "multipart/form-data" },
+      withCredentials: true,
     });
     // .then((res) => {
     //   console.warn(res);
@@ -174,6 +187,14 @@ function UserMypage() {
     //     setSuccess("이미지가 성공적으로 업데이트 되었습니다");
     //   }
     // });
+  };
+
+  const passwordChange = () => {
+    delete userInfo.nickname;
+    // console.log("비밀번호 변경 : ", userInfo);
+    axios.post("http://localhost:4000/public/profile", userInfo, {
+      withCredentials: true,
+    });
   };
 
   return (
@@ -195,32 +216,35 @@ function UserMypage() {
               style={{
                 display: "none",
               }}
-              onChange={handleInputChange}
+              onChange={handleImgChange}
             />
 
-            {imgInfo.filepreview !== null ? (
-              <img
-                src={imgInfo.filepreview}
-                alt="uploadimage"
-                style={{
-                  width: "100px",
-                  height: "90px",
-                  objectFit: "scale-down",
-                }}
-              />
-            ) : null}
-
-            <ProfileEditing htmlFor="upload_file" onClick={() => submit()}>
-              편집
-            </ProfileEditing>
+            <Box onChange={handleImgChange}>
+              {imgInfo.filepreview !== null ? (
+                <img
+                  src={imgInfo.filepreview}
+                  alt="uploadimage"
+                  style={{
+                    width: "100px",
+                    height: "90px",
+                    objectFit: "scale-down",
+                  }}
+                />
+              ) : null}
+            </Box>
+            <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
           </Profilecontainer>
 
           <UserEmailTitle>이메일</UserEmailTitle>
           <UserEmail type="text" name="val" disabled />
           <UserEmailTitle>닉네임</UserEmailTitle>
-          <UserEmail type="text" placeholder="닉네임" />
+          <UserEmail
+            type="text"
+            placeholder="닉네임"
+            onChange={handleInputChange("nickname")}
+          />
         </UserContainerLine>
-        <Edting>저장하기</Edting>
+        <Edting onClick={submit}>저장하기</Edting>
 
         {/* 회원정보 끝 */}
         <br />
@@ -228,9 +252,17 @@ function UserMypage() {
 
         <PasswordLine>
           <PassWordTitle>기존비밀번호</PassWordTitle>
-          <PassWordInput placeholder="기존" type="password"></PassWordInput>
+          <PassWordInput
+            placeholder="기존"
+            type="password"
+            onChange={handleInputChange("password")}
+          ></PassWordInput>
           <PassWordTitle>새로운 비밀번호</PassWordTitle>
-          <PassWordInput placeholder="New" type="password"></PassWordInput>
+          <PassWordInput
+            placeholder="New"
+            type="password"
+            onChange={handleInputChange("newPassword")}
+          ></PassWordInput>
           <PassWordTitle>비밀번호 확인</PassWordTitle>
           <PassWordInput
             placeholder="New 한번 더"
@@ -238,7 +270,9 @@ function UserMypage() {
           ></PassWordInput>
         </PasswordLine>
         <Box>
-          <EditPasswordDeleted>비밀번호 변경</EditPasswordDeleted>
+          <EditPasswordDeleted onClick={passwordChange}>
+            비밀번호 변경
+          </EditPasswordDeleted>
           <EditPasswordDeleted>회원탈퇴</EditPasswordDeleted>
         </Box>
         {/* 비밀번호 끝 */}

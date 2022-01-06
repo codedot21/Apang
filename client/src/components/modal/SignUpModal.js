@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export const ModalBackGround = styled.div`
   position: fixed;
@@ -95,13 +96,42 @@ export const BtnMenu = styled.button`
 
 function SignUpModal({ open, close }) {
   const [isSelect, setIsSelect] = useState("public");
+  const [publicInfo, setPublicInfo] = useState({
+    email: "",
+    nickname: "",
+    password: "",
+  });
+  const [doctorInfo, setDoctorInfo] = useState({
+    email: "",
+    name: "",
+    password: "",
+    hospital: "",
+    license: "",
+  });
 
   const handleClick = (e) => {
     setIsSelect(e.target.value);
   };
 
-  // <ModalBackGround onClick={close}>
-  // <ModalBox onClick={(e) => e.stopPropagation()}>
+  const doctorChange = (key) => (e) => {
+    setDoctorInfo({
+      ...doctorInfo,
+      [key]: e.target.value,
+    });
+  };
+
+  const publicSignUp = () => {};
+
+  const doctorSignUp = () => {
+    axios
+      .post("http://localhost:4000/doctor/signup", doctorInfo, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log("회원가입 완료");
+      });
+  };
+
   return open ? (
     <ModalBackGround onClick={close}>
       <ModalBox onClick={(e) => e.stopPropagation()}>
@@ -133,26 +163,46 @@ function SignUpModal({ open, close }) {
             <div>
               <input type="text" placeholder="Nickname" />
             </div>
-            <Button>가입하기</Button>
+            <Button onClick={publicSignUp}>가입하기</Button>
           </LoginBody>
         ) : (
           <LoginBody>
             <div>
-              <input type="email" placeholder="Email" />
+              <input
+                type="email"
+                placeholder="Email"
+                onChange={doctorChange("email")}
+              />
             </div>
             <div>
-              <input type="password" placeholder="Password" />
+              <input
+                type="password"
+                placeholder="Password"
+                onChange={doctorChange("password")}
+              />
             </div>
             <div>
-              <input type="text" placeholder="Name" />
+              <input
+                type="text"
+                placeholder="Name"
+                onChange={doctorChange("name")}
+              />
             </div>
             <div>
-              <input type="number" placeholder="Lisense Number" />
+              <input
+                type="number"
+                placeholder="Lisense Number"
+                onChange={doctorChange("license")}
+              />
             </div>
             <div>
-              <input type="text" placeholder="Where do you work" />
+              <input
+                type="text"
+                placeholder="Where do you work"
+                onChange={doctorChange("hospital")}
+              />
             </div>
-            <Button>신청하기</Button>
+            <Button onClick={doctorSignUp}>신청하기</Button>
           </LoginBody>
         )}
         <LoginFooter></LoginFooter>

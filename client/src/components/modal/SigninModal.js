@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import kakao from "../../images/kakao.png";
 import google from "../../images/google.png";
 import { KAKAO_AUTH_URL } from "../OAuthKakao";
+import axios from "axios";
 
 export const ModalBackGround = styled.div`
   position: fixed;
@@ -99,20 +100,48 @@ export const ModalContainer = styled.div`
 `;
 
 function SigninModal({ open, close }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [userInfo, setUserInfo] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (key) => (e) => {
+    setUserInfo({
+      ...userInfo,
+      [key]: e.target.value,
+    });
+  };
+
+  const handleSignIn = () => {
+    axios
+      .post("http://localhost:4000/common/signin", userInfo, {
+        withCredentials: true,
+      })
+      .then(() => {
+        console.log("로그인 완료");
+        close();
+      });
+  };
   return open ? (
     <ModalBackGround onClick={close}>
       <ModalBox onClick={(e) => e.stopPropagation()}>
         <LoginHeader>로그인</LoginHeader>
         <LoginBody>
           <div>
-            <input type="email" placeholder="Email" />
+            <input
+              type="email"
+              placeholder="Email"
+              onChange={handleInputChange("email")}
+            />
           </div>
           <div>
-            <input type="password" placeholder="Password" />
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={handleInputChange("password")}
+            />
           </div>
-          <Button onClick={close}>로그인</Button>
+          <Button onClick={handleSignIn}>로그인 </Button>
         </LoginBody>
         <LoginFooter>
           <SocialLoginHeader>소셜로그인</SocialLoginHeader>
