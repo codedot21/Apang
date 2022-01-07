@@ -195,7 +195,7 @@ function DocMypage() {
     const formdata = new FormData();
     formdata.append("apang", imgInfo.file);
     console.log(formdata);
-    axios.post("http://localhost:80/public/profile", formdata, {
+    axios.post("http://localhost:4000/doctor/profile", formdata, {
       headers: { "Content-type": "multipart/form-data" },
     });
     // .then((res) => {
@@ -225,6 +225,7 @@ function DocMypage() {
               ) : null}
             </Profile>
             <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
+            <input type="file" onChange={handleInputChange} />
           </Profilecontainer>
           <Usercontainer>
             <UserEmailTitle>이메일</UserEmailTitle>
@@ -238,7 +239,7 @@ function DocMypage() {
             {/* <HospitalBtn>수정</HospitalBtn> */}
           </Usercontainer>
         </UserContainerLine>
-        <Edting>저장하기</Edting>
+        <Edting onClick={submit}>저장하기</Edting>
 
         {/* 회원정보 끝 */}
         <br />

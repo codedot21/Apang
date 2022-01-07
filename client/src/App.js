@@ -16,6 +16,8 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
 
+  let GoogleEmail;
+
   const LoginHandler = (data) => {
     setUserInfo(data);
     console.log(userInfo);
@@ -24,7 +26,7 @@ function App() {
 
   const handleLogout = () => {
     axios
-      .post("http://localhost:80/common/kakaosignout", {
+      .post("http://localhost:4000/common/kakaosignout", {
         userid: localStorage.getItem("userid"),
       })
       .then((res) => {
@@ -35,6 +37,29 @@ function App() {
         navigate("/");
       });
   };
+
+  const getGoogleToken = async (authorizationCode) => {
+    await axios({
+      url: "http://localhost:4000/oauth/google",
+      method: "post",
+      data: { authorizationCode },
+      withCredentials: true,
+    }).then((res) => {
+      console.log("여기", res.data);
+      console.log("여기", res.data.data.email);
+      console.log("여기", res.data.data.name);
+    });
+  };
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    console.log(`url ${url}`);
+    const authorizationCode = url.searchParams.get("code");
+    console.log(`authorizationCode ${authorizationCode}`);
+    if (authorizationCode) {
+      getGoogleToken(authorizationCode);
+    }
+  }, []);
 
   return (
     <>
