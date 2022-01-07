@@ -58,6 +58,8 @@ function App() {
   //   isAuthenticated();
   // }, []); //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
 
+  let GoogleEmail;
+
   const LoginHandler = (data) => {
     setUserInfo(data);
     console.log(userInfo);
@@ -99,6 +101,29 @@ function App() {
     //   });
     // );
   };
+
+  const getGoogleToken = async (authorizationCode) => {
+    await axios({
+      url: "http://localhost:4000/oauth/google",
+      method: "post",
+      data: { authorizationCode },
+      withCredentials: true,
+    }).then((res) => {
+      console.log("여기", res.data);
+      console.log("여기", res.data.data.email);
+      console.log("여기", res.data.data.name);
+    });
+  };
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    console.log(`url ${url}`);
+    const authorizationCode = url.searchParams.get("code");
+    console.log(`authorizationCode ${authorizationCode}`);
+    if (authorizationCode) {
+      getGoogleToken(authorizationCode);
+    }
+  }, []);
 
   return (
     <>

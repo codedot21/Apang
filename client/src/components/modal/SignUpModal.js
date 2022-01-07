@@ -18,20 +18,34 @@ export const ModalBackGround = styled.div`
 export const ModalBox = styled.div`
   width: 100%;
   height: 100%;
-  max-width: 30rem;
+  max-width: 23rem;
   max-height: 30rem;
-  border-radius: 0.3rem;
+  border-radius: 1rem;
   background-color: #fbf3ed;
   overflow: hidden;
 `;
 
 export const LoginHeader = styled.div`
   position: relative;
-  padding: 26px 64px 16px 60px;
+  padding: 1.5rem 3.5rem 1rem 3.5rem;
   background-color: #fbf3ed;
   font-weight: 500;
   color: black;
-  font-size: 2rem;
+  font-size: 1.5rem;
+
+  & > button {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    width: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-align: center;
+    color: ${({ theme }) => theme.color.hamburger};
+    border: 0;
+    cursor: pointer;
+    background-color: #fbf3ed;
+  }
 `;
 
 export const LoginBody = styled.div`
@@ -51,10 +65,13 @@ export const LoginBody = styled.div`
     padding-bottom: 0.5rem;
     padding-left: 0.5rem;
     width: 17rem;
-    height: 2rem;
-    font-size: 1rem;
+    height: 2.5rem;
+    font-size: 0.8rem;
     border: 0.1rem solid #dee2e6;
-    border-radius: 30px;
+    border-radius: 10px;
+    &:focus {
+      outline: 0.1rem solid #63b5f6;
+    }
   }
 `;
 
@@ -73,12 +90,12 @@ export const Button = styled.button`
   margin: 0.7rem 2rem;
   background: #6ec5ff;
   white-space: nowrap;
-  padding: 0.5rem 3rem;
+  padding: 0.6rem 7rem;
   color: white;
   outline: none;
   border: none;
   cursor: pointer;
-  border-radius: 30px;
+  border-radius: 10px;
   &:hover {
     background: #fff;
     background-color: #002171;
@@ -156,7 +173,10 @@ function SignUpModal({ open, close }) {
   return open ? (
     <ModalBackGround onClick={close}>
       <ModalBox onClick={(e) => e.stopPropagation()}>
-        <LoginHeader>회원가입</LoginHeader>
+        <LoginHeader>
+          회원가입
+          <button onClick={close}> &times; </button>
+        </LoginHeader>
         <input
           type="radio"
           name="user"
@@ -203,35 +223,35 @@ function SignUpModal({ open, close }) {
             <div>
               <input
                 type="email"
-                placeholder="Email"
+                placeholder="이메일"
                 onChange={doctorChange("email")}
               />
             </div>
             <div>
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="비밀번호"
                 onChange={doctorChange("password")}
               />
             </div>
             <div>
               <input
                 type="text"
-                placeholder="Name"
+                placeholder="이름"
                 onChange={doctorChange("name")}
               />
             </div>
             <div>
               <input
                 type="number"
-                placeholder="Lisense Number"
+                placeholder="의사 라이센스 번호"
                 onChange={doctorChange("license")}
               />
             </div>
             <div>
               <input
                 type="text"
-                placeholder="Where do you work"
+                placeholder="어디서 근무하시나요?"
                 onChange={doctorChange("hospital")}
               />
             </div>

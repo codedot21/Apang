@@ -94,9 +94,6 @@ export const Btn = styled.button`
   outline: none;
   border: none;
   cursor: pointer;
-  &:hover {
-    background-color: #63b5f6;
-  }
 `;
 
 function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {

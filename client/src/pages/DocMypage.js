@@ -195,7 +195,7 @@ function DocMypage(props) {
     const formdata = new FormData();
     formdata.append("apang", imgInfo.file);
     console.log(formdata);
-    axios.post("http://localhost:80/public/profile", formdata, {
+    axios.post("http://localhost:4000/doctor/profile", formdata, {
       headers: { "Content-type": "multipart/form-data" },
     });
     // .then((res) => {
