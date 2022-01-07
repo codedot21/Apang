@@ -73,7 +73,7 @@ export const Button = styled.button`
   margin: 0.7rem 2rem;
   background: #6ec5ff;
   white-space: nowrap;
-  padding: 0.5rem 3rem;
+  padding: 0.4rem 7rem;
   color: white;
   outline: none;
   border: none;

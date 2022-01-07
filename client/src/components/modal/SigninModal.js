@@ -68,19 +68,22 @@ export const LoginFooter = styled.div`
 `;
 
 export const SocialLoginHeader = styled.div`
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  font-size: 0.8rem;
+  padding-top: 0.1rem;
+  padding-bottom: 1rem;
   background-color: #fbf3ed;
 `;
 
 // export const SocialLogin = styled(Link)``;
-export const SocialLogin = styled.a``;
+export const SocialLogin = styled.a`
+  padding: 0.1rem 1rem 1rem 1rem;
+`;
 
 export const Button = styled.button`
   margin: 0.7rem 2rem;
   background: #6ec5ff;
   white-space: nowrap;
-  padding: 0.5rem 3rem;
+  padding: 0.4rem 7.3rem;
   color: white;
   outline: none;
   border: none;
@@ -145,7 +148,7 @@ function SigninModal({ open, close }) {
           <Button onClick={handleSignIn}>로그인 </Button>
         </LoginBody>
         <LoginFooter>
-          <SocialLoginHeader>소셜로그인</SocialLoginHeader>
+          <SocialLoginHeader>소셜계정으로 로그인</SocialLoginHeader>
           <SocialLogin href={KAKAO_AUTH_URL} onClick={close}>
             <img src={kakao} alt="kakaologin" width="48rem"></img>
           </SocialLogin>
