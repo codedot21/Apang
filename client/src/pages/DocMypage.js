@@ -175,7 +175,7 @@ const MyreviewTitle = styled.h2`
 
 // 대답 끝
 
-function DocMypage() {
+function DocMypage(props) {
   const [imgInfo, setImgInfo] = useState({
     file: [],
     filepreview: null,
@@ -207,65 +207,76 @@ function DocMypage() {
   };
   return (
     <>
-      <DocContainer>
-        {/* 회원정보 시작 */}
-        <Title>회원정보</Title>
-        <UserContainerLine>
-          {/* <Profile
+      {props.userInfo ? (
+        <DocContainer>
+          {/* 회원정보 시작 */}
+          <Title>회원정보</Title>
+          <UserContainerLine>
+            {/* <Profile
           type="file"
           type="file"
           id="upload_file"
           style={{ display: "none" }}
           onChange={handleInputChange}
         /> */}
-          <Profilecontainer>
-            <Profile>
-              {imgInfo.filepreview !== null ? (
-                <img src={imgInfo.filepreview} alt="uploadimage" />
-              ) : null}
-            </Profile>
-            <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
-          </Profilecontainer>
-          <Usercontainer>
-            <UserEmailTitle>이메일</UserEmailTitle>
-            <UserEmail type="text" name="val" disabled />
-            <UserEmailTitle>닉네임</UserEmailTitle>
-            <UserEmail type="text" placeholder="닉네임" />
-            {/* <NickNameEdit>수정</NickNameEdit> */}
+            <Profilecontainer>
+              <Profile>
+                {imgInfo.filepreview !== null ? (
+                  <img src={imgInfo.filepreview} alt="uploadimage" />
+                ) : (
+                  <img alt="doctorimage" src="" />
+                )}
+              </Profile>
+              <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
+            </Profilecontainer>
+            <Usercontainer>
+              <UserEmailTitle>이메일</UserEmailTitle>
+              <UserEmail
+                value={props.userInfo.email}
+                type="text"
+                name="val"
+                disabled
+              />
+              <UserEmailTitle>이름</UserEmailTitle>
+              <UserEmail type="text" defaultValue={props.userInfo.name} />
+              {/* <NickNameEdit>수정</NickNameEdit> */}
 
-            <UserEmailTitle>병원명</UserEmailTitle>
-            <UserEmail type="text" placeholder="병원명" />
-            {/* <HospitalBtn>수정</HospitalBtn> */}
-          </Usercontainer>
-        </UserContainerLine>
-        <Edting>저장하기</Edting>
+              <UserEmailTitle>병원명</UserEmailTitle>
+              <UserEmail type="text" placeholder={props.userInfo.hospital} />
+              {/* <HospitalBtn>수정</HospitalBtn> */}
+            </Usercontainer>
+          </UserContainerLine>
+          <Edting>저장하기</Edting>
 
-        {/* 회원정보 끝 */}
-        <br />
+          {/* 회원정보 끝 */}
+          <br />
 
-        <PasswordLine>
-          <PassWordTitle>기존비밀번호</PassWordTitle>
-          <PassWordInput placeholder="기존" type="password"></PassWordInput>
-          <PassWordTitle>새로운 비밀번호</PassWordTitle>
-          <PassWordInput placeholder="New" type="password"></PassWordInput>
-          <PassWordTitle>비밀번호 확인</PassWordTitle>
-          <PassWordInput
-            placeholder="New 한번 더"
-            type="password"
-          ></PassWordInput>
-        </PasswordLine>
-        <Box>
-          <EditPasswordDeleted>비밀번호 변경</EditPasswordDeleted>
-          <EditPasswordDeleted>회원탈퇴</EditPasswordDeleted>
-        </Box>
-        {/* 비밀번호 끝 */}
+          <PasswordLine>
+            <PassWordTitle>기존비밀번호</PassWordTitle>
+            <PassWordInput placeholder="기존" type="password"></PassWordInput>
+            <PassWordTitle>새로운 비밀번호</PassWordTitle>
+            <PassWordInput placeholder="New" type="password"></PassWordInput>
+            <PassWordTitle>비밀번호 확인</PassWordTitle>
+            <PassWordInput
+              placeholder="New 한번 더"
+              type="password"
+            ></PassWordInput>
+          </PasswordLine>
+          <Box>
+            <EditPasswordDeleted>비밀번호 변경</EditPasswordDeleted>
+            <EditPasswordDeleted>회원탈퇴</EditPasswordDeleted>
+          </Box>
+          {/* 비밀번호 끝 */}
 
-        <hr />
-        {/* MY Review 시작*/}
-        <MyreviewTitle>MY Answer</MyreviewTitle>
+          <hr />
+          {/* MY Review 시작*/}
+          <MyreviewTitle>MY Answer</MyreviewTitle>
 
-        {/* MY Review 끝*/}
-      </DocContainer>
+          {/* MY Review 끝*/}
+        </DocContainer>
+      ) : (
+        ""
+      )}
     </>
   );
 }

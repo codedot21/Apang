@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export const ModalBackGround = styled.div`
@@ -95,12 +95,21 @@ export const BtnMenu = styled.button`
 `;
 
 function SignUpModal({ open, close }) {
+  const navigate = useNavigate();
   const [isSelect, setIsSelect] = useState("public");
   const [publicInfo, setPublicInfo] = useState({
     email: "",
     nickname: "",
     password: "",
   });
+
+  const publicChange = (key) => (e) => {
+    setPublicInfo({
+      ...publicInfo,
+      [key]: e.target.value,
+    });
+  };
+
   const [doctorInfo, setDoctorInfo] = useState({
     email: "",
     name: "",
@@ -109,10 +118,6 @@ function SignUpModal({ open, close }) {
     license: "",
   });
 
-  const handleClick = (e) => {
-    setIsSelect(e.target.value);
-  };
-
   const doctorChange = (key) => (e) => {
     setDoctorInfo({
       ...doctorInfo,
@@ -120,7 +125,21 @@ function SignUpModal({ open, close }) {
     });
   };
 
-  const publicSignUp = () => {};
+  const handleClick = (e) => {
+    setIsSelect(e.target.value);
+  };
+
+  const publicSignUp = () => {
+    axios
+      .post("http://localhost:4000/public/signup", publicInfo, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log("회원가입 완료");
+        close();
+        navigate("/");
+      });
+  };
 
   const doctorSignUp = () => {
     axios
@@ -129,6 +148,8 @@ function SignUpModal({ open, close }) {
       })
       .then((res) => {
         console.log("회원가입 완료");
+        close();
+        navigate("/");
       });
   };
 
@@ -155,13 +176,25 @@ function SignUpModal({ open, close }) {
         {isSelect === "public" ? (
           <LoginBody>
             <div>
-              <input type="email" placeholder="Email" />
+              <input
+                type="email"
+                placeholder="Email"
+                onChange={publicChange("email")}
+              />
             </div>
             <div>
-              <input type="password" placeholder="Password" />
+              <input
+                type="password"
+                placeholder="Password"
+                onChange={publicChange("password")}
+              />
             </div>
             <div>
-              <input type="text" placeholder="Nickname" />
+              <input
+                type="text"
+                placeholder="Nickname"
+                onChange={publicChange("nickname")}
+              />
             </div>
             <Button onClick={publicSignUp}>가입하기</Button>
           </LoginBody>

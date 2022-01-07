@@ -15,6 +15,48 @@ function App() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+  const [accessToken, setAccessToken] = useState("");
+  const [auth, setAuth] = useState("");
+
+  // useEffect(() => {
+  //   setUserInfo(localStorage.getItem("userInfo"));
+  // }, []);
+  const isAuthenticated = (authnumber) => {
+    if (authnumber === 2 || authnumber === 0) {
+      axios
+        .get("http://localhost:4000/public/userinfo", {
+          withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
+        })
+        .then((res) => {
+          // console.log(res);
+          console.log(res.data.userInfo);
+          setUserInfo(res.data.userInfo);
+          setAuth(res.data.userInfo.auth); //nav에 내려주기 위해
+          setIsLogin(true);
+          navigate("/");
+        });
+    } else if (authnumber === 1) {
+      axios
+        .get("http://localhost:4000/doctor/userinfo", {
+          withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
+        })
+        .then((res) => {
+          console.log(res.data.userInfo);
+          setUserInfo(res.data.userInfo);
+          setAuth(res.data.userInfo.auth);
+          setIsLogin(true);
+          navigate("/");
+        });
+    }
+  };
+
+  const handleResponseSuccess = (authnumber) => {
+    isAuthenticated(authnumber);
+  };
+
+  // useEffect(() => {
+  //   isAuthenticated();
+  // }, []); //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
 
   const LoginHandler = (data) => {
     setUserInfo(data);
@@ -24,26 +66,59 @@ function App() {
 
   const handleLogout = () => {
     axios
-      .post("http://localhost:80/common/kakaosignout", {
-        userid: localStorage.getItem("userid"),
-      })
+      .post(
+        "http://localhost:4000/common/signout",
+        {
+          auth: auth,
+          userid: localStorage.getItem("userid"),
+          // credentials: "include",
+        },
+        { withCredentials: true } //서버-클라이언트 쿠키연결.
+      )
       .then((res) => {
-        setUserInfo("");
+        console.log("록아웃되니?");
+        setUserInfo(null);
         setIsLogin(false);
+        setAccessToken("");
         localStorage.removeItem("userid");
         alert("로그아웃이 되었습니다.");
         navigate("/");
       });
+    // // .catch(() =>
+    // axios
+    //   .post("http://localhost:4000/common/kakaosignout", {
+    //     userid: localStorage.getItem("userid"),
+    //   })
+    //   .then((res) => {
+    //     setUserInfo("");
+    //     setIsLogin(false);
+    //     localStorage.removeItem("userid");
+    //     localStorage.removeItem("ACCESS_TOKEN");
+    //     alert("로그아웃이 되었습니다.");
+    //     navigate("/");
+    //   });
+    // );
   };
 
   return (
     <>
-      <Nav isLogin={isLogin} handleLogout={handleLogout} />
+      <Nav
+        isLogin={isLogin}
+        auth={auth}
+        handleResponseSuccess={handleResponseSuccess}
+        handleLogout={handleLogout}
+      />
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/authpage" element={<AuthPage />} />
-        <Route path="/mypage/publicprofile" element={<UserMypage />} />
-        <Route path="/mypage/doctorprofile" element={<DocMypage />} />
+        <Route
+          path="/mypage/publicprofile"
+          element={<UserMypage userInfo={userInfo} />}
+        />
+        <Route
+          path="/mypage/doctorprofile"
+          element={<DocMypage userInfo={userInfo} />}
+        />
         <Route
           path="/oauth/callback/kakao"
           element={<Kakao LoginHandler={LoginHandler} />}

@@ -99,7 +99,7 @@ export const ModalContainer = styled.div`
   border: 8%;
 `;
 
-function SigninModal({ open, close }) {
+function SigninModal({ open, close, handleResponseSuccess }) {
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -117,7 +117,9 @@ function SigninModal({ open, close }) {
       .post("http://localhost:4000/common/signin", userInfo, {
         withCredentials: true,
       })
-      .then(() => {
+      .then((res) => {
+        console.log("auth번호!", res.data.data.auth);
+        handleResponseSuccess(res.data.data.auth);
         console.log("로그인 완료");
         close();
       });
@@ -141,7 +143,7 @@ function SigninModal({ open, close }) {
               onChange={handleInputChange("password")}
             />
           </div>
-          <Button onClick={handleSignIn}>로그인 </Button>
+          <Button onClick={handleSignIn}>로그인</Button>
         </LoginBody>
         <LoginFooter>
           <SocialLoginHeader>소셜로그인</SocialLoginHeader>

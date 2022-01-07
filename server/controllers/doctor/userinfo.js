@@ -1,7 +1,7 @@
 const { doctors } = require("../../models");
 const { isAuthorized } = require("../tokenFunctions");
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   // body 내용 확인
   // console.log(req.body);
 
@@ -14,7 +14,7 @@ module.exports = (req, res) => {
   }
   // 토큰이 유효할 때
   else {
-    const doctorInfo = doctors.findOne({
+    const doctorInfo = await doctors.findOne({
       where: {
         id: accessToken.id,
       },
