@@ -24,6 +24,7 @@ const UserContainerLine = styled.div`
   height: 190px;
   width: 80%;
   margin: 0 auto;
+  margin-bottom: 15px;
 `;
 
 const Profilecontainer = styled.div`
@@ -31,8 +32,6 @@ const Profilecontainer = styled.div`
   width: 40%;
   text-align: center;
   height: 80%;
-
-  object-fit: cover;
 `;
 
 const Profile = styled.input``;
@@ -46,19 +45,19 @@ const ProfileEditing = styled.label`
   &:hover {
     background-color: #002171;
   }
-  position: relative;
-  top: 2vw;
-  right: 4vw;
+  display: block;
+  width: 6vw;
+  margin: auto;
 `;
 
-const UserEmailTitle = styled.div`
+const UserTitle = styled.div`
   float: left;
   padding: 1rem;
   font-weight: bold;
   width: 20%;
 `;
 
-const UserEmail = styled.input`
+const UserInput = styled.input`
   float: left;
   padding: 1rem;
   border: 1px solid black;
@@ -68,18 +67,17 @@ const UserEmail = styled.input`
 `;
 
 const Edting = styled.button`
-  width: 20%;
   border: 1px solid #63b5f6;
   background-color: #63b5f6;
   border-radius: 30px;
   color: #fff;
   padding: 10px;
-  margin: 20px;
   &:hover {
     background-color: #002171;
   }
-  position: relative;
-  left: 35vw;
+  display: block;
+  margin: auto;
+  width: 7vw;
 `;
 
 // 회원정보 끝
@@ -203,12 +201,6 @@ function UserMypage() {
         {/* 회원정보 시작 */}
         <Title>회원정보</Title>
         <UserContainerLine>
-          {/* <Profile
-            type="file"
-            id="upload_file"
-            style={{ display: "none" }}
-            onChange={handleInputChange}
-          /> */}
           <Profilecontainer>
             <Profile
               type="file"
@@ -235,10 +227,10 @@ function UserMypage() {
             <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
           </Profilecontainer>
 
-          <UserEmailTitle>이메일</UserEmailTitle>
-          <UserEmail type="text" name="val" disabled />
-          <UserEmailTitle>닉네임</UserEmailTitle>
-          <UserEmail
+          <UserTitle>이메일</UserTitle>
+          <UserInput type="text" name="val" disabled />
+          <UserTitle>닉네임</UserTitle>
+          <UserInput
             type="text"
             placeholder="닉네임"
             onChange={handleInputChange("nickname")}

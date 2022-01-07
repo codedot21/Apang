@@ -18,27 +18,23 @@ const Title = styled.h1`
   padding: 1rem;
 `;
 
-const UserContainerLine = styled.div`
+const DocContainerLine = styled.div`
   border: 1px solid #b5afaf;
   padding: 2rem;
   height: 220px;
   width: 80%;
   margin: 0 auto;
+  margin-bottom: 10px;
 `;
 
 const Profilecontainer = styled.div`
   float: left;
   width: 40%;
   text-align: center;
+  height: 80%;
 `;
 
-const Profile = styled.div`
-  width: 50%;
-  height: 100px;
-  border: 1px solid #b5afaf;
-  padding: 40px;
-  margin: 0 auto;
-`;
+const Profile = styled.input``;
 
 const ProfileEditing = styled.label`
   border: 1px solid #63b5f6;
@@ -49,17 +45,18 @@ const ProfileEditing = styled.label`
   &:hover {
     background-color: #002171;
   }
-  position: relative;
-  top: 2vw;
+  display: block;
+  width: 6vw;
+  margin: auto;
 `;
 
-const Usercontainer = styled.div`
+const DocLine = styled.div`
   width: 60%;
   float: right;
   height: 13vw;
 `;
 
-const UserEmailTitle = styled.div`
+const DocTitle = styled.div`
   float: left;
   padding: 1rem;
   font-weight: bold;
@@ -67,7 +64,7 @@ const UserEmailTitle = styled.div`
   height: 23%;
 `;
 
-const UserEmail = styled.input`
+const DocInput = styled.input`
   float: left;
   padding: 1rem;
   border: 1px solid black;
@@ -76,45 +73,20 @@ const UserEmail = styled.input`
   margin-bottom: 10px;
 `;
 
-const HospitalBtn = styled.button`
-  border: 1px solid #63b5f6;
-  background-color: #63b5f6;
-  color: #fff;
-  padding: 5px;
-  border-radius: 30px;
-  position: relative;
-  top: 60px;
-  right: 35px;
-  &:hover {
-    background-color: #002171;
-  }
-`;
-
-const NickNameEdit = styled.button`
-  border: 1px solid #63b5f6;
-  background-color: #63b5f6;
-  border-radius: 30px;
-  color: #fff;
-  padding: 5px;
-  margin-left: 20px;
-  &:hover {
-    background-color: #002171;
-  }
-`;
-
 const Edting = styled.button`
-  width: 20%;
   border: 1px solid #63b5f6;
   background-color: #63b5f6;
   border-radius: 30px;
   color: #fff;
   padding: 10px;
-  margin: 20px;
   &:hover {
     background-color: #002171;
   }
-  position: relative;
-  left: 35vw;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  width: 7vw;
+  clear: both;
 `;
 
 // 회원정보 끝
@@ -176,6 +148,7 @@ const MyreviewTitle = styled.h2`
 // 대답 끝
 
 function DocMypage() {
+  // console.log("DocMypage: ", userInfo.email);
   const [imgInfo, setImgInfo] = useState({
     file: [],
     filepreview: null,
@@ -195,7 +168,7 @@ function DocMypage() {
     const formdata = new FormData();
     formdata.append("apang", imgInfo.file);
     console.log(formdata);
-    axios.post("http://localhost:80/public/profile", formdata, {
+    axios.post("http://localhost:4000/public/profile", formdata, {
       headers: { "Content-type": "multipart/form-data" },
     });
     // .then((res) => {
@@ -209,35 +182,42 @@ function DocMypage() {
     <>
       <DocContainer>
         {/* 회원정보 시작 */}
-        <Title>회원정보</Title>
-        <UserContainerLine>
-          {/* <Profile
-          type="file"
-          type="file"
-          id="upload_file"
-          style={{ display: "none" }}
-          onChange={handleInputChange}
-        /> */}
+        <Title>의사정보</Title>
+        <DocContainerLine>
           <Profilecontainer>
-            <Profile>
-              {imgInfo.filepreview !== null ? (
-                <img src={imgInfo.filepreview} alt="uploadimage" />
-              ) : null}
-            </Profile>
-            <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
-          </Profilecontainer>
-          <Usercontainer>
-            <UserEmailTitle>이메일</UserEmailTitle>
-            <UserEmail type="text" name="val" disabled />
-            <UserEmailTitle>닉네임</UserEmailTitle>
-            <UserEmail type="text" placeholder="닉네임" />
-            {/* <NickNameEdit>수정</NickNameEdit> */}
+            <Profile
+              type="file"
+              id="upload_file"
+              style={{ display: "none" }}
+              onChange={handleInputChange}
+            />
 
-            <UserEmailTitle>병원명</UserEmailTitle>
-            <UserEmail type="text" placeholder="병원명" />
-            {/* <HospitalBtn>수정</HospitalBtn> */}
-          </Usercontainer>
-        </UserContainerLine>
+            {imgInfo.filepreview !== null ? (
+              <img
+                src={imgInfo.filepreview}
+                alt="uploadimage"
+                style={{
+                  width: "100px",
+                  height: "90px",
+                  objectFit: "scale-down",
+                }}
+              />
+            ) : null}
+
+            <ProfileEditing htmlFor="upload_file" onClick={() => submit()}>
+              편집
+            </ProfileEditing>
+          </Profilecontainer>
+
+          <DocLine>
+            <DocTitle>이메일</DocTitle>
+            <DocInput type="email" disabled />
+            <DocTitle>닉네임</DocTitle>
+            <DocInput type="text" placeholder="닉네임" />
+            <DocTitle>병원명</DocTitle>
+            <DocInput type="text" placeholder="병원명" />
+          </DocLine>
+        </DocContainerLine>
         <Edting>저장하기</Edting>
 
         {/* 회원정보 끝 */}

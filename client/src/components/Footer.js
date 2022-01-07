@@ -34,6 +34,14 @@ const Careeres = styled.div`
   font-size: 20px;
   float: left;
   width: 20%;
+  @media ${({ theme }) => theme.device.ipad} {
+    width: 18rem;
+    max-width: 60rem;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 20rem;
+    max-width: 8rem;
+  }
 `;
 
 function Footer() {

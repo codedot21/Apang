@@ -6,6 +6,7 @@ import Main from "./pages/Main.js";
 import AuthPage from "./pages/AuthPage.js";
 import UserMypage from "./pages/UserMypage.js";
 import DocMypage from "./pages/DocMypage.js";
+import ReviewPage from "./pages/ReviewPage.js";
 import Footer from "./components/Footer.js";
 import Kakao from "./components/Kakao.js";
 
@@ -24,7 +25,7 @@ function App() {
 
   const handleLogout = () => {
     axios
-      .post("http://localhost:80/common/kakaosignout", {
+      .post("http://localhost:4000/common/kakaosignout", {
         userid: localStorage.getItem("userid"),
       })
       .then((res) => {
@@ -44,6 +45,7 @@ function App() {
         <Route path="/authpage" element={<AuthPage />} />
         <Route path="/mypage/publicprofile" element={<UserMypage />} />
         <Route path="/mypage/doctorprofile" element={<DocMypage />} />
+        <Route path="/reviewpage" element={<ReviewPage />} />
         <Route
           path="/oauth/callback/kakao"
           element={<Kakao LoginHandler={LoginHandler} />}

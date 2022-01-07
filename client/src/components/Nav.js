@@ -162,6 +162,9 @@ function Nav({ handleLogout }) {
                   <NavLink to="/mypage/doctorprofile">
                     <MenuBtn>의사마이</MenuBtn>
                   </NavLink>
+                  <NavLink to="/reviewpage">
+                    <MenuBtn>리뷰작성</MenuBtn>
+                  </NavLink>
                   <NavLink to="/authpage">
                     <MenuBtn>관리자</MenuBtn>
                   </NavLink>
