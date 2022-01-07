@@ -16,6 +16,8 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
 
+  let GoogleEmail;
+
   const LoginHandler = (data) => {
     setUserInfo(data);
     console.log(userInfo);
@@ -42,7 +44,11 @@ function App() {
       method: "post",
       data: { authorizationCode },
       withCredentials: true,
-    }).then((res) => {});
+    }).then((res) => {
+      console.log("여기", res.data);
+      console.log("여기", res.data.data.email);
+      console.log("여기", res.data.data.name);
+    });
   };
 
   useEffect(() => {
