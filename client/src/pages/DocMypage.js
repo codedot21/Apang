@@ -32,7 +32,7 @@ const Profilecontainer = styled.div`
   text-align: center;
 `;
 
-const Profile = styled.div`
+const Profile = styled.input`
   width: 50%;
   height: 100px;
   border: 1px solid #b5afaf;
@@ -180,63 +180,114 @@ function DocMypage() {
     file: [],
     filepreview: null,
   });
-  const handleInputChange = (e) => {
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    hospital: "",
+    password: "",
+    newPassword: "",
+  });
+  const handleImgChange = (e) => {
     setImgInfo({
       ...imgInfo,
       file: e.target.files[0],
       filepreview: URL.createObjectURL(e.target.files[0]),
     });
   };
+  const handleInputChange = (key) => (e) => {
+    setUserInfo({
+      ...userInfo,
+      [key]: e.target.value,
+    });
+  };
 
   // 수정
   // const [isSucces, setSuccess] = useState(null);
-  const submit = async () => {
-    console.log("저장");
+  const submit = () => {
+    // console.log("저장");
     const formdata = new FormData();
     formdata.append("apang", imgInfo.file);
-    console.log(formdata);
+    formdata.append("name", userInfo.name);
+    formdata.append("hospital", userInfo.hospital);
+    // formdata.append("hospital", userInfo.hospital);
     axios.post("http://localhost:4000/doctor/profile", formdata, {
       headers: { "Content-type": "multipart/form-data" },
+      withCredentials: true,
     });
-    // .then((res) => {
-    //   console.warn(res);
-    //   if (res.data.success === 1) {
-    //     setSuccess("이미지가 성공적으로 업데이트 되었습니다");
-    //   }
-    // });
   };
+
+  // 비밀번호 변경
+  const passwordChange = () => {
+    delete userInfo.name;
+    delete userInfo.hospital;
+    // console.log(userInfo);
+    axios.post("http://localhost:4000/doctor/profile", userInfo, {
+      withCredentials: true,
+    });
+  };
+
+  // 회원탈퇴
+  const deleteHandler = () => {
+    axios
+      .delete("http://localhost:4000/common/users", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        // 서버에서 넘겨준 auth 잘 불러오는지 확인.
+        // console.log(res.data.auth);
+        // 로그아웃 상태로 메인페이지로 보내줘야됨
+      });
+  };
+
   return (
     <>
       <DocContainer>
         {/* 회원정보 시작 */}
         <Title>회원정보</Title>
         <UserContainerLine>
-          {/* <Profile
-          type="file"
-          type="file"
-          id="upload_file"
-          style={{ display: "none" }}
-          onChange={handleInputChange}
-        /> */}
           <Profilecontainer>
-            <Profile>
+            <Profile
+              type="file"
+              id="upload_file"
+              style={{
+                display: "none",
+              }}
+              onChange={handleImgChange}
+            />
+            <Box onChange={handleImgChange}>
               {imgInfo.filepreview !== null ? (
-                <img src={imgInfo.filepreview} alt="uploadimage" />
+                <img
+                  src={imgInfo.filepreview}
+                  alt="uploadimage"
+                  style={{
+                    width: "100px",
+                    height: "90px",
+                    objectFit: "scale-down",
+                  }}
+                />
               ) : null}
-            </Profile>
+            </Box>
             <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
-            <input type="file" onChange={handleInputChange} />
+            {/* <input
+              type="file"
+              id="upload_file"
+              onChange={handleImgChange}
+            ></input> */}
           </Profilecontainer>
           <Usercontainer>
             <UserEmailTitle>이메일</UserEmailTitle>
             <UserEmail type="text" name="val" disabled />
-            <UserEmailTitle>닉네임</UserEmailTitle>
-            <UserEmail type="text" placeholder="닉네임" />
-            {/* <NickNameEdit>수정</NickNameEdit> */}
-
+            <UserEmailTitle>이름</UserEmailTitle>
+            <UserEmail
+              type="text"
+              placeholder="이름"
+              onChange={handleInputChange("name")}
+            />
             <UserEmailTitle>병원명</UserEmailTitle>
-            <UserEmail type="text" placeholder="병원명" />
-            {/* <HospitalBtn>수정</HospitalBtn> */}
+            <UserEmail
+              type="text"
+              placeholder="병원명"
+              onChange={handleInputChange("hospital")}
+            />
           </Usercontainer>
         </UserContainerLine>
         <Edting onClick={submit}>저장하기</Edting>
@@ -246,9 +297,17 @@ function DocMypage() {
 
         <PasswordLine>
           <PassWordTitle>기존비밀번호</PassWordTitle>
-          <PassWordInput placeholder="기존" type="password"></PassWordInput>
+          <PassWordInput
+            placeholder="기존"
+            type="password"
+            onChange={handleInputChange("password")}
+          ></PassWordInput>
           <PassWordTitle>새로운 비밀번호</PassWordTitle>
-          <PassWordInput placeholder="New" type="password"></PassWordInput>
+          <PassWordInput
+            placeholder="New"
+            type="password"
+            onChange={handleInputChange("newPassword")}
+          ></PassWordInput>
           <PassWordTitle>비밀번호 확인</PassWordTitle>
           <PassWordInput
             placeholder="New 한번 더"
@@ -256,8 +315,12 @@ function DocMypage() {
           ></PassWordInput>
         </PasswordLine>
         <Box>
-          <EditPasswordDeleted>비밀번호 변경</EditPasswordDeleted>
-          <EditPasswordDeleted>회원탈퇴</EditPasswordDeleted>
+          <EditPasswordDeleted onClick={passwordChange}>
+            비밀번호 변경
+          </EditPasswordDeleted>
+          <EditPasswordDeleted onClick={deleteHandler}>
+            회원탈퇴
+          </EditPasswordDeleted>
         </Box>
         {/* 비밀번호 끝 */}
 

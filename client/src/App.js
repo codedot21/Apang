@@ -25,17 +25,24 @@ function App() {
   };
 
   const handleLogout = () => {
-    axios
-      .post("http://localhost:4000/common/kakaosignout", {
-        userid: localStorage.getItem("userid"),
-      })
-      .then((res) => {
-        setUserInfo("");
-        setIsLogin(false);
-        localStorage.removeItem("userid");
-        alert("로그아웃이 되었습니다.");
-        navigate("/");
-      });
+    // axios
+    //   .post("http://localhost:4000/common/kakaosignout", {
+    //     userid: localStorage.getItem("userid"),
+    //   })
+    //   .then((res) => {
+    //     setUserInfo("");
+    //     setIsLogin(false);
+    //     localStorage.removeItem("userid");
+    //     alert("로그아웃이 되었습니다.");
+    //     navigate("/");
+    //   });
+    axios.post(
+      "http://localhost:4000/common/signout",
+      {},
+      {
+        withCredentials: true,
+      }
+    );
   };
 
   const getGoogleToken = async (authorizationCode) => {

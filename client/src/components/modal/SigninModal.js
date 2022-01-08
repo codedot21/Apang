@@ -119,7 +119,12 @@ export const ModalContainer = styled.div`
   border: 8%;
 `;
 
+export const ErrMsg = styled.div`
+  color: red;
+`;
+
 function SigninModal({ open, close }) {
+  const [errMsg, setErrMsg] = useState("");
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -138,9 +143,14 @@ function SigninModal({ open, close }) {
       .post("http://localhost:4000/common/signin", userInfo, {
         withCredentials: true,
       })
-      .then(() => {
-        console.log("로그인 완료");
-        close();
+      .then((res) => {
+        // console.log("로그인 완료");
+        if (res.data.error === 1) {
+          setErrMsg("이메일과 비밀번호를 확인해 주세요");
+        } else {
+          // console.log(res.status);
+          close();
+        }
       });
   };
   return open ? (
@@ -150,6 +160,7 @@ function SigninModal({ open, close }) {
           로그인
           <button onClick={close}> &times; </button>
         </LoginHeader>
+        <ErrMsg>{errMsg}</ErrMsg>
         <LoginBody>
           <div>
             <input

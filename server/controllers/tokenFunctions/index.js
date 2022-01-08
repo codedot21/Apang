@@ -21,13 +21,13 @@ module.exports = {
   },
   isAuthorized: (req) => {
     const token = req.cookies.jwt;
-    console.log("token : ", token);
+    // console.log("token : ", token);
     const userinfo = jwt.verify(
       token,
       process.env.ACCESS_SECRET,
       (err, decoded) => {
-        console.log("이쪽응로왔나?");
-        console.log("decoded : ", decoded);
+        // console.log("이쪽응로왔나?");
+        // console.log("decoded : ", decoded);
         if (decoded) {
           return decoded;
         } else {
