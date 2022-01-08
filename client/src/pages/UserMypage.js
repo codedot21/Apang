@@ -177,6 +177,7 @@ function UserMypage() {
     formdata.append("apang", imgInfo.file);
     // console.log(formdata);
     formdata.append("nickname", userInfo.nickname);
+    formdata.append("token", localStorage.getItem("accessToken"));
     axios.post("http://localhost:4000/public/profile", formdata, {
       headers: { "Content-type": "multipart/form-data" },
       withCredentials: true,
@@ -188,13 +189,26 @@ function UserMypage() {
     //   }
     // });
   };
-
+  // 비밀번호 변경
   const passwordChange = () => {
     delete userInfo.nickname;
     // console.log("비밀번호 변경 : ", userInfo);
     axios.post("http://localhost:4000/public/profile", userInfo, {
       withCredentials: true,
     });
+  };
+
+  // 회원탈퇴
+  const deleteHandler = () => {
+    axios
+      .delete("http://localhost:4000/common/users", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        // 서버에서 넘겨준 auth 잘 불러오는지 확인.
+        // console.log(res.data.auth);
+        // 로그아웃 상태로 메인페이지로 보내줘야됨
+      });
   };
 
   return (
@@ -273,7 +287,9 @@ function UserMypage() {
           <EditPasswordDeleted onClick={passwordChange}>
             비밀번호 변경
           </EditPasswordDeleted>
-          <EditPasswordDeleted>회원탈퇴</EditPasswordDeleted>
+          <EditPasswordDeleted onClick={deleteHandler}>
+            회원탈퇴
+          </EditPasswordDeleted>
         </Box>
         {/* 비밀번호 끝 */}
 
