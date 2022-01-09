@@ -8,6 +8,8 @@ import UserMypage from "./pages/UserMypage.js";
 import DocMypage from "./pages/DocMypage.js";
 import Footer from "./components/Footer.js";
 import Kakao from "./components/Kakao.js";
+import QnaPage from "./pages/QnaPage.js";
+import ScrollTop from "./components/Scroll.js";
 
 import axios from "axios";
 
@@ -70,6 +72,7 @@ function App() {
 
   return (
     <>
+      <ScrollTop />
       <Nav isLogin={isLogin} handleLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Main />} />
@@ -80,6 +83,7 @@ function App() {
           path="/oauth/callback/kakao"
           element={<Kakao LoginHandler={LoginHandler} />}
         />
+        <Route path="/qna" element={<QnaPage />} />
       </Routes>
       <Footer />
     </>

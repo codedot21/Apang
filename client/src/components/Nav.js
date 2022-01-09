@@ -5,6 +5,7 @@ import { Container, Button } from "../styles";
 import Apang from "../images/apang.png";
 import SigninModal from "../components/modal/SigninModal.js";
 import SignUpModal from "../components/modal/SignUpModal.js";
+import { useLocation } from "react-router-dom";
 
 export const NavContainer = styled(Container)`
   background: ${({ theme }) => theme.color.white};
@@ -12,6 +13,7 @@ export const NavContainer = styled(Container)`
   position: sticky;
   align-items: center;
   height: 6rem;
+  top: 0;
 `;
 
 export const LogoWrap = styled(Link)`
@@ -168,7 +170,7 @@ function Nav({ handleLogout }) {
             ) : null}
           </NavMenu>
 
-          <NavLink to="/">
+          <NavLink to="/qna">
             <Button>Q&A</Button>
           </NavLink>
         </NavBtn>
