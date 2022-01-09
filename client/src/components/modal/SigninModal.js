@@ -140,6 +140,8 @@ function SigninModal({ open, close, handleResponseSuccess }) {
       })
       .then((res) => {
         console.log("auth번호!", res.data.data.auth);
+        // localStorage.setItem("auth", res.data.data.auth);
+        // handleResponseSuccess();
         handleResponseSuccess(res.data.data.auth);
         console.log("로그인 완료");
         close();

@@ -235,7 +235,9 @@ function UserMypage(props) {
                 ) : (
                   <img
                     // src={require(`././uploads/${props.userInfo.profile_img}`)}
+                    //사진이름을 한글로 하면 에러뜬다....!
                     src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
+                    // src={`../../public/uploads/${props.userInfo.profile_img}`}
                     alt="publicimage"
                   />
                 )}

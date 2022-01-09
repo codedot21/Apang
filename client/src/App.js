@@ -12,28 +12,33 @@ import Kakao from "./components/Kakao.js";
 import axios from "axios";
 
 function App() {
+  console.log("App.js랜더링");
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
-  const [accessToken, setAccessToken] = useState("");
+  // const [accessToken, setAccessToken] = useState("");
   const [auth, setAuth] = useState("");
 
   // useEffect(() => {
   //   setUserInfo(localStorage.getItem("userInfo"));
   // }, []);
-  const isAuthenticated = (authnumber) => {
+  const isAuthenticated = () => {
+    //쿠키에 jwt가 있는지 없는지 랜더링될떄마다 확인하는 함수..?
+    // const authnumber = localStorage.getItem("auth");
+    const authnumber = parseInt(localStorage.getItem("auth"));
+    console.log(authnumber);
     if (authnumber === 2 || authnumber === 0) {
       axios
         .get("http://localhost:4000/public/userinfo", {
           withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
         })
         .then((res) => {
-          // console.log(res);
+          //console.log(res);
           console.log(res.data.userInfo);
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth); //nav에 내려주기 위해
           setIsLogin(true);
-          navigate("/");
+          // navigate("/");
         });
     } else if (authnumber === 1) {
       axios
@@ -45,18 +50,22 @@ function App() {
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth);
           setIsLogin(true);
-          navigate("/");
+          // navigate("/");
         });
     }
   };
 
   const handleResponseSuccess = (authnumber) => {
-    isAuthenticated(authnumber);
+    localStorage.setItem("auth", authnumber);
+    isAuthenticated();
   };
+  // const handleResponseSuccess = (authnumber) => {
+  //   isAuthenticated(authnumber);
+  // };
 
-  // useEffect(() => {
-  //   isAuthenticated();
-  // }, []); //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
+  useEffect(() => {
+    isAuthenticated();
+  }, []); //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
 
   let GoogleEmail;
 
@@ -81,8 +90,9 @@ function App() {
         console.log("록아웃되니?");
         setUserInfo(null);
         setIsLogin(false);
-        setAccessToken("");
+        // setAccessToken("");
         localStorage.removeItem("userid");
+        localStorage.removeItem("auth");
         alert("로그아웃이 되었습니다.");
         navigate("/");
       });
