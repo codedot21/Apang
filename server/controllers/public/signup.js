@@ -5,9 +5,9 @@ module.exports = (req, res) => {
   // req.body에 회원가입 할 정보가 담겨있음.
   const userInfo = req.body;
   // 닉네임 중복여부를 확인하기위한 코드
-  const existNickname = users.findOne({
-    where: { nickname: userInfo.nickname },
-  });
+  // const existNickname = users.findOne({
+  //   where: { nickname: userInfo.nickname },
+  // });
 
   if (
     userInfo.email === "" ||
@@ -16,9 +16,11 @@ module.exports = (req, res) => {
   ) {
     // 항목이 비었을때 400코드에 bad request메세지를 보내주고 클라이언트에서는 항목이비었다는 메세지.
     res.send({ error: 1, message: "Bad Request" });
-  } else if (existNickname) {
-    res.send({ error: 3, message: "같은 닉넴임이 존재합니다." });
-  } else {
+  }
+  //  else if (existNickname) {
+  //   res.send({ error: 3, message: "같은 닉넴임이 존재합니다." });
+  // }
+  else {
     users
       .findOrCreate({
         where: { email: userInfo.email },
