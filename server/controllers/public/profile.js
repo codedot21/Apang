@@ -4,7 +4,7 @@ const multer = require("multer");
 const path = require("path");
 
 const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../../../client/src/storage/", "uploads"),
+  destination: path.join(__dirname, "../../../client/public/", "uploads"),
   filename: function (req, file, cb) {
     fileName = file.originalname;
     console.log("들어왔나?", file);
@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 
 module.exports = (req, res) => {
   // console.log(req.cookies.jwt);
-  // console.log(req.body);
+  // console.log("req.body : ", req);
 
   const userInfo = isAuthorized(req);
   // console.log("userInfo : ", userInfo);
@@ -30,9 +30,10 @@ module.exports = (req, res) => {
         nickname = nickname.replaceAll('"', "");
         // console.log("nickname : ", nickname);
         // console.log(userInfo.id);
-        console.log("req : ", req);
-        console.log("req.file : ", req.file);
+        // console.log("req : ", req);
+        // console.log("req.file : ", req.file);
         let filename = req.file.filename;
+        console.log("filename은?", filename);
         if (!req.file) {
           // console.log("이거?", req.file);
           return res.send("이미지를 올려주세요");
@@ -54,7 +55,7 @@ module.exports = (req, res) => {
               },
             }
           );
-          res.status(200).send({ message: "닉네임 수정 완료" });
+          res.status(200).send({ message: "프로필 수정 완료" });
           // 그게 아니라면 닉네임도 같이 수정을 함.
         } else {
           // 먼저 바꾼 닉네임이 존재하는지 일반유저 테이블에 찾아본다.

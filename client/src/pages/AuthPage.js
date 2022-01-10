@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
-import MsgModal from "../components/modal/MsgModal";
 
 export const AuthContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -13,6 +12,9 @@ export const AuthContainer = styled(Container)`
 const Auth = styled.h1`
   text-align: left;
   margin: 0 0 20px 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 18px;
+  }
 `;
 
 const Tools = styled.table`
@@ -26,10 +28,26 @@ const TitleHeader = styled.th`
   border-bottom: 1px solid #3b7de0;
   border-left: 1px solid #3b7de0;
   padding: 0.5vw;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 10px;
+    width: 5%;
+    padding: 3px;
+  }
 `;
 
 const Tbody = styled.tbody`
   color: #494949;
+`;
+
+const AgreeBtn = styled.button`
+  border: 1px solid #63b5f6;
+  background-color: #63b5f6;
+  border-radius: 10px;
+  color: #fff;
+  padding: 3px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 10px;
+  }
 `;
 
 function AuthPage() {
@@ -93,18 +111,9 @@ function AuthPage() {
               <TitleHeader>{doctors.license}</TitleHeader>
               <TitleHeader>{doctors.agree}</TitleHeader>
               <TitleHeader>
-                <button
-                  onClick={(e) => agreeHandler(doctors, e)}
-                  style={{
-                    backgroundColor: "#63b5f6",
-                    border: "2px solid #63b5f6",
-                    color: "#eee",
-                    borderRadius: "5px",
-                    padding: "3px",
-                  }}
-                >
+                <AgreeBtn onClick={(e) => agreeHandler(doctors, e)}>
                   승낙
-                </button>
+                </AgreeBtn>
               </TitleHeader>
             </Tbody>
           ))}

@@ -46,7 +46,7 @@ const Kakao = ({ LoginHandler }) => {
             nickname: user.data.properties.nickname,
             email: user.data.kakao_account.email,
           };
-          //LoginHandler(userInfo); //이게 있으면 POST 400 bad request 요청이 2번이나 더 보내진다.
+          LoginHandler(userInfo); //이게 있으면 POST 400 bad request 요청이 2번이나 더 보내진다.
           navigate("/");
         } else {
           window.alert("로그인에 실패하였습니다.");

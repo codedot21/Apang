@@ -94,12 +94,9 @@ export const Btn = styled.button`
   outline: none;
   border: none;
   cursor: pointer;
-  &:hover {
-    background-color: #63b5f6;
-  }
 `;
 
-function Nav({ handleLogout }) {
+function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
   const [isDropOpen, setIsDropOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [signOpen, setSignOpen] = useState(false);
@@ -149,27 +146,42 @@ function Nav({ handleLogout }) {
             <Btn onClick={openDropHandler}>메뉴</Btn>
             {isDropOpen ? (
               <DropDownListContainer>
-                <DropDownList>
-                  <MenuBtn onClick={openSigninModal}>로그인</MenuBtn>
-                  <SigninModal open={loginOpen} close={openSigninModal} />
+                {/* 로그인여부에 따라 보이는 메뉴가 다름 */}
+                {isLogin ? (
+                  <DropDownList>
+                    {auth === 1 ? ( //의사일 경우 의사마이보이게.
+                      <>
+                        <NavLink to="/mypage/doctorprofile">
+                          <MenuBtn>의사마이</MenuBtn>
+                        </NavLink>
+                      </>
+                    ) : auth === 0 ? (
+                      <NavLink to="/authpage">
+                        <MenuBtn>관리자</MenuBtn>
+                      </NavLink>
+                    ) : (
+                      <>
+                        <NavLink to="/mypage/publicprofile">
+                          <MenuBtn>일반마이</MenuBtn>
+                        </NavLink>
+                      </>
+                    )}
 
-                  <MenuBtn onClick={openSignupModal}>회원가입</MenuBtn>
-                  <SignUpModal open={signOpen} close={openSignupModal} />
+                    <MenuBtn onClick={handleLogout}>로그아웃</MenuBtn>
+                  </DropDownList>
+                ) : (
+                  <DropDownList>
+                    <MenuBtn onClick={openSigninModal}>로그인</MenuBtn>
+                    <SigninModal
+                      handleResponseSuccess={handleResponseSuccess}
+                      open={loginOpen}
+                      close={openSigninModal}
+                    />
 
-                  <NavLink to="/mypage/publicprofile">
-                    <MenuBtn>일반마이</MenuBtn>
-                  </NavLink>
-                  <NavLink to="/mypage/doctorprofile">
-                    <MenuBtn>의사마이</MenuBtn>
-                  </NavLink>
-                  <NavLink to="/reviewpage">
-                    <MenuBtn>리뷰작성</MenuBtn>
-                  </NavLink>
-                  <NavLink to="/authpage">
-                    <MenuBtn>관리자</MenuBtn>
-                  </NavLink>
-                  <MenuBtn onClick={handleLogout}>로그아웃</MenuBtn>
-                </DropDownList>
+                    <MenuBtn onClick={openSignupModal}>회원가입</MenuBtn>
+                    <SignUpModal open={signOpen} close={openSignupModal} />
+                  </DropDownList>
+                )}
               </DropDownListContainer>
             ) : null}
           </NavMenu>

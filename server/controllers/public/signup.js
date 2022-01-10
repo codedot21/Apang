@@ -4,13 +4,20 @@ module.exports = (req, res) => {
   console.log("일반 회원가입 : ", req.body);
   // req.body에 회원가입 할 정보가 담겨있음.
   const userInfo = req.body;
+  // 닉네임 중복여부를 확인하기위한 코드
+  const existNickname = users.findOne({
+    where: { nickname: userInfo.nickname },
+  });
+
   if (
-    userInfo.email === undefined ||
-    userInfo.nickname === undefined ||
-    userInfo.password === undefined
+    userInfo.email === "" ||
+    userInfo.nickname === "" ||
+    userInfo.password === ""
   ) {
     // 항목이 비었을때 400코드에 bad request메세지를 보내주고 클라이언트에서는 항목이비었다는 메세지.
-    res.status(400).send({ message: "Bad Request" });
+    res.send({ error: 1, message: "Bad Request" });
+  } else if (existNickname) {
+    res.send({ error: 3, message: "같은 닉넴임이 존재합니다." });
   } else {
     users
       .findOrCreate({
@@ -18,7 +25,7 @@ module.exports = (req, res) => {
         defaults: {
           password: userInfo.password,
           nickname: userInfo.nickname,
-          profile_img: "미정",
+          profile_img: "publicprofile.jpeg",
           auth: 2,
         },
       })
@@ -32,7 +39,7 @@ module.exports = (req, res) => {
         }
         // 중복되는 이메일이 있을때 409상태코드와 Eamil Exist메세지를 보내줌.
         else {
-          res.status(409).send({ message: "Email Exist" });
+          res.send({ error: 2, message: "Email Exist" });
         }
       });
   }

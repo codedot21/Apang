@@ -16,6 +16,9 @@ export const UserContainer = styled(Container)`
 const Title = styled.h1`
   width: 100%;
   padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 20px;
+  }
 `;
 
 const UserContainerLine = styled.div`
@@ -25,6 +28,10 @@ const UserContainerLine = styled.div`
   width: 80%;
   margin: 0 auto;
   margin-bottom: 15px;
+  @media ${({ theme }) => theme.device.mobile} {
+    max-width: 100%;
+    height: 20rem;
+  }
 `;
 
 const Profilecontainer = styled.div`
@@ -32,6 +39,11 @@ const Profilecontainer = styled.div`
   width: 40%;
   text-align: center;
   height: 80%;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    max-width: 100%;
+    height: 50%;
+  }
 `;
 
 const Profile = styled.input``;
@@ -48,6 +60,12 @@ const ProfileEditing = styled.label`
   display: block;
   width: 6vw;
   margin: auto;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 50%;
+    max-width: 8rem;
+    font-size: 13px;
+  }
 `;
 
 const UserTitle = styled.div`
@@ -55,6 +73,11 @@ const UserTitle = styled.div`
   padding: 1rem;
   font-weight: bold;
   width: 20%;
+  @media ${({ theme }) => theme.device.mobile} {
+    float: center;
+    width: 40%;
+    font-size: 12px;
+  }
 `;
 
 const UserInput = styled.input`
@@ -64,6 +87,9 @@ const UserInput = styled.input`
   border-radius: 30px;
   width: 30%;
   margin-bottom: 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 60%;
+  }
 `;
 
 const Edting = styled.button`
@@ -78,6 +104,14 @@ const Edting = styled.button`
   display: block;
   margin: auto;
   width: 7vw;
+
+  @media ${({ theme }) => theme.device.ipad} {
+    width: 10%;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 5rem;
+    font-size: 12px;
+  }
 `;
 
 // 회원정보 끝
@@ -92,6 +126,9 @@ const PasswordLine = styled.div`
   width: 80%;
   margin: 0 auto;
   margin-top: 10px;
+  @media ${({ theme }) => theme.device.mobile} {
+    height: 14rem;
+  }
 `;
 
 const PassWordTitle = styled.span`
@@ -99,6 +136,11 @@ const PassWordTitle = styled.span`
   padding: 20px;
   float: left;
   font-weight: bold;
+  @media ${({ theme }) => theme.device.mobile} {
+    float: left;
+    font-size: 10px;
+    width: 50%;
+  }
 `;
 
 const PassWordInput = styled.input`
@@ -109,6 +151,10 @@ const PassWordInput = styled.input`
   border: 1px solid black;
   border-radius: 30px;
   padding: 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    float: center;
+    width: 40%;
+  }
 `;
 
 const Box = styled.div`
@@ -125,6 +171,10 @@ const EditPasswordDeleted = styled.button`
   margin: 20px;
   &:hover {
     background-color: #002171;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 12px;
+    width: 30%;
   }
 `;
 
@@ -143,7 +193,8 @@ const MyreviewTitle = styled.h2`
 // 마이 큐엔에이 끝
 
 // 상현 수정
-function UserMypage() {
+function UserMypage(props) {
+  console.log(props.userInfo);
   const [imgInfo, setImgInfo] = useState({
     file: [],
     filepreview: null,
@@ -175,6 +226,7 @@ function UserMypage() {
     formdata.append("apang", imgInfo.file);
     // console.log(formdata);
     formdata.append("nickname", userInfo.nickname);
+    formdata.append("token", localStorage.getItem("accessToken"));
     axios.post("http://localhost:4000/public/profile", formdata, {
       headers: { "Content-type": "multipart/form-data" },
       withCredentials: true,
@@ -186,7 +238,7 @@ function UserMypage() {
     //   }
     // });
   };
-
+  // 비밀번호 변경
   const passwordChange = () => {
     delete userInfo.nickname;
     // console.log("비밀번호 변경 : ", userInfo);
@@ -195,91 +247,127 @@ function UserMypage() {
     });
   };
 
+  // 회원탈퇴
+  const deleteHandler = () => {
+    axios
+      .delete("http://localhost:4000/common/users", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        // 서버에서 넘겨준 auth 잘 불러오는지 확인.
+        // console.log(res.data.auth);
+        // 로그아웃 상태로 메인페이지로 보내줘야됨
+      });
+  };
+
   return (
     <>
-      <UserContainer>
-        {/* 회원정보 시작 */}
-        <Title>회원정보</Title>
-        <UserContainerLine>
-          <Profilecontainer>
-            <Profile
-              type="file"
-              id="upload_file"
-              style={{
-                display: "none",
-              }}
-              onChange={handleImgChange}
+      {props.userInfo ? (
+        <UserContainer>
+          {/* 회원정보 시작 */}
+          <Title>회원정보</Title>
+          <UserContainerLine>
+            {/* <Profile
+            type="file"
+            id="upload_file"
+            style={{ display: "none" }}
+            onChange={handleInputChange}
+          /> */}
+            <Profilecontainer>
+              <Profile
+                type="file"
+                id="upload_file"
+                style={{
+                  display: "none",
+                }}
+                onChange={handleImgChange}
+              />
+
+              <Box onChange={handleImgChange}>
+                {imgInfo.filepreview !== null ? (
+                  <img
+                    src={imgInfo.filepreview}
+                    alt="uploadimage"
+                    style={{
+                      width: "100px",
+                      height: "90px",
+                      objectFit: "scale-down",
+                    }}
+                  />
+                ) : (
+                  <img
+                    // src={require(`././uploads/${props.userInfo.profile_img}`)}
+                    //사진이름을 한글로 하면 에러뜬다....!
+                    src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
+                    // src={`../../public/uploads/${props.userInfo.profile_img}`}
+                    alt="publicimage"
+                  />
+                )}
+              </Box>
+              <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
+            </Profilecontainer>
+
+            <UserTitle>이메일</UserTitle>
+            <UserInput
+              type="text"
+              value={props.userInfo.email}
+              name="val"
+              disabled
             />
+            <UserTitle>닉네임</UserTitle>
+            <UserInput
+              type="text"
+              defaultValue={props.userInfo.nickname}
+              onChange={handleInputChange("nickname")}
+            />
+          </UserContainerLine>
+          <Edting onClick={submit}>저장하기</Edting>
 
-            <Box onChange={handleImgChange}>
-              {imgInfo.filepreview !== null ? (
-                <img
-                  src={imgInfo.filepreview}
-                  alt="uploadimage"
-                  style={{
-                    width: "100px",
-                    height: "90px",
-                    objectFit: "scale-down",
-                  }}
-                />
-              ) : null}
-            </Box>
-            <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
-          </Profilecontainer>
+          {/* 회원정보 끝 */}
+          <br />
+          {/* 비밀번호 시작 */}
 
-          <UserTitle>이메일</UserTitle>
-          <UserInput type="text" name="val" disabled />
-          <UserTitle>닉네임</UserTitle>
-          <UserInput
-            type="text"
-            placeholder="닉네임"
-            onChange={handleInputChange("nickname")}
-          />
-        </UserContainerLine>
-        <Edting onClick={submit}>저장하기</Edting>
+          <PasswordLine>
+            <PassWordTitle>기존비밀번호</PassWordTitle>
+            <PassWordInput
+              placeholder="기존"
+              type="password"
+              onChange={handleInputChange("password")}
+            ></PassWordInput>
+            <PassWordTitle>새로운 비밀번호</PassWordTitle>
+            <PassWordInput
+              placeholder="New"
+              type="password"
+              onChange={handleInputChange("newPassword")}
+            ></PassWordInput>
+            <PassWordTitle>비밀번호 확인</PassWordTitle>
+            <PassWordInput
+              placeholder="New 한번 더"
+              type="password"
+            ></PassWordInput>
+          </PasswordLine>
+          <Box>
+            <EditPasswordDeleted onClick={passwordChange}>
+              비밀번호 변경
+            </EditPasswordDeleted>
+            <EditPasswordDeleted>회원탈퇴</EditPasswordDeleted>
+          </Box>
+          {/* 비밀번호 끝 */}
 
-        {/* 회원정보 끝 */}
-        <br />
-        {/* 비밀번호 시작 */}
+          <hr />
+          {/* MY Review 시작*/}
+          <MyreviewTitle>My Review</MyreviewTitle>
 
-        <PasswordLine>
-          <PassWordTitle>기존비밀번호</PassWordTitle>
-          <PassWordInput
-            placeholder="기존"
-            type="password"
-            onChange={handleInputChange("password")}
-          ></PassWordInput>
-          <PassWordTitle>새로운 비밀번호</PassWordTitle>
-          <PassWordInput
-            placeholder="New"
-            type="password"
-            onChange={handleInputChange("newPassword")}
-          ></PassWordInput>
-          <PassWordTitle>비밀번호 확인</PassWordTitle>
-          <PassWordInput
-            placeholder="New 한번 더"
-            type="password"
-          ></PassWordInput>
-        </PasswordLine>
-        <Box>
-          <EditPasswordDeleted onClick={passwordChange}>
-            비밀번호 변경
-          </EditPasswordDeleted>
-          <EditPasswordDeleted>회원탈퇴</EditPasswordDeleted>
-        </Box>
-        {/* 비밀번호 끝 */}
+          {/* MY Review 끝*/}
 
-        <hr />
-        {/* MY Review 시작*/}
-        <MyreviewTitle>My Review</MyreviewTitle>
-
-        {/* MY Review 끝*/}
-
-        <hr />
-        {/*MY Q&A 시작  */}
-        <MyreviewTitle>My Q&A</MyreviewTitle>
-        {/*MY Q&A 끝  */}
-      </UserContainer>
+          <hr />
+          {/*MY Q&A 시작  */}
+          <MyreviewTitle>My Q&A</MyreviewTitle>
+          {/*MY Q&A 끝  */}
+        </UserContainer>
+      ) : (
+        ""
+      )}
     </>
   );
 }
