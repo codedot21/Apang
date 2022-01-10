@@ -175,7 +175,7 @@ const MyreviewTitle = styled.h2`
 
 // 대답 끝
 
-function DocMypage() {
+function DocMypage(props) {
   const [imgInfo, setImgInfo] = useState({
     file: [],
     filepreview: null,
@@ -240,96 +240,107 @@ function DocMypage() {
 
   return (
     <>
-      <DocContainer>
-        {/* 회원정보 시작 */}
-        <Title>회원정보</Title>
-        <UserContainerLine>
-          <Profilecontainer>
-            <Profile
-              type="file"
-              id="upload_file"
-              style={{
-                display: "none",
-              }}
-              onChange={handleImgChange}
-            />
-            <Box onChange={handleImgChange}>
-              {imgInfo.filepreview !== null ? (
-                <img
-                  src={imgInfo.filepreview}
-                  alt="uploadimage"
-                  style={{
-                    width: "100px",
-                    height: "90px",
-                    objectFit: "scale-down",
-                  }}
-                />
-              ) : null}
-            </Box>
-            <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
-            {/* <input
+      {props.userInfo ? (
+        <DocContainer>
+          {/* 회원정보 시작 */}
+          <Title>회원정보</Title>
+          <UserContainerLine>
+            <Profilecontainer>
+              <Profile
+                type="file"
+                id="upload_file"
+                style={{
+                  display: "none",
+                }}
+                onChange={handleImgChange}
+              />
+              <Box onChange={handleImgChange}>
+                {imgInfo.filepreview !== null ? (
+                  <img
+                    src={imgInfo.filepreview}
+                    alt="uploadimage"
+                    style={{
+                      width: "100px",
+                      height: "90px",
+                      objectFit: "scale-down",
+                    }}
+                  />
+                ) : (
+                  <img
+                    // src={require(`././uploads/${props.userInfo.profile_img}`)}
+                    //사진이름을 한글로 하면 에러뜬다....!
+                    src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
+                    alt="publicimage"
+                  />
+                )}
+              </Box>
+              <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
+              {/* <input
               type="file"
               id="upload_file"
               onChange={handleImgChange}
             ></input> */}
-          </Profilecontainer>
-          <Usercontainer>
-            <UserEmailTitle>이메일</UserEmailTitle>
-            <UserEmail type="text" name="val" disabled />
-            <UserEmailTitle>이름</UserEmailTitle>
-            <UserEmail
-              type="text"
-              placeholder="이름"
-              onChange={handleInputChange("name")}
-            />
-            <UserEmailTitle>병원명</UserEmailTitle>
-            <UserEmail
-              type="text"
-              placeholder="병원명"
-              onChange={handleInputChange("hospital")}
-            />
-          </Usercontainer>
-        </UserContainerLine>
-        <Edting onClick={submit}>저장하기</Edting>
+            </Profilecontainer>
+            <Usercontainer>
+              <UserEmailTitle>이메일</UserEmailTitle>
+              <UserEmail type="text" name="val" disabled />
+              <UserEmailTitle>이름</UserEmailTitle>
+              <UserEmail
+                type="text"
+                placeholder="이름"
+                onChange={handleInputChange("name")}
+              />
+              <UserEmailTitle>병원명</UserEmailTitle>
+              <UserEmail
+                type="text"
+                placeholder="병원명"
+                onChange={handleInputChange("hospital")}
+              />
+            </Usercontainer>
+          </UserContainerLine>
+          <Edting onClick={submit}>저장하기</Edting>
 
-        {/* 회원정보 끝 */}
-        <br />
+          {/* 회원정보 끝 */}
+          <br />
 
-        <PasswordLine>
-          <PassWordTitle>기존비밀번호</PassWordTitle>
-          <PassWordInput
-            placeholder="기존"
-            type="password"
-            onChange={handleInputChange("password")}
-          ></PassWordInput>
-          <PassWordTitle>새로운 비밀번호</PassWordTitle>
-          <PassWordInput
-            placeholder="New"
-            type="password"
-            onChange={handleInputChange("newPassword")}
-          ></PassWordInput>
-          <PassWordTitle>비밀번호 확인</PassWordTitle>
-          <PassWordInput
-            placeholder="New 한번 더"
-            type="password"
-          ></PassWordInput>
-        </PasswordLine>
-        <Box>
-          <EditPasswordDeleted onClick={passwordChange}>
-            비밀번호 변경
-          </EditPasswordDeleted>
-          <EditPasswordDeleted onClick={deleteHandler}>
-            회원탈퇴
-          </EditPasswordDeleted>
-        </Box>
-        {/* 비밀번호 끝 */}
+          <PasswordLine>
+            <PassWordTitle>기존비밀번호</PassWordTitle>
+            <PassWordInput
+              placeholder="기존"
+              type="password"
+              onChange={handleInputChange("password")}
+            ></PassWordInput>
+            <PassWordTitle>새로운 비밀번호</PassWordTitle>
+            <PassWordInput
+              placeholder="New"
+              type="password"
+              onChange={handleInputChange("newPassword")}
+            ></PassWordInput>
+            <PassWordTitle>비밀번호 확인</PassWordTitle>
+            <PassWordInput
+              placeholder="New 한번 더"
+              type="password"
+            ></PassWordInput>
+          </PasswordLine>
+          <Box>
+            <EditPasswordDeleted onClick={passwordChange}>
+              비밀번호 변경
+            </EditPasswordDeleted>
+            <EditPasswordDeleted onClick={deleteHandler}>
+              회원탈퇴
+            </EditPasswordDeleted>
+          </Box>
+          {/* 비밀번호 끝 */}
 
-        <hr />
-        {/* MY Review 시작*/}
-        <MyreviewTitle>MY Answer</MyreviewTitle>
+          <hr />
+          {/* MY Review 시작*/}
+          <MyreviewTitle>MY Answer</MyreviewTitle>
 
-        {/* MY Review 끝*/}
-      </DocContainer>
+          {/* MY Review 끝*/}
+        </DocContainer>
+      ) : (
+        ""
+      )}
     </>
   );
 }

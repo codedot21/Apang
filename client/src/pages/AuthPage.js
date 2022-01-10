@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
-import MsgModal from "../components/modal/MsgModal";
 
 export const AuthContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};

@@ -123,7 +123,7 @@ export const ErrMsg = styled.div`
   color: red;
 `;
 
-function SigninModal({ open, close }) {
+function SigninModal({ open, close, handleResponseSuccess }) {
   const [errMsg, setErrMsg] = useState("");
   const [userInfo, setUserInfo] = useState({
     email: "",
@@ -144,10 +144,12 @@ function SigninModal({ open, close }) {
         withCredentials: true,
       })
       .then((res) => {
-        // console.log("로그인 완료");
+        // console.log("auth번호!", res.data.data.auth);
         if (res.data.error === 1) {
           setErrMsg("이메일과 비밀번호를 확인해 주세요");
         } else {
+          handleResponseSuccess(res.data.data.auth);
+          // console.log("로그인 완료");
           // console.log(res.status);
           close();
         }
@@ -176,7 +178,7 @@ function SigninModal({ open, close }) {
               onChange={handleInputChange("password")}
             />
           </div>
-          <Button onClick={handleSignIn}>로그인 </Button>
+          <Button onClick={handleSignIn}>로그인</Button>
         </LoginBody>
         <LoginFooter>
           <SocialLoginHeader>소셜계정으로 로그인</SocialLoginHeader>

@@ -4,7 +4,7 @@ const multer = require("multer");
 const path = require("path");
 
 const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../../../client/src/storage/", "uploads"),
+  destination: path.join(__dirname, "../../../client/public/", "uploads"),
   filename: function (req, file, cb) {
     fileName = file.originalname;
     console.log("들어왔나?", file);
@@ -33,6 +33,7 @@ module.exports = (req, res) => {
         // console.log("req : ", req);
         // console.log("req.file : ", req.file);
         let filename = req.file.filename;
+        console.log("filename은?", filename);
         if (!req.file) {
           // console.log("이거?", req.file);
           return res.send("이미지를 올려주세요");

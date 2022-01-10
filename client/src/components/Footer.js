@@ -98,7 +98,7 @@ function Footer() {
       {/* --------{개인 소개 글 끝}------------ */}
 
       <Title style={{ clear: "both" }}>
-        © Copyright 2022 Apang. The Algoithm Team
+        © Copyright 2022 Apang. The Algoitsm Team
       </Title>
     </FooterContainer>
   );
