@@ -16,6 +16,9 @@ export const UserContainer = styled(Container)`
 const Title = styled.h1`
   width: 100%;
   padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 20px;
+  }
 `;
 
 const UserContainerLine = styled.div`
@@ -24,6 +27,11 @@ const UserContainerLine = styled.div`
   height: 190px;
   width: 80%;
   margin: 0 auto;
+  margin-bottom: 15px;
+  @media ${({ theme }) => theme.device.mobile} {
+    max-width: 100%;
+    height: 20rem;
+  }
 `;
 
 const Profilecontainer = styled.div`
@@ -31,8 +39,11 @@ const Profilecontainer = styled.div`
   width: 40%;
   text-align: center;
   height: 80%;
-
-  object-fit: cover;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    max-width: 100%;
+    height: 50%;
+  }
 `;
 
 const Profile = styled.input``;
@@ -46,40 +57,61 @@ const ProfileEditing = styled.label`
   &:hover {
     background-color: #002171;
   }
-  position: relative;
-  top: 2vw;
-  right: 4vw;
+  display: block;
+  width: 6vw;
+  margin: auto;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 50%;
+    max-width: 8rem;
+    font-size: 13px;
+  }
 `;
 
-const UserEmailTitle = styled.div`
+const UserTitle = styled.div`
   float: left;
   padding: 1rem;
   font-weight: bold;
   width: 20%;
+  @media ${({ theme }) => theme.device.mobile} {
+    float: center;
+    width: 40%;
+    font-size: 12px;
+  }
 `;
 
-const UserEmail = styled.input`
+const UserInput = styled.input`
   float: left;
   padding: 1rem;
   border: 1px solid black;
   border-radius: 30px;
   width: 30%;
   margin-bottom: 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 60%;
+  }
 `;
 
 const Edting = styled.button`
-  width: 20%;
   border: 1px solid #63b5f6;
   background-color: #63b5f6;
   border-radius: 30px;
   color: #fff;
   padding: 10px;
-  margin: 20px;
   &:hover {
     background-color: #002171;
   }
-  position: relative;
-  left: 35vw;
+  display: block;
+  margin: auto;
+  width: 7vw;
+
+  @media ${({ theme }) => theme.device.ipad} {
+    width: 10%;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 5rem;
+    font-size: 12px;
+  }
 `;
 
 // 회원정보 끝
@@ -94,6 +126,9 @@ const PasswordLine = styled.div`
   width: 80%;
   margin: 0 auto;
   margin-top: 10px;
+  @media ${({ theme }) => theme.device.mobile} {
+    height: 14rem;
+  }
 `;
 
 const PassWordTitle = styled.span`
@@ -101,6 +136,11 @@ const PassWordTitle = styled.span`
   padding: 20px;
   float: left;
   font-weight: bold;
+  @media ${({ theme }) => theme.device.mobile} {
+    float: left;
+    font-size: 10px;
+    width: 50%;
+  }
 `;
 
 const PassWordInput = styled.input`
@@ -111,6 +151,10 @@ const PassWordInput = styled.input`
   border: 1px solid black;
   border-radius: 30px;
   padding: 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    float: center;
+    width: 40%;
+  }
 `;
 
 const Box = styled.div`
@@ -127,6 +171,10 @@ const EditPasswordDeleted = styled.button`
   margin: 20px;
   &:hover {
     background-color: #002171;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 12px;
+    width: 30%;
   }
 `;
 
@@ -259,15 +307,15 @@ function UserMypage(props) {
               <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
             </Profilecontainer>
 
-            <UserEmailTitle>이메일</UserEmailTitle>
-            <UserEmail
+            <UserTitle>이메일</UserTitle>
+            <UserInput
               type="text"
               value={props.userInfo.email}
               name="val"
               disabled
             />
-            <UserEmailTitle>닉네임</UserEmailTitle>
-            <UserEmail
+            <UserTitle>닉네임</UserTitle>
+            <UserInput
               type="text"
               defaultValue={props.userInfo.nickname}
               onChange={handleInputChange("nickname")}
