@@ -5,6 +5,7 @@ import google from "../../images/google.png";
 import { KAKAO_AUTH_URL } from "../OAuthKakao";
 import { GOOGLE_AUTHORIZE_URL } from "../OAuthGoogle";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export const ModalBackGround = styled.div`
   position: fixed;
@@ -138,7 +139,7 @@ function SigninModal({ open, close, handleResponseSuccess }) {
   };
 
   const handleSignIn = () => {
-    console.log("로그인");
+    // console.log("로그인");
     axios
       .post("http://localhost:4000/common/signin", userInfo, {
         withCredentials: true,
@@ -147,10 +148,22 @@ function SigninModal({ open, close, handleResponseSuccess }) {
         // console.log("auth번호!", res.data.data.auth);
         if (res.data.error === 1) {
           setErrMsg("이메일과 비밀번호를 확인해 주세요");
+          // console.log("res.data.error : ", res.data.error);
+        } else if (res.data.error === 2) {
+          Swal.fire({
+            icon: "error",
+            title: "Apang 로그인",
+            text: "회원가입 신청이 승낙되지 않았습니다.",
+          });
         } else {
           handleResponseSuccess(res.data.data.auth);
           // console.log("로그인 완료");
           // console.log(res.status);
+          Swal.fire({
+            icon: "success",
+            title: "Apang 로그인",
+            text: "로그인이 완료되었습니다.",
+          });
           close();
         }
       });
