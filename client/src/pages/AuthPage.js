@@ -55,7 +55,7 @@ function AuthPage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/doctor/userinfo", {
+      .get("http://localhost:80/doctor/userinfo", {
         withCredentials: true,
       })
       .then((res) => {
@@ -67,7 +67,7 @@ function AuthPage() {
   const agreeHandler = (params, e) => {
     // console.log(params);
     axios
-      .post("http://localhost:4000/doctor/profile", params.id, {
+      .post("http://localhost:80/doctor/profile", params.id, {
         withCredentials: true,
       })
       .then(() => {
