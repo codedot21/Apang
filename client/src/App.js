@@ -6,6 +6,7 @@ import Main from "./pages/Main.js";
 import AuthPage from "./pages/AuthPage.js";
 import UserMypage from "./pages/UserMypage.js";
 import DocMypage from "./pages/DocMypage.js";
+import ReviewPage from "./pages/ReviewPage.js";
 import Footer from "./components/Footer.js";
 import Kakao from "./components/Kakao.js";
 import QnaPage from "./pages/QnaPage.js";
@@ -154,6 +155,7 @@ function App() {
           path="/mypage/doctorprofile"
           element={<DocMypage userInfo={userInfo} />}
         />
+        <Route path="/reviewpage" element={<ReviewPage />} />
         <Route
           path="/oauth/callback/kakao"
           element={<Kakao LoginHandler={LoginHandler} />}

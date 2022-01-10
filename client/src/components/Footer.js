@@ -1,7 +1,6 @@
 import { FaGithub } from "react-icons/fa";
 import React from "react";
 import styled from "styled-components";
-import { Container } from "../styles";
 
 export const FooterContainer = styled.div`
   // background-color: #dee2e6;
@@ -11,29 +10,49 @@ export const FooterContainer = styled.div`
   justify-content: center;
   align-items: center;
   max-width: 2560px;
+  @media ${({ theme }) => theme.device.ipad} {
+    max-width: 1230px;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    max-width: 900px;
+    font-size: 13px;
+  }
 `;
 
 const Title = styled.div`
   color: #fff;
   width: 100%;
   text-align: center;
-  padding: 1vw;
+  padding: 0.5vw;
   font-size: 18px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 14px;
+  }
 `;
 
 const Lines = styled.div`
   height: 2vw;
-  width: 100%;
-  margin-left: 10vw;
+  text-align: center;
+  margin-bottom: 2vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin-bottom: 14vw;
+  }
 `;
 const Careeres = styled.div`
   color: #fff;
-  padding: 7px;
-  text-align: center;
-  margin-bottom: 1.5vw;
+  padding: 8px;
   font-size: 20px;
-  float: left;
-  width: 20%;
+  @media ${({ theme }) => theme.device.ipad} {
+    display: flex;
+    font-size: 15px;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 14px;
+    padding: 5px;
+  }
 `;
 
 function Footer() {
@@ -97,9 +116,7 @@ function Footer() {
 
       {/* --------{개인 소개 글 끝}------------ */}
 
-      <Title style={{ clear: "both" }}>
-        © Copyright 2022 Apang. The Algoitsm Team
-      </Title>
+      <Title>© Copyright 2022 Apang. The Algoithm Team</Title>
     </FooterContainer>
   );
 }

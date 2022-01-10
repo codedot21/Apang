@@ -12,17 +12,43 @@ export const AuthContainer = styled(Container)`
 const Auth = styled.h1`
   text-align: left;
   margin: 0 0 20px 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 18px;
+  }
 `;
 
 const Tools = styled.table`
-  border: 1px solid black;
+  border: 3px solid #3b7de0;
   width: 100%;
+  text-align: center;
 `;
 const Tools2 = styled.thead``;
 
-const TitleHeader = styled.th``;
+const TitleHeader = styled.th`
+  border-bottom: 1px solid #3b7de0;
+  border-left: 1px solid #3b7de0;
+  padding: 0.5vw;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 10px;
+    width: 5%;
+    padding: 3px;
+  }
+`;
 
-const Tbody = styled.tbody``;
+const Tbody = styled.tbody`
+  color: #494949;
+`;
+
+const AgreeBtn = styled.button`
+  border: 1px solid #63b5f6;
+  background-color: #63b5f6;
+  border-radius: 10px;
+  color: #fff;
+  padding: 3px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 10px;
+  }
+`;
 
 function AuthPage() {
   const [doctors, setDoctors] = useState([]);
@@ -68,11 +94,11 @@ function AuthPage() {
         <Auth>관리자</Auth>
         <Tools>
           <Tools2>
-            <thTitleHeader>ID</thTitleHeader>
-            <TitleHeader>EMAIL</TitleHeader>
-            <TitleHeader>NAME</TitleHeader>
-            <TitleHeader>HOSPITAL</TitleHeader>
-            <TitleHeader>LICENSE</TitleHeader>
+            <TitleHeader>Number</TitleHeader>
+            <TitleHeader>Email</TitleHeader>
+            <TitleHeader>이름</TitleHeader>
+            <TitleHeader>병원명</TitleHeader>
+            <TitleHeader>의사면허번호</TitleHeader>
             <TitleHeader>AGREE</TitleHeader>
             <TitleHeader>승낙여부</TitleHeader>
           </Tools2>
@@ -85,7 +111,9 @@ function AuthPage() {
               <TitleHeader>{doctors.license}</TitleHeader>
               <TitleHeader>{doctors.agree}</TitleHeader>
               <TitleHeader>
-                <button onClick={(e) => agreeHandler(doctors, e)}>승낙</button>
+                <AgreeBtn onClick={(e) => agreeHandler(doctors, e)}>
+                  승낙
+                </AgreeBtn>
               </TitleHeader>
             </Tbody>
           ))}

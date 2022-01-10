@@ -16,29 +16,37 @@ export const DocContainer = styled(Container)`
 const Title = styled.h1`
   width: 100%;
   padding: 1rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 20px;
+  }
 `;
 
-const UserContainerLine = styled.div`
+const DocContainerLine = styled.div`
   border: 1px solid #b5afaf;
   padding: 2rem;
   height: 220px;
   width: 80%;
   margin: 0 auto;
+  margin-bottom: 10px;
+  @media ${({ theme }) => theme.device.mobile} {
+    max-width: 100%;
+    height: 22rem;
+  }
 `;
 
 const Profilecontainer = styled.div`
   float: left;
   width: 40%;
   text-align: center;
+  height: 80%;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    max-width: 100%;
+    height: 50%;
+  }
 `;
 
-const Profile = styled.input`
-  width: 50%;
-  height: 100px;
-  border: 1px solid #b5afaf;
-  padding: 40px;
-  margin: 0 auto;
-`;
+const Profile = styled.input``;
 
 const ProfileEditing = styled.label`
   border: 1px solid #63b5f6;
@@ -49,72 +57,75 @@ const ProfileEditing = styled.label`
   &:hover {
     background-color: #002171;
   }
-  position: relative;
-  top: 2vw;
+  display: block;
+  width: 6vw;
+  margin: auto;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 50%;
+    max-width: 8rem;
+    font-size: 13px;
+  }
 `;
 
-const Usercontainer = styled.div`
+const DocLine = styled.div`
   width: 60%;
   float: right;
   height: 13vw;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 13px;
+    float: left;
+    width: 100%;
+  }
 `;
 
-const UserEmailTitle = styled.div`
+const DocTitle = styled.div`
   float: left;
   padding: 1rem;
   font-weight: bold;
   width: 30%;
   height: 23%;
+  @media ${({ theme }) => theme.device.mobile} {
+    float: center;
+    width: 40%;
+    font-size: 12px;
+  }
 `;
 
-const UserEmail = styled.input`
+const DocInput = styled.input`
   float: left;
   padding: 1rem;
   border: 1px solid black;
   border-radius: 30px;
   width: 50%;
   margin-bottom: 10px;
-`;
-
-const HospitalBtn = styled.button`
-  border: 1px solid #63b5f6;
-  background-color: #63b5f6;
-  color: #fff;
-  padding: 5px;
-  border-radius: 30px;
-  position: relative;
-  top: 60px;
-  right: 35px;
-  &:hover {
-    background-color: #002171;
-  }
-`;
-
-const NickNameEdit = styled.button`
-  border: 1px solid #63b5f6;
-  background-color: #63b5f6;
-  border-radius: 30px;
-  color: #fff;
-  padding: 5px;
-  margin-left: 20px;
-  &:hover {
-    background-color: #002171;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 60%;
   }
 `;
 
 const Edting = styled.button`
-  width: 20%;
   border: 1px solid #63b5f6;
   background-color: #63b5f6;
   border-radius: 30px;
   color: #fff;
   padding: 10px;
-  margin: 20px;
   &:hover {
     background-color: #002171;
   }
-  position: relative;
-  left: 35vw;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  width: 7vw;
+  clear: both;
+
+  @media ${({ theme }) => theme.device.ipad} {
+    width: 10%;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 5rem;
+    font-size: 12px;
+  }
 `;
 
 // 회원정보 끝
@@ -128,6 +139,9 @@ const PasswordLine = styled.div`
   text-align: center;
   width: 80%;
   margin: 0 auto;
+  @media ${({ theme }) => theme.device.mobile} {
+    height: 15rem;
+  }
 `;
 
 const PassWordTitle = styled.span`
@@ -135,6 +149,11 @@ const PassWordTitle = styled.span`
   padding: 20px;
   float: left;
   font-weight: bold;
+  @media ${({ theme }) => theme.device.mobile} {
+    float: left;
+    font-size: 10px;
+    width: 50%;
+  }
 `;
 
 const PassWordInput = styled.input`
@@ -145,6 +164,10 @@ const PassWordInput = styled.input`
   border: 1px solid black;
   border-radius: 30px;
   padding: 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    float: center;
+    width: 40%;
+  }
 `;
 
 const Box = styled.div`
@@ -161,6 +184,10 @@ const EditPasswordDeleted = styled.button`
   margin: 20px;
   &:hover {
     background-color: #002171;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 12px;
+    width: 30%;
   }
 `;
 
@@ -244,7 +271,7 @@ function DocMypage(props) {
         <DocContainer>
           {/* 회원정보 시작 */}
           <Title>회원정보</Title>
-          <UserContainerLine>
+          <DocContainerLine>
             <Profilecontainer>
               <Profile
                 type="file"
@@ -281,23 +308,23 @@ function DocMypage(props) {
               onChange={handleImgChange}
             ></input> */}
             </Profilecontainer>
-            <Usercontainer>
-              <UserEmailTitle>이메일</UserEmailTitle>
-              <UserEmail type="text" name="val" disabled />
-              <UserEmailTitle>이름</UserEmailTitle>
-              <UserEmail
+            <DocLine>
+              <DocTitle>이메일</DocTitle>
+              <DocInput type="text" name="val" disabled />
+              <DocTitle>이름</DocTitle>
+              <DocInput
                 type="text"
                 placeholder="이름"
                 onChange={handleInputChange("name")}
               />
-              <UserEmailTitle>병원명</UserEmailTitle>
-              <UserEmail
+              <DocTitle>병원명</DocTitle>
+              <DocInput
                 type="text"
                 placeholder="병원명"
                 onChange={handleInputChange("hospital")}
               />
-            </Usercontainer>
-          </UserContainerLine>
+            </DocLine>
+          </DocContainerLine>
           <Edting onClick={submit}>저장하기</Edting>
 
           {/* 회원정보 끝 */}
