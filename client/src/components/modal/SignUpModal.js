@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export const ModalBackGround = styled.div`
@@ -111,9 +111,28 @@ export const BtnMenu = styled.button`
   border: none;
 `;
 
+export const ErrMsg = styled.div`
+  color: red;
+`;
+
 function SignUpModal({ open, close }) {
-  const navigate = useNavigate();
   const [isSelect, setIsSelect] = useState("public");
+  const [errorMessage, setErrorMessage] = useState("");
+  // 유효성 검사
+  const check = (email, password) => {
+    let emailRegExp =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    let pwdRegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
+
+    if (!emailRegExp.test(email)) {
+      return false;
+    }
+    if (!pwdRegExp.test(password)) {
+      return false;
+    }
+  };
+
+  // 비밀번호 형식 확인
   const [publicInfo, setPublicInfo] = useState({
     email: "",
     nickname: "",
@@ -147,27 +166,50 @@ function SignUpModal({ open, close }) {
   };
 
   const publicSignUp = () => {
-    axios
-      .post("http://localhost:4000/public/signup", publicInfo, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log("회원가입 완료");
-        close();
-        navigate("/");
-      });
+    if (check(publicInfo.email, publicInfo.password) === false) {
+      setErrorMessage("이메일 형식과 비밀번호를 확인해 주세요");
+      return;
+    } else {
+      axios
+        .post("http://localhost:4000/public/signup", publicInfo, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          // console.log("회원가입 완료");
+          if (res.data.error === 1) {
+            alert("모든 항목을 입력해 주세요.");
+          } else if (res.data.error === 2) {
+            alert("이메일이 존재합니다.");
+          } else if (res.data.error === 3) {
+            alert("닉네임이 존재합니다.");
+          } else if (res.status === 201) {
+            close();
+          }
+          // navigate("/");
+        });
+    }
   };
 
   const doctorSignUp = () => {
-    axios
-      .post("http://localhost:4000/doctor/signup", doctorInfo, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log("회원가입 완료");
-        close();
-        navigate("/");
-      });
+    if (check(publicInfo.email, publicInfo.password) === false) {
+      setErrorMessage("이메일 형식과 비밀번호를 확인해 주세요");
+      return;
+    } else {
+      axios
+        .post("http://localhost:4000/doctor/signup", doctorInfo, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          // console.log(res);
+          if (res.data.error === 1) {
+            alert("모든 항목을 채워주세요");
+          } else if (res.data.error === 2) {
+            alert("이메일이 존재합니다.");
+          } else if (res.data.status === 201) {
+            close();
+          }
+        });
+    }
   };
 
   return open ? (
@@ -193,29 +235,31 @@ function SignUpModal({ open, close }) {
           defaultChecked={true}
         />
         <BtnMenu>일반</BtnMenu>
+        <ErrMsg>{errorMessage}</ErrMsg>
         {isSelect === "public" ? (
           <LoginBody>
             <div>
               <input
                 type="email"
-                placeholder="Email"
+                placeholder="이메일 형식을 지켜주세요."
                 onChange={publicChange("email")}
               />
             </div>
             <div>
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="숫자와 문자를 포함한 8~12자리입니다."
                 onChange={publicChange("password")}
               />
             </div>
             <div>
               <input
                 type="text"
-                placeholder="Nickname"
+                placeholder="닉네임"
                 onChange={publicChange("nickname")}
               />
             </div>
+
             <Button onClick={publicSignUp}>가입하기</Button>
           </LoginBody>
         ) : (
@@ -223,14 +267,14 @@ function SignUpModal({ open, close }) {
             <div>
               <input
                 type="email"
-                placeholder="이메일"
+                placeholder="이메일 형식을 지켜주세요."
                 onChange={doctorChange("email")}
               />
             </div>
             <div>
               <input
                 type="password"
-                placeholder="비밀번호"
+                placeholder="숫자와 문자를 포함한 8~12자리입니다."
                 onChange={doctorChange("password")}
               />
             </div>
@@ -244,14 +288,14 @@ function SignUpModal({ open, close }) {
             <div>
               <input
                 type="number"
-                placeholder="의사 라이센스 번호"
+                placeholder="의사 번호"
                 onChange={doctorChange("license")}
               />
             </div>
             <div>
               <input
                 type="text"
-                placeholder="어디서 근무하시나요?"
+                placeholder="병원 이름"
                 onChange={doctorChange("hospital")}
               />
             </div>

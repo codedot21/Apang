@@ -67,8 +67,6 @@ function App() {
     isAuthenticated();
   }, []); //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
 
-  let GoogleEmail;
-
   const LoginHandler = (data) => {
     setUserInfo(data);
     console.log(userInfo);

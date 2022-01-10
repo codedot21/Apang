@@ -119,7 +119,12 @@ export const ModalContainer = styled.div`
   border: 8%;
 `;
 
+export const ErrMsg = styled.div`
+  color: red;
+`;
+
 function SigninModal({ open, close, handleResponseSuccess }) {
+  const [errMsg, setErrMsg] = useState("");
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -139,12 +144,15 @@ function SigninModal({ open, close, handleResponseSuccess }) {
         withCredentials: true,
       })
       .then((res) => {
-        console.log("auth번호!", res.data.data.auth);
-        // localStorage.setItem("auth", res.data.data.auth);
-        // handleResponseSuccess();
-        handleResponseSuccess(res.data.data.auth);
-        console.log("로그인 완료");
-        close();
+        // console.log("auth번호!", res.data.data.auth);
+        if (res.data.error === 1) {
+          setErrMsg("이메일과 비밀번호를 확인해 주세요");
+        } else {
+          handleResponseSuccess(res.data.data.auth);
+          // console.log("로그인 완료");
+          // console.log(res.status);
+          close();
+        }
       });
   };
   return open ? (
@@ -154,6 +162,7 @@ function SigninModal({ open, close, handleResponseSuccess }) {
           로그인
           <button onClick={close}> &times; </button>
         </LoginHeader>
+        <ErrMsg>{errMsg}</ErrMsg>
         <LoginBody>
           <div>
             <input
