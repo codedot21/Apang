@@ -137,17 +137,12 @@ function App() {
 
   return (
     <>
-<<<<<<< HEAD
-      <ScrollTop />
-      <Nav isLogin={isLogin} handleLogout={handleLogout} />
-=======
       <Nav
         isLogin={isLogin}
         auth={auth}
         handleResponseSuccess={handleResponseSuccess}
         handleLogout={handleLogout}
       />
->>>>>>> fa253fa0fd7c0fb5d1d295fc3f7fca1bd21e8fa0
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/authpage" element={<AuthPage />} />
