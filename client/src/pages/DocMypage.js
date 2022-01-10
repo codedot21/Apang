@@ -236,7 +236,7 @@ function DocMypage(props) {
     formdata.append("name", userInfo.name);
     formdata.append("hospital", userInfo.hospital);
     // formdata.append("hospital", userInfo.hospital);
-    axios.post("http://localhost:4000/doctor/profile", formdata, {
+    axios.post("http://localhost:80/doctor/profile", formdata, {
       headers: { "Content-type": "multipart/form-data" },
       withCredentials: true,
     });
@@ -247,7 +247,7 @@ function DocMypage(props) {
     delete userInfo.name;
     delete userInfo.hospital;
     // console.log(userInfo);
-    axios.post("http://localhost:4000/doctor/profile", userInfo, {
+    axios.post("http://localhost:80/doctor/profile", userInfo, {
       withCredentials: true,
     });
   };
@@ -255,7 +255,7 @@ function DocMypage(props) {
   // 회원탈퇴
   const deleteHandler = () => {
     axios
-      .delete("http://localhost:4000/common/users", {
+      .delete("http://localhost:80/common/users", {
         withCredentials: true,
       })
       .then((res) => {
