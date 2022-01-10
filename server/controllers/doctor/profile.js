@@ -4,7 +4,7 @@ const multer = require("multer");
 const path = require("path");
 
 const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../../../client/src/storage/", "uploads"),
+  destination: path.join(__dirname, "../../../client/public/", "uploads"),
   filename: function (req, file, cb) {
     fileName = file.originalname;
     console.log("들어왔나?", file);

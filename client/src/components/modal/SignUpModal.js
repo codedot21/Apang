@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import MsgModal from "./MsgModal";
 
 export const ModalBackGround = styled.div`
   position: fixed;
@@ -139,6 +138,14 @@ function SignUpModal({ open, close }) {
     nickname: "",
     password: "",
   });
+
+  const publicChange = (key) => (e) => {
+    setPublicInfo({
+      ...publicInfo,
+      [key]: e.target.value,
+    });
+  };
+
   const [doctorInfo, setDoctorInfo] = useState({
     email: "",
     name: "",
@@ -147,19 +154,15 @@ function SignUpModal({ open, close }) {
     license: "",
   });
 
-  const handleClick = (e) => {
-    setIsSelect(e.target.value);
-  };
-
-  const publicChange = (key) => (e) => {
-    setPublicInfo({ ...publicInfo, [key]: e.target.value });
-  };
-
   const doctorChange = (key) => (e) => {
     setDoctorInfo({
       ...doctorInfo,
       [key]: e.target.value,
     });
+  };
+
+  const handleClick = (e) => {
+    setIsSelect(e.target.value);
   };
 
   const publicSignUp = () => {

@@ -25,7 +25,7 @@ module.exports = (req, res) => {
         defaults: {
           password: userInfo.password,
           nickname: userInfo.nickname,
-          profile_img: "미정",
+          profile_img: "publicprofile.jpeg",
           auth: 2,
         },
       })
