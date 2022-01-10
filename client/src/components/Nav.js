@@ -100,7 +100,6 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
   const [isDropOpen, setIsDropOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [signOpen, setSignOpen] = useState(false);
-  const [docSignOpen, setDocSignOpen] = useState(false);
 
   const openDropHandler = () => {
     console.log("클릭되었나요?");
@@ -114,25 +113,6 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
   const openSignupModal = () => {
     console.log("일반회원가입 모달 오픈되었나요?");
     setSignOpen(!signOpen);
-  };
-
-  // 일반에서 의사로
-  const openDocSign = () => {
-    console.log("의사 회원가입으로 전환되나요?");
-    setSignOpen(!signOpen);
-    setDocSignOpen(!docSignOpen);
-  };
-
-  // 의사에서 일반으로
-  const openPublicSign = () => {
-    console.log("일반 회원가입으로 전환되나요?");
-    setDocSignOpen(!docSignOpen);
-    setSignOpen(!signOpen);
-  };
-
-  const openDocSignModal = () => {
-    console.log("의사 회원 모달 오픈되었나요?");
-    setDocSignOpen(!docSignOpen);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
@@ -350,7 +350,9 @@ function UserMypage(props) {
             <EditPasswordDeleted onClick={passwordChange}>
               비밀번호 변경
             </EditPasswordDeleted>
-            <EditPasswordDeleted>회원탈퇴</EditPasswordDeleted>
+            <EditPasswordDeleted onClick={deleteHandler}>
+              회원탈퇴
+            </EditPasswordDeleted>
           </Box>
           {/* 비밀번호 끝 */}
 
