@@ -182,7 +182,7 @@ function SignUpModal({ open, close }) {
     else {
       setErrorMessage("사용가능한 형식 입니다.");
       axios
-        .post("http://localhost:4000/public/signup", publicInfo, {
+        .post("http://localhost:80/public/signup", publicInfo, {
           withCredentials: true,
         })
         .then((res) => {
@@ -214,7 +214,7 @@ function SignUpModal({ open, close }) {
             close();
             delete publicInfo.nickname;
             axios
-              .post("http://localhost:4000/common/signin", publicInfo, {
+              .post("http://localhost:80/common/signin", publicInfo, {
                 withCredentials: true,
               })
               .then((res) => {

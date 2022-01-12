@@ -227,7 +227,7 @@ function UserMypage(props) {
     // console.log(formdata);
     formdata.append("nickname", userInfo.nickname);
     formdata.append("token", localStorage.getItem("accessToken"));
-    axios.post("http://localhost:4000/public/profile", formdata, {
+    axios.post("http://localhost:80/public/profile", formdata, {
       headers: { "Content-type": "multipart/form-data" },
       withCredentials: true,
     });
@@ -242,7 +242,7 @@ function UserMypage(props) {
   const passwordChange = () => {
     delete userInfo.nickname;
     // console.log("비밀번호 변경 : ", userInfo);
-    axios.post("http://localhost:4000/public/profile", userInfo, {
+    axios.post("http://localhost:80/public/profile", userInfo, {
       withCredentials: true,
     });
   };
@@ -250,7 +250,7 @@ function UserMypage(props) {
   // 회원탈퇴
   const deleteHandler = () => {
     axios
-      .delete("http://localhost:4000/common/users", {
+      .delete("http://localhost:80/common/users", {
         withCredentials: true,
       })
       .then((res) => {

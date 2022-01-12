@@ -33,7 +33,7 @@ function App() {
     console.log(authnumber);
     if (authnumber === 2 || authnumber === 0) {
       axios
-        .get("http://localhost:4000/public/userinfo", {
+        .get("http://localhost:80/public/userinfo", {
           withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
         })
         .then((res) => {
@@ -46,7 +46,7 @@ function App() {
         });
     } else if (authnumber === 1) {
       axios
-        .get("http://localhost:4000/doctor/userinfo", {
+        .get("http://localhost:80/doctor/userinfo", {
           withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
         })
         .then((res) => {
@@ -80,7 +80,7 @@ function App() {
   const handleLogout = () => {
     axios
       .post(
-        "http://localhost:4000/common/signout",
+        "http://localhost:80/common/signout",
         {
           auth: auth,
           userid: localStorage.getItem("userid"),
@@ -100,7 +100,7 @@ function App() {
       });
     // // .catch(() =>
     // axios
-    //   .post("http://localhost:4000/common/kakaosignout", {
+    //   .post("http://localhost:80/common/kakaosignout", {
     //     userid: localStorage.getItem("userid"),
     //   })
     //   .then((res) => {
