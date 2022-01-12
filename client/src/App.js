@@ -20,17 +20,13 @@ function App() {
   // const [accessToken, setAccessToken] = useState("");
   const [auth, setAuth] = useState("");
 
-  // useEffect(() => {
-  //   setUserInfo(localStorage.getItem("userInfo"));
-  // }, []);
   const isAuthenticated = () => {
     //쿠키에 jwt가 있는지 없는지 랜더링될떄마다 확인하는 함수..?
-    // const authnumber = localStorage.getItem("auth");
     const authnumber = parseInt(localStorage.getItem("auth"));
     console.log(authnumber);
     if (authnumber === 2 || authnumber === 0) {
       axios
-        .get("http://localhost:4000/public/userinfo", {
+        .get("http://localhost:80/public/userinfo", {
           withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
         })
         .then((res) => {
@@ -43,7 +39,7 @@ function App() {
         });
     } else if (authnumber === 1) {
       axios
-        .get("http://localhost:4000/doctor/userinfo", {
+        .get("http://localhost:80/doctor/userinfo", {
           withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
         })
         .then((res) => {
@@ -52,6 +48,32 @@ function App() {
           setAuth(res.data.userInfo.auth);
           setIsLogin(true);
           // navigate("/");
+        });
+    } else if (isNaN(authnumber)) {
+      //parseInt(null)이 들어가면 값이 NaN이 나오더라.
+      axios
+        .post("http://localhost:80/oauth/kakao", {
+          //서버로부터 사용자 정보 받아오기
+          access_token: localStorage.getItem("accessToken"),
+        })
+        .then((res) => {
+          if (res.status === 201 || res.status === 200) {
+            const user = res.data;
+            console.log("user : ", user);
+            console.log(user.accessToken);
+            localStorage.setItem("userid", user.data.id);
+            const userInfo = {
+              id: user.data.id,
+              nickname: user.data.properties.nickname,
+              email: user.data.kakao_account.email,
+            };
+            console.log(userInfo);
+            setUserInfo(userInfo);
+            setIsLogin(true);
+            navigate("/");
+          } else {
+            window.alert("로그인에 실패하였습니다.");
+          }
         });
     }
   };
@@ -68,16 +90,17 @@ function App() {
     isAuthenticated();
   }, []); //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
 
-  const LoginHandler = (data) => {
-    setUserInfo(data);
-    console.log(userInfo);
-    setIsLogin(true);
+  const LoginHandler = () => {
+    isAuthenticated();
+    // setUserInfo(data);
+    // console.log(userInfo);
+    // setIsLogin(true);
   };
 
   const handleLogout = () => {
     axios
       .post(
-        "http://localhost:4000/common/signout",
+        "http://localhost:80/common/signout",
         {
           auth: auth,
           userid: localStorage.getItem("userid"),
@@ -92,12 +115,13 @@ function App() {
         // setAccessToken("");
         localStorage.removeItem("userid");
         localStorage.removeItem("auth");
+        localStorage.removeItem("accessToken");
         alert("로그아웃이 되었습니다.");
         navigate("/");
       });
     // // .catch(() =>
     // axios
-    //   .post("http://localhost:4000/common/kakaosignout", {
+    //   .post("http://localhost:80/common/kakaosignout", {
     //     userid: localStorage.getItem("userid"),
     //   })
     //   .then((res) => {
@@ -113,7 +137,7 @@ function App() {
 
   const getGoogleToken = async (authorizationCode) => {
     await axios({
-      url: "http://localhost:4000/oauth/google",
+      url: "http://localhost:80/oauth/google",
       method: "post",
       data: { authorizationCode },
       withCredentials: true,
@@ -124,15 +148,15 @@ function App() {
     });
   };
 
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    console.log(`url ${url}`);
-    const authorizationCode = url.searchParams.get("code");
-    console.log(`authorizationCode ${authorizationCode}`);
-    if (authorizationCode) {
-      getGoogleToken(authorizationCode);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const url = new URL(window.location.href);
+  //   console.log(`url ${url}`);
+  //   const authorizationCode = url.searchParams.get("code");
+  //   console.log(`authorizationCode ${authorizationCode}`);
+  //   if (authorizationCode) {
+  //     getGoogleToken(authorizationCode);
+  //   }
+  // }, []);
 
   return (
     <>
