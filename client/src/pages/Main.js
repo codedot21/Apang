@@ -289,12 +289,17 @@ export const SubTitle = styled.h1`
 `;
 
 const Selector = styled.select`
-  padding: 1rem;
-  box-sizing: border-box;
-  width: 30%;
-  margin: 1vw;
-  border-radius: 20px;
-  border: 1px solid black;
+  outline: none;
+  border: none;
+  width: 24rem;
+  height: 3.5rem;
+  font-size: 1rem;
+  color: #707070;
+  padding-left: 0.5rem;
+  border: 0.2rem solid #63b5f6;
+  border-radius: 10px;
+  background-color: white;
+  -webkit-appearance: none;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
   }
@@ -336,33 +341,27 @@ function Main({ medicalhandling }) {
       <MainContainer>
         <MainWrap>
           <Title>어디가 아팡?</Title>
-          {/* <Text>원하는 진료과목을 선택해주세요</Text> */}
-          {/* <Search>
-            <form>
-              <input type="text" placeholder="입력해주세요" />
-              <NavLink to="/">
-                <button>
-                  <img src={SearchIcon} alt="SearchIcon" />
-                </button>
-              </NavLink>
-            </form>
-          </Search> */}
           <Text>원하는 진료과목을 선택해주세요</Text>
-          <Selector value={select} onChange={hadleInputvalue}>
-            <Options disabled selected>
-              진료과목선택
-            </Options>
-            {serch.map((el, index) => {
-              return (
-                <Options value={el.value} key={el.key}>
-                  {el.value}
+          <Search>
+            <form>
+              <Selector value={select} onChange={hadleInputvalue}>
+                <Options disabled selected>
+                  진료과목선택
                 </Options>
-              );
-            })}
-          </Selector>
-          <SerchButton onClick={() => navigate("/medicallist")}>
-            클릭
-          </SerchButton>
+                {serch.map((el, index) => {
+                  return (
+                    <Options value={el.value} key={el.key}>
+                      {el.value}
+                    </Options>
+                  );
+                })}
+              </Selector>
+
+              <SerchButton onClick={() => navigate("/medicallist")}>
+                <img src={SearchIcon} alt="SearchIcon" />
+              </SerchButton>
+            </form>
+          </Search>
         </MainWrap>
         <ImgWrap>
           <Img src={Hospital}></Img>
