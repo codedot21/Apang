@@ -6,7 +6,6 @@ import Qna from "../components/Qna";
 import Doc from "../images/doc.png";
 import QnaModal from "../components/modal/QnaModal.js";
 import Swal from "sweetalert2";
-import axios from "axios";
 
 export const QnaContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};

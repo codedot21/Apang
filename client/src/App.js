@@ -12,6 +12,8 @@ import Kakao from "./components/Kakao.js";
 import QnaPage from "./pages/QnaPage.js";
 import QnaDetail from "./pages/QnaDetail.js";
 import ScrollTop from "./components/Scroll.js";
+import Medical from "./pages/Medical.js";
+import MedicalDetail from "./pages/MedicalDetail.js";
 
 import axios from "axios";
 
@@ -24,6 +26,28 @@ function App() {
   const [auth, setAuth] = useState("");
   const [qnaDetail, setqnaDetail] = useState("");
 
+  // map 상태
+  const [medical, setMedical] = useState("");
+
+  //map 함수
+
+  const medicalhandling = (value) => {
+    setMedical(value);
+    console.log(medical);
+  };
+
+  // 병원 정보
+  const [medicalInfo, setMedicalInfo] = useState("");
+
+  // 정보 가져오기
+  const medicalInfoHandling = (value) => {
+    setMedicalInfo(value);
+    console.log(medicalInfo);
+  };
+
+  // useEffect(() => {
+  //   setUserInfo(localStorage.getItem("userInfo"));
+  // }, []);
   const isAuthenticated = () => {
     //쿠키에 jwt가 있는지 없는지 랜더링될떄마다 확인하는 함수..?
     const authnumber = parseInt(localStorage.getItem("auth"));
@@ -110,7 +134,8 @@ function App() {
 
   useEffect(() => {
     isAuthenticated();
-  }, []); //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
+  }, []);
+  //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
 
   // useEffect(() => {
   //   uploadSuccess();
@@ -181,7 +206,7 @@ function App() {
         handleLogout={handleLogout}
       />
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<Main medicalhandling={medicalhandling} />} />
         <Route path="/authpage" element={<AuthPage />} />
         <Route
           path="/mypage/publicprofile"
@@ -191,7 +216,10 @@ function App() {
           path="/mypage/doctorprofile"
           element={<DocMypage userInfo={userInfo} />}
         />
-        <Route path="/reviewpage" element={<ReviewPage />} />
+        <Route
+          path="/reviewpage"
+          element={<ReviewPage userInfo={userInfo} />}
+        />
         <Route
           path="/oauth/callback/kakao"
           element={<Kakao LoginHandler={LoginHandler} />}
@@ -207,11 +235,28 @@ function App() {
             />
           }
         />
+
+        <Route path="/qnadetail" element={<QnaDetail isLogin={isLogin} />} />
+        <Route
+          path="/medicallist"
+          element={
+            <Medical
+              medical={medical}
+              medicalInfoHandling={medicalInfoHandling}
+            />
+          }
+        />
         <Route
           path="/qna/detail/:id"
           element={<QnaDetail isLogin={isLogin} qnaDetail={qnaDetail} />}
         />
+
+        <Route
+          path="/medicaldetail"
+          element={<MedicalDetail medicalInfo={medicalInfo} />}
+        />
       </Routes>
+
       <Footer />
     </>
   );

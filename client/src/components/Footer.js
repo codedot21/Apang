@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 export const FooterContainer = styled.div`
-  // background-color: #dee2e6;
+  background-color: #dee2e6;
   background-color: ${({ theme }) => theme.color.footer};
   padding: 0.5rem 2rem;
   flex-direction: row;
