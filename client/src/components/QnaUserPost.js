@@ -76,19 +76,14 @@ export const ContentText = styled.div`
   font-size: 0.8rem;
 `;
 
-function QnaUserPost() {
+function QnaUserPost({ qnaDetail }) {
+  console.log(qnaDetail);
   return (
     <QnaUserContainer>
       <QnaBox>
         <ContentWrap>
-          {/* <Profile>
-            <img src={user} width="20rem" alt="doctor" />
-            <div className="Id">맨날아파</div>
-          </Profile> */}
-          <ContentTitle>요즘 소화가 잘 안돼요!</ContentTitle>
-          <ContentText>
-            자꾸 속이 더부룩하고 소화가 잘 안되는 느낌이 들어요ㅠ
-          </ContentText>
+          <ContentTitle>{qnaDetail.title}</ContentTitle>
+          <ContentText>{qnaDetail.content}</ContentText>
         </ContentWrap>
       </QnaBox>
     </QnaUserContainer>
@@ -96,3 +91,10 @@ function QnaUserPost() {
 }
 
 export default QnaUserPost;
+
+{
+  /* <Profile>
+            <img src={user} width="20rem" alt="doctor" />
+            <div className="Id">맨날아파</div>
+          </Profile> */
+}

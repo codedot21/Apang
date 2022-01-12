@@ -64,6 +64,7 @@ function Footer() {
           target="_blank"
           href={"https://github.com/codestates/Apang"}
           style={{ textDecoration: "none", color: "#095cd8" }}
+          rel="noreferrer"
         >
           {" "}
           Apang
@@ -78,6 +79,7 @@ function Footer() {
             target="_blank"
             href={"https://github.com/sangcode33"}
             style={{ textDecoration: "none", color: "#fff" }}
+            rel="noreferrer"
           >
             <FaGithub /> 권상현 Front end
           </a>
@@ -87,6 +89,7 @@ function Footer() {
             target="_blank"
             href={"https://github.com/gusdnvkfks/"}
             style={{ textDecoration: "none", color: "#fff" }}
+            rel="noreferrer"
           >
             <FaGithub /> 김경훈 Back end
           </a>
@@ -96,6 +99,7 @@ function Footer() {
             target="_blank"
             href={"https://github.com/codedot21/"}
             style={{ textDecoration: "none", color: "#fff" }}
+            rel="noreferrer"
           >
             <FaGithub /> 김장겸 Front end
           </a>

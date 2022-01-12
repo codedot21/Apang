@@ -31,7 +31,8 @@ export const ImgWrap = styled.div`
   }
 `;
 
-function QnaDetail({ isLogin, userInfo, auth }) {
+function QnaDetail({ qnaDetail, isLogin }) {
+  console.log(qnaDetail);
   return (
     <>
       <QnaContainer>
@@ -39,8 +40,10 @@ function QnaDetail({ isLogin, userInfo, auth }) {
           <Img src={question}></Img>
         </ImgWrap>
       </QnaContainer>
-      <QnaUserPost />
-      <QnaPost isLogin={isLogin} userInfo={userInfo} auth={auth} />
+
+      <QnaUserPost qnaDetail={qnaDetail} />
+
+      <QnaPost isLogin={isLogin} />
     </>
   );
 }

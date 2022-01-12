@@ -291,11 +291,13 @@ function QnaPage({ isLogin, uploadSuccess, qnaInfo, handleQnaInfo }) {
             ) : (
               <Button onClick={handleClick}>질문하기</Button>
             )}
-            <QnaModal open={QuestionOpen} close={openQuestionModal} />
+            <QnaModal
+              uploadSuccess={uploadSuccess}
+              open={QuestionOpen}
+              close={openQuestionModal}
+            />
           </QnaWrap>
-          <Linked to="/qnadetail">
-            <Qna />
-          </Linked>
+          <Qna qnaInfo={qnaInfo} handleQnaInfo={handleQnaInfo} />
         </QnaWrap>
       </QnaListContainer>
     </>

@@ -179,7 +179,7 @@ export const TagsInput = styled.div`
   }
 `;
 
-function QnaModal({ open, close }) {
+function QnaModal({ open, close, uploadSuccess }) {
   const initialTags = ["아파요", "안아파요", "덜아파요"];
 
   const [tags, setTags] = useState(initialTags);
@@ -198,6 +198,34 @@ function QnaModal({ open, close }) {
     }
   };
 
+  const [qnaInfo, setqnaInfo] = useState({
+    category: "",
+    title: "",
+    content: "",
+  });
+
+  const qnaChange = (key) => (e) => {
+    setqnaInfo({
+      ...qnaInfo,
+      [key]: e.target.value,
+    });
+  };
+
+  const handleUpload = () => {
+    axios
+      .post(
+        "http://localhost:80/qna/upload",
+        { ...qnaInfo, kakao_userid: localStorage.getItem("userid") },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        close();
+        uploadSuccess();
+      });
+  };
+
   return open ? (
     <ModalBackGround onClick={close}>
       <ModalBox onClick={(e) => e.stopPropagation()}>
@@ -207,7 +235,7 @@ function QnaModal({ open, close }) {
         </QnaHeader>
         <QnaBody>
           <div>
-            <select className="select">
+            <select className="select" onChange={qnaChange("category")}>
               <option className="option" value="">
                 카테고리를 선택해주세요
               </option>
@@ -234,7 +262,11 @@ function QnaModal({ open, close }) {
             </select>
           </div>
           <div>
-            <input type="text" placeholder="제목을 입력해주세요" />
+            <input
+              type="text"
+              placeholder="제목을 입력해주세요"
+              onChange={qnaChange("title")}
+            />
           </div>
 
           <TagsInput>
@@ -263,11 +295,12 @@ function QnaModal({ open, close }) {
               className="textarea"
               type="textarea"
               placeholder="내용을 입력해주세요"
+              onChange={qnaChange("content")}
             />
           </div>
         </QnaBody>
         <QnaFooter>
-          <Button>등록</Button>
+          <Button onClick={handleUpload}>등록</Button>
         </QnaFooter>
       </ModalBox>
     </ModalBackGround>

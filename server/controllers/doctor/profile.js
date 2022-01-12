@@ -16,8 +16,6 @@ module.exports = (req, res) => {
   const userInfo = isAuthorized(req);
   console.log(userInfo);
   if (userInfo.auth === 0) {
-    // console.log("관리자일때 닥터수정 : ", Object.keys(req.body));
-    // console.log(Object.keys(req.body).toString());
     const id = Object.keys(req.body).toString();
     console.log(id);
     doctors.update(
@@ -39,7 +37,6 @@ module.exports = (req, res) => {
         }).single("apang");
 
         upload(req, res, function (err) {
-          // console.log("여기선나오네? : ", req.body.name);
           const name = req.body.name;
           const hospital = req.body.hospital;
           const filename = req.file.filename;

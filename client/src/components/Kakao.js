@@ -22,7 +22,7 @@ const Kakao = ({ LoginHandler }) => {
     headers: {
       "content-type": "application/x-www-form-urlencoded;charset=utf-8",
     },
-    url: "https://kauth.kakao.com/oauth/token",
+    url: "https://kauth.kakao.com/oauth/token", //카카오로부터 토큰받아오기
     data: makeFormData({
       grant_type: "authorization_code",
       client_id: CLIENT_ID,
@@ -31,27 +31,29 @@ const Kakao = ({ LoginHandler }) => {
     }),
   }).then((res) => {
     const ACCESS_TOKEN = res.data.access_token;
-    axios
-      .post("http://localhost:80/oauth/kakao", {
-        access_token: ACCESS_TOKEN,
-      })
-      .then((res) => {
-        if (res.status === 201 || res.status === 200) {
-          const user = res.data;
-          console.log("user : ", user);
-          console.log(user.accessToken);
-          localStorage.setItem("userid", user.data.id);
-          const userInfo = {
-            id: user.data.id,
-            nickname: user.data.properties.nickname,
-            email: user.data.kakao_account.email,
-          };
-          LoginHandler(userInfo); //이게 있으면 POST 400 bad request 요청이 2번이나 더 보내진다.
-          navigate("/");
-        } else {
-          window.alert("로그인에 실패하였습니다.");
-        }
-      });
+    localStorage.setItem("accessToken", ACCESS_TOKEN);
+    LoginHandler();
+    // axios
+    //   .post("http://localhost:80/oauth/kakao", { //서버로부터 사용자 정보 받아오기
+    //     access_token: ACCESS_TOKEN,
+    //   })
+    //   .then((res) => {
+    //     if (res.status === 201 || res.status === 200) {
+    //       const user = res.data;
+    //       console.log("user : ", user);
+    //       console.log(user.accessToken);
+    //       localStorage.setItem("userid", user.data.id);
+    //       const userInfo = {
+    //         id: user.data.id,
+    //         nickname: user.data.properties.nickname,
+    //         email: user.data.kakao_account.email,
+    //       };
+    //       LoginHandler(userInfo); //이게 있으면 POST 400 bad request 요청이 2번이나 더 보내진다.
+    //       navigate("/");
+    //     } else {
+    //       window.alert("로그인에 실패하였습니다.");
+    //     }
+    //   });
   });
   return <></>;
 };

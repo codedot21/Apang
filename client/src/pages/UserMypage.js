@@ -194,6 +194,19 @@ const MyreviewTitle = styled.h2`
 
 // 상현 수정
 function UserMypage(props) {
+  // axios
+  //     .post(
+  //       "http://localhost:80/qna/info",
+  //       { kakao_userid: localStorage.getItem("userid") },
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     )
+  //     .then((res) => {
+  //       console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
+  //       setqnaInfo(res.data.qnaInfo);
+  //     });
+
   console.log(props.userInfo);
   const [imgInfo, setImgInfo] = useState({
     file: [],
@@ -266,101 +279,106 @@ function UserMypage(props) {
         <UserContainer>
           {/* 회원정보 시작 */}
           <Title>회원정보</Title>
-          <UserContainerLine>
-            {/* <Profile
+          {props.userInfo.auth ? (
+            <>
+              <UserContainerLine>
+                {/* <Profile
             type="file"
             id="upload_file"
             style={{ display: "none" }}
             onChange={handleInputChange}
           /> */}
-            <Profilecontainer>
-              <Profile
-                type="file"
-                id="upload_file"
-                style={{
-                  display: "none",
-                }}
-                onChange={handleImgChange}
-              />
+                <Profilecontainer>
+                  <Profile
+                    type="file"
+                    id="upload_file"
+                    style={{
+                      display: "none",
+                    }}
+                    onChange={handleImgChange}
+                  />
 
-              <Box onChange={handleImgChange}>
-                {imgInfo.filepreview !== null ? (
-                  <img
-                    src={imgInfo.filepreview}
-                    alt="uploadimage"
-                    style={{
-                      width: "100px",
-                      height: "90px",
-                      objectFit: "scale-down",
-                    }}
-                  />
-                ) : (
-                  <img
-                    style={{
-                      width: "100px",
-                      height: "90px",
-                      objectFit: "scale-down",
-                    }}
-                    // src={require(`././uploads/${props.userInfo.profile_img}`)}
-                    //사진이름을 한글로 하면 에러뜬다....!
-                    src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
-                    // src={`../../public/uploads/${props.userInfo.profile_img}`}
-                    alt="publicimage"
-                  />
-                )}
+                  <Box onChange={handleImgChange}>
+                    {imgInfo.filepreview !== null ? (
+                      <img
+                        src={imgInfo.filepreview}
+                        alt="uploadimage"
+                        style={{
+                          width: "100px",
+                          height: "90px",
+                          objectFit: "scale-down",
+                        }}
+                      />
+                    ) : (
+                      <img
+                        // src={require(`././uploads/${props.userInfo.profile_img}`)}
+                        //사진이름을 한글로 하면 에러뜬다....!
+                        style={{
+                          width: "100px",
+                          height: "90px",
+                          objectFit: "scale-down",
+                        }}
+                        src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
+                        // src={`../../public/uploads/${props.userInfo.profile_img}`}
+                        alt="publicimage"
+                      />
+                    )}
+                  </Box>
+                  <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
+                </Profilecontainer>
+
+                <UserTitle>이메일</UserTitle>
+                <UserInput
+                  type="text"
+                  value={props.userInfo.email}
+                  name="val"
+                  disabled
+                />
+                <UserTitle>닉네임</UserTitle>
+                <UserInput
+                  type="text"
+                  defaultValue={props.userInfo.nickname}
+                  onChange={handleInputChange("nickname")}
+                />
+              </UserContainerLine>
+              <Edting onClick={submit}>저장하기</Edting>
+
+              {/* 회원정보 끝 */}
+              <br />
+              {/* 비밀번호 시작 */}
+
+              <PasswordLine>
+                <PassWordTitle>기존비밀번호</PassWordTitle>
+                <PassWordInput
+                  placeholder="기존"
+                  type="password"
+                  onChange={handleInputChange("password")}
+                ></PassWordInput>
+                <PassWordTitle>새로운 비밀번호</PassWordTitle>
+                <PassWordInput
+                  placeholder="New"
+                  type="password"
+                  onChange={handleInputChange("newPassword")}
+                ></PassWordInput>
+                <PassWordTitle>비밀번호 확인</PassWordTitle>
+                <PassWordInput
+                  placeholder="New 한번 더"
+                  type="password"
+                ></PassWordInput>
+              </PasswordLine>
+              <Box>
+                <EditPasswordDeleted onClick={passwordChange}>
+                  비밀번호 변경
+                </EditPasswordDeleted>
+                <EditPasswordDeleted onClick={deleteHandler}>
+                  회원탈퇴
+                </EditPasswordDeleted>
               </Box>
-              <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
-            </Profilecontainer>
-
-            <UserTitle>이메일</UserTitle>
-            <UserInput
-              type="text"
-              value={props.userInfo.email}
-              name="val"
-              disabled
-            />
-            <UserTitle>닉네임</UserTitle>
-            <UserInput
-              type="text"
-              defaultValue={props.userInfo.nickname}
-              onChange={handleInputChange("nickname")}
-            />
-          </UserContainerLine>
-          <Edting onClick={submit}>저장하기</Edting>
-
-          {/* 회원정보 끝 */}
-          <br />
-          {/* 비밀번호 시작 */}
-
-          <PasswordLine>
-            <PassWordTitle>기존비밀번호</PassWordTitle>
-            <PassWordInput
-              placeholder="기존"
-              type="password"
-              onChange={handleInputChange("password")}
-            ></PassWordInput>
-            <PassWordTitle>새로운 비밀번호</PassWordTitle>
-            <PassWordInput
-              placeholder="New"
-              type="password"
-              onChange={handleInputChange("newPassword")}
-            ></PassWordInput>
-            <PassWordTitle>비밀번호 확인</PassWordTitle>
-            <PassWordInput
-              placeholder="New 한번 더"
-              type="password"
-            ></PassWordInput>
-          </PasswordLine>
-          <Box>
-            <EditPasswordDeleted onClick={passwordChange}>
-              비밀번호 변경
-            </EditPasswordDeleted>
-            <EditPasswordDeleted onClick={deleteHandler}>
-              회원탈퇴
-            </EditPasswordDeleted>
-          </Box>
-          {/* 비밀번호 끝 */}
-
+              {/* 비밀번호 끝 */}
+            </>
+          ) : (
+            ""
+          )}
           <hr />
           {/* MY Review 시작*/}
           <MyreviewTitle>My Review</MyreviewTitle>
@@ -370,6 +388,8 @@ function UserMypage(props) {
           <hr />
           {/*MY Q&A 시작  */}
           <MyreviewTitle>My Q&A</MyreviewTitle>
+          {/* props.userInfo.id === props.qnaInfo.users_id 필터함수쓰기*/}
+
           {/*MY Q&A 끝  */}
         </UserContainer>
       ) : (

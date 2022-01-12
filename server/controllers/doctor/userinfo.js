@@ -7,6 +7,7 @@ module.exports = async (req, res) => {
 
   // 권한이 유효한지 먼저 확인하기
   const userInfo = isAuthorized(req);
+  console.log("useInfo 모야", userInfo);
 
   // 관리자가 요청할 때
   if (userInfo.auth === 0) {
