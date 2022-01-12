@@ -7,6 +7,7 @@ module.exports = async (req, res) => {
 
   // 권한이 유효한지 먼저 확인하기
   const userInfo = isAuthorized(req);
+  console.log("useInfo 모야", userInfo);
 
   // 관리자가 요청할 때
   if (userInfo.auth === 0) {
@@ -24,7 +25,7 @@ module.exports = async (req, res) => {
     }
     // 토큰이 유효할 때
     else {
-      const doctorInfo = doctors.findOne({
+      const doctorInfo = await doctors.findOne({
         where: {
           id: userInfo.id,
         },

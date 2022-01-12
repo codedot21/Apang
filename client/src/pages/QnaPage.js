@@ -229,7 +229,7 @@ export const ContentComment = styled.div`
   }
 `;
 
-function QnaPage({ isLogin }) {
+function QnaPage({ isLogin, uploadSuccess, qnaInfo, handleQnaInfo }) {
   const [QuestionOpen, setQuestionOpen] = useState(false);
 
   const openQuestionModal = () => {
@@ -290,11 +290,13 @@ function QnaPage({ isLogin }) {
             ) : (
               <Button onClick={handleClick}>질문하기</Button>
             )}
-            <QnaModal open={QuestionOpen} close={openQuestionModal} />
+            <QnaModal
+              uploadSuccess={uploadSuccess}
+              open={QuestionOpen}
+              close={openQuestionModal}
+            />
           </QnaWrap>
-          <Linked to="/qnadetail">
-            <Qna />
-          </Linked>
+          <Qna qnaInfo={qnaInfo} handleQnaInfo={handleQnaInfo} />
         </QnaWrap>
       </QnaListContainer>
     </>

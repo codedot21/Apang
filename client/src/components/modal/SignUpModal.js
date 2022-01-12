@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 
+// axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+
 export const ModalBackGround = styled.div`
   position: fixed;
   top: 0;
@@ -121,17 +123,18 @@ function SignUpModal({ open, close }) {
   const [isSelect, setIsSelect] = useState("public");
   const [errorMessage, setErrorMessage] = useState("");
   // 유효성 검사
-  const check = (email, password) => {
-    let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    let pwdRegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
+  // const check = (email, password) => {
+  //   let emailRegExp =
+  //     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+  //   let pwdRegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
 
-    if (!emailRegExp.test(email)) {
-      return false;
-    }
-    if (!pwdRegExp.test(password)) {
-      return false;
-    }
-  };
+  //   if (!emailRegExp.test(email)) {
+  //     return false;
+  //   }
+  //   if (!pwdRegExp.test(password)) {
+  //     return false;
+  //   }
+  // };
 
   // 닉네임 2글자 이상 8글자 이하
   // const isMoreThan4Length = (nickname) => {
@@ -174,6 +177,9 @@ function SignUpModal({ open, close }) {
     // if (check(publicInfo.email, publicInfo.password) === false) {
     //   setErrorMessage("이메일 형식과 비밀번호를 확인해 주세요");
     //   return;
+    // }
+    // else if (isMoreThan4Length(publicInfo.nickname)) {
+    //   setErrorMessage("닉네임은 2~8글자 입니다.");
     // }
     // else {
     setErrorMessage("사용가능한 형식 입니다.");
@@ -228,7 +234,7 @@ function SignUpModal({ open, close }) {
     //   return;
     // } else {
     axios
-      .post("http://localhost:4000/doctor/signup", doctorInfo, {
+      .post("http://localhost:80/doctor/signup", doctorInfo, {
         withCredentials: true,
       })
       .then((res) => {
@@ -258,11 +264,24 @@ function SignUpModal({ open, close }) {
   };
 
   return open ? (
-    <ModalBackGround onClick={close}>
+    <ModalBackGround
+      onClick={() => {
+        setIsSelect("public");
+        close();
+      }}
+    >
       <ModalBox onClick={(e) => e.stopPropagation()}>
         <LoginHeader>
           회원가입
-          <button onClick={close}> &times; </button>
+          <button
+            onClick={() => {
+              setIsSelect("public");
+              close();
+            }}
+          >
+            {" "}
+            &times;{" "}
+          </button>
         </LoginHeader>
         <input
           type="radio"

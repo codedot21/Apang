@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import user from "../images/user.png";
+import { Link } from "react-router-dom";
 
+export const Linked = styled(Link)`
+  text-decoration: none;
+`;
 export const QnaBox = styled.div`
   border: 0.1rem solid #63b5f6;
   color: black;
@@ -74,26 +78,35 @@ export const ContentComment = styled.div`
   }
 `;
 
-function Qna() {
+function Qna({ qnaInfo, handleQnaInfo }) {
+  console.log("qnaInfo 안들어오나?", qnaInfo);
   return (
-    <QnaBox>
-      <ContentWrap>
-        <Profile>
-          <img src={user} width="20rem" />
-          <div className="Id">맨날아파</div>
-        </Profile>
-        <ContentTitle>요즘 소화가 잘 안돼요!</ContentTitle>
-        <ContentText>
-          자꾸 속이 더부룩하고 소화가 잘 안되는 느낌이 들어요ㅠ
-        </ContentText>
-        <Tag>
-          <div className="tag">#아파요</div>
-          <div className="tag">#안아파요</div>
-          <div className="tag">#덜아파요</div>
-        </Tag>
-        <ContentComment>댓글 1</ContentComment>
-      </ContentWrap>
-    </QnaBox>
+    <>
+      {qnaInfo
+        ? qnaInfo.map((qna) => {
+            return (
+              <Linked to={`/qna/detail/${qna.id}`}>
+                <QnaBox key={qna.id} onClick={() => handleQnaInfo(qna)}>
+                  <ContentWrap>
+                    <Profile>
+                      <img src={user} width="20rem" />
+                      <div className="Id">맨날아파</div>
+                    </Profile>
+                    <ContentTitle>{qna.title}</ContentTitle>
+                    <ContentText>{qna.content}</ContentText>
+                    <Tag>
+                      <div className="tag">#아파요</div>
+                      <div className="tag">#안아파요</div>
+                      <div className="tag">#덜아파요</div>
+                    </Tag>
+                    <ContentComment>댓글 1</ContentComment>
+                  </ContentWrap>
+                </QnaBox>
+              </Linked>
+            );
+          })
+        : null}
+    </>
   );
 }
 

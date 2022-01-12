@@ -203,6 +203,7 @@ const MyreviewTitle = styled.h2`
 // 대답 끝
 
 function DocMypage(props) {
+  console.log(props.useInfo);
   const [imgInfo, setImgInfo] = useState({
     file: [],
     filepreview: null,
@@ -301,6 +302,11 @@ function DocMypage(props) {
                     }}
                     // src={require(`././uploads/${props.userInfo.profile_img}`)}
                     //사진이름을 한글로 하면 에러뜬다....!
+                    style={{
+                      width: "100px",
+                      height: "90px",
+                      objectFit: "scale-down",
+                    }}
                     src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
                     alt="publicimage"
                   />
