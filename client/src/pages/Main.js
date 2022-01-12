@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import Hospital from "../images/hospital.png";
@@ -8,6 +8,7 @@ import Find from "../images/searchdoc.png";
 import Doc from "../images/doc.jpg";
 import SearchIcon from "../images/search.svg";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const MainContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -287,21 +288,78 @@ export const SubTitle = styled.h1`
   }
 `;
 
-function Main() {
+const Selector = styled.select`
+  outline: none;
+  border: none;
+  width: 24rem;
+  height: 3.5rem;
+  font-size: 1rem;
+  color: #707070;
+  padding-left: 0.5rem;
+  border: 0.2rem solid #63b5f6;
+  border-radius: 10px;
+  background-color: white;
+  -webkit-appearance: none;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+  }
+`;
+
+const Options = styled.option`
+  padding: 2rem;
+  box-sizing: border-box;
+  margin: 1vw;
+  border-radius: 30px;
+  border: 1px solid red;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 60%;
+  }
+`;
+
+const SerchButton = styled.button``;
+
+// map을 위한 테스트
+function Main({ medicalhandling }) {
+  const navigate = useNavigate();
+  const serch = [
+    { key: 1, value: "치과" },
+    { key: 2, value: "산부인과" },
+    { key: 3, value: "내과" },
+    { key: 4, value: "정형외과" },
+    { key: 5, value: "성형외과" },
+  ];
+  const [select, setSelect] = useState();
+
+  const hadleInputvalue = (e) => {
+    setSelect(e.target.value);
+  };
+  console.log(select);
+  medicalhandling(select);
+
   return (
     <>
       <MainContainer>
         <MainWrap>
           <Title>어디가 아팡?</Title>
-          {/* <Text>원하는 진료과목을 선택해주세요</Text> */}
+          <Text>원하는 진료과목을 선택해주세요</Text>
           <Search>
             <form>
-              <input type="text" placeholder="입력해주세요" />
-              <NavLink to="/">
-                <button>
-                  <img src={SearchIcon} alt="SearchIcon" />
-                </button>
-              </NavLink>
+              <Selector value={select} onChange={hadleInputvalue}>
+                <Options disabled selected>
+                  진료과목선택
+                </Options>
+                {serch.map((el, index) => {
+                  return (
+                    <Options value={el.value} key={el.key}>
+                      {el.value}
+                    </Options>
+                  );
+                })}
+              </Selector>
+
+              <SerchButton onClick={() => navigate("/medicallist")}>
+                <img src={SearchIcon} alt="SearchIcon" />
+              </SerchButton>
             </form>
           </Search>
         </MainWrap>
