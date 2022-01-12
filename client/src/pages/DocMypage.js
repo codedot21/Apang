@@ -294,6 +294,11 @@ function DocMypage(props) {
                   />
                 ) : (
                   <img
+                    style={{
+                      width: "100px",
+                      height: "90px",
+                      objectFit: "scale-down",
+                    }}
                     // src={require(`././uploads/${props.userInfo.profile_img}`)}
                     //사진이름을 한글로 하면 에러뜬다....!
                     style={{

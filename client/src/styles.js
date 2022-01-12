@@ -5,8 +5,7 @@ export const GlobalStyle = createGlobalStyle`
   box-sizing: border-box;
   margin: 0;
   padding: 0;
- } 
-
+ }
 `;
 
 export const theme = {
@@ -17,11 +16,12 @@ export const theme = {
     footer: "#b5afaf",
     hamburger: "#7f8c8d",
     white: "#ffffff",
+    hover: "#002171",
   },
 
   device: {
     mobile: `screen and (max-width: 767px)`,
-    ipad: `screen and (max-width: 1023px)`,
+    ipad: `screen and (max-width: 1024px)`,
   },
 };
 

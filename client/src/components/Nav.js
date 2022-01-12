@@ -6,7 +6,6 @@ import Apang from "../images/apang.png";
 import SigninModal from "../components/modal/SigninModal.js";
 import SignUpModal from "../components/modal/SignUpModal.js";
 import hamburger from "../images/hamburger.png";
-import user from "../images/user.png";
 
 export const NavContainer = styled(Container)`
   background: ${({ theme }) => theme.color.white};
@@ -88,17 +87,6 @@ export const Hamburger = styled.button`
   } ;
 `;
 
-export const Profile = styled.div`
-  display: flex;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  margin-left: 1rem;
-  .Id {
-    margin-left: 1rem;
-    margin-top: 0.5rem;
-  }
-`;
-
 export const Btn = styled.button`
   font-family: Noto Sans CJK KR;
   display: flex;
@@ -113,6 +101,7 @@ export const Btn = styled.button`
   outline: none;
   border: none;
   cursor: pointer;
+  z-index: 99;
   :hover {
     background-color: #8ac8ff;
     color: white;
@@ -188,12 +177,7 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
                 ) : (
                   <li>
                     <NavLink to="/mypage/publicprofile">
-                      <DropDownButton>
-                        <Profile>
-                          <img src={user} width="40rem" alt="user" />
-                          <div className="Id">맨날아파</div>
-                        </Profile>
-                      </DropDownButton>
+                      <DropDownButton>마이페이지</DropDownButton>
                     </NavLink>
                   </li>
                 )}
@@ -245,6 +229,9 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
           </ul>
         </NavMenu>
       )}
+      <Hamburger>
+        <img src={hamburger} alt="user" width="28rem"></img>
+      </Hamburger>
     </NavContainer>
   );
 }
