@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
     }
     // 토큰이 유효할 때
     else {
-      const doctorInfo = doctors.findOne({
+      const doctorInfo = await doctors.findOne({
         where: {
           id: userInfo.id,
         },

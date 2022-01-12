@@ -6,6 +6,7 @@ import Qna from "../components/Qna";
 import Doc from "../images/doc.png";
 import QnaModal from "../components/modal/QnaModal.js";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 export const QnaContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -229,7 +230,7 @@ export const ContentComment = styled.div`
   }
 `;
 
-function QnaPage({ isLogin }) {
+function QnaPage({ isLogin, uploadSuccess, qnaInfo, handleQnaInfo }) {
   const [QuestionOpen, setQuestionOpen] = useState(false);
 
   const openQuestionModal = () => {

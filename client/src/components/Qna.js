@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import user from "../images/user.png";
+import { Link } from "react-router-dom";
 
 export const QnaBox = styled.div`
   border: 0.1rem solid #63b5f6;

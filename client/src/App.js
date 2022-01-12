@@ -162,8 +162,18 @@ function App() {
           path="/oauth/callback/kakao"
           element={<Kakao LoginHandler={LoginHandler} />}
         />
-        <Route path="/qna" element={<QnaPage isLogin={isLogin} />} />
-        <Route path="/qnadetail" element={<QnaDetail isLogin={isLogin} />} />
+        <Route
+          path="/qna"
+          element={
+            <QnaPage isLogin={isLogin} userInfo={userInfo} auth={auth} />
+          }
+        />
+        <Route
+          path="/qnadetail"
+          element={
+            <QnaDetail isLogin={isLogin} userInfo={userInfo} auth={auth} />
+          }
+        />
       </Routes>
       <Footer />
     </>

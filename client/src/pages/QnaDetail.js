@@ -8,7 +8,7 @@ import QnaPost from "../components/QnaPost.js";
 export const QnaContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
   display: flex;
-  padding: 4rem 2rem;
+  padding: 2rem 2rem;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -31,7 +31,7 @@ export const ImgWrap = styled.div`
   }
 `;
 
-function QnaDetail({ isLogin }) {
+function QnaDetail({ isLogin, userInfo, auth }) {
   return (
     <>
       <QnaContainer>
@@ -40,7 +40,7 @@ function QnaDetail({ isLogin }) {
         </ImgWrap>
       </QnaContainer>
       <QnaUserPost />
-      <QnaPost isLogin={isLogin} />
+      <QnaPost isLogin={isLogin} userInfo={userInfo} auth={auth} />
     </>
   );
 }

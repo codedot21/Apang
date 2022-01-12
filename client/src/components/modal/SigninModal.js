@@ -32,7 +32,7 @@ export const ModalBox = styled.div`
 
 export const LoginHeader = styled.div`
   position: relative;
-  padding: 1.5rem 3.5rem 1rem 3.5rem;
+  padding: 1.5rem 3.5rem 1rem 9.3rem;
   background-color: #fbf3ed;
   font-weight: 500;
   color: black;
@@ -81,20 +81,21 @@ export const LoginBody = styled.div`
 `;
 
 export const LoginFooter = styled.div`
-  padding: 0.1rem 1rem 1rem 1rem;
+  padding: 0.1rem 1rem 1rem 6.8rem;
   background-color: #fbf3ed;
 `;
 
 export const SocialLoginHeader = styled.div`
   font-size: 0.8rem;
   padding-top: 0.1rem;
+  padding-left: 1.2rem;
   padding-bottom: 1rem;
   background-color: #fbf3ed;
 `;
 
 // export const SocialLogin = styled(Link)``;
 export const SocialLogin = styled.a`
-  padding: 0.1rem 1rem 1rem 1rem;
+  padding: 0.1rem 1rem 1rem 0.8rem;
 `;
 
 export const Button = styled.button`
@@ -122,6 +123,7 @@ export const ModalContainer = styled.div`
 
 export const ErrMsg = styled.div`
   color: red;
+  text-align: center;
 `;
 
 function SigninModal({ open, close, handleResponseSuccess }) {

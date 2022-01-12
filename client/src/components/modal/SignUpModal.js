@@ -29,7 +29,7 @@ export const ModalBox = styled.div`
 
 export const LoginHeader = styled.div`
   position: relative;
-  padding: 1.5rem 3.5rem 1rem 3.5rem;
+  padding: 1.5rem 3.5rem 1rem 9rem;
   background-color: #fbf3ed;
   font-weight: 500;
   color: black;
@@ -48,6 +48,15 @@ export const LoginHeader = styled.div`
     cursor: pointer;
     background-color: #fbf3ed;
   }
+`;
+
+export const SelectHeader = styled.div`
+  position: relative;
+  padding: 0 3.5rem 0 7rem;
+  background-color: #fbf3ed;
+  font-weight: 500;
+  color: black;
+  font-size: 1.5rem;
 `;
 
 export const LoginBody = styled.div`
@@ -115,6 +124,7 @@ export const BtnMenu = styled.button`
 
 export const ErrMsg = styled.div`
   color: red;
+  text-align: center;
 `;
 
 function SignUpModal({ open, close }) {
@@ -232,7 +242,7 @@ function SignUpModal({ open, close }) {
     //   return;
     // } else {
     axios
-      .post("http://localhost:4000/doctor/signup", doctorInfo, {
+      .post("http://localhost:80/doctor/signup", doctorInfo, {
         withCredentials: true,
       })
       .then((res) => {
@@ -268,22 +278,26 @@ function SignUpModal({ open, close }) {
           회원가입
           <button onClick={close}> &times; </button>
         </LoginHeader>
-        <input
-          type="radio"
-          name="user"
-          value="doctor"
-          onClick={handleClick}
-          defaultChecked={false}
-        />
-        <BtnMenu>의사</BtnMenu>
-        <input
-          type="radio"
-          name="user"
-          value="public"
-          onChange={handleClick}
-          defaultChecked={true}
-        />
-        <BtnMenu>일반</BtnMenu>
+        <SelectHeader>
+          <input
+            className="ID"
+            type="radio"
+            name="user"
+            value="doctor"
+            onClick={handleClick}
+            defaultChecked={false}
+          />
+          <BtnMenu>의사</BtnMenu>
+          <input
+            className="ID"
+            type="radio"
+            name="user"
+            value="public"
+            onChange={handleClick}
+            defaultChecked={true}
+          />
+          <BtnMenu>일반</BtnMenu>
+        </SelectHeader>
         <ErrMsg>{errorMessage}</ErrMsg>
         {isSelect === "public" ? (
           <LoginBody>

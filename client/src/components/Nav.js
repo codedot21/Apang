@@ -42,38 +42,38 @@ export const NavMenu = styled.div`
   @media ${({ theme }) => theme.device.mobile} {
     right: 1rem;
   }
-
   #main-menu > li {
     float: left;
     position: relative;
     list-style: none;
   }
-
   #sub-menu {
     position: absolute;
     margin-top: 1rem;
-    margin-left: 0rem;
+    margin-left: 0;
     right: 0.1rem;
     background: white;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.7s ease-in;
+    transition: all 0.9s ease-in;
     list-style: none;
     border: 1px solid #8ac8ff;
     border-radius: 0.1rem;
+    @media ${({ theme }) => theme.device.mobile} {
+      width: 20rem;
+      margin-top: 5rem;
+    }
   }
-
   #sub-menu > li {
     border-bottom: 1px solid #00000026;
   }
-
   #main-menu > li:hover #sub-menu {
     opacity: 1;
     visibility: visible;
   }
 `;
 
-export const Hamburger = styled.button`
+export const Hamburger = styled.div`
   display: none;
   @media ${({ theme }) => theme.device.mobile} {
     color: ${({ theme }) => theme.color.hamburger};
@@ -84,7 +84,7 @@ export const Hamburger = styled.button`
     justify-content: center;
     align-items: center;
     border: none;
-  } ;
+
 `;
 
 export const Btn = styled.button`
@@ -128,6 +128,8 @@ export const DropDownButton = styled.button`
   }
 
   @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1.9rem;
+    width: 19.8rem;
     :hover {
       background-color: ${({ theme }) => theme.color.button};
     }
@@ -162,7 +164,7 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
             <li>
               <Btn>Menu</Btn>
               <ul id="sub-menu">
-                {auth === 1 ? ( //
+                {auth === 1 ? (
                   <li>
                     <NavLink to="/mypage/doctorprofile">
                       <DropDownButton>마이페이지</DropDownButton>
@@ -206,17 +208,11 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
                   <DropDownButton onClick={openSigninModal}>
                     로그인
                   </DropDownButton>
-                  <SigninModal
-                    handleResponseSuccess={handleResponseSuccess}
-                    open={loginOpen}
-                    close={openSigninModal}
-                  />
                 </li>
                 <li>
                   <DropDownButton onClick={openSignupModal}>
                     회원가입
                   </DropDownButton>
-                  <SignUpModal open={signOpen} close={openSignupModal} />
                 </li>
               </ul>
             </li>
@@ -229,8 +225,80 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
           </ul>
         </NavMenu>
       )}
+      <SigninModal
+        handleResponseSuccess={handleResponseSuccess}
+        open={loginOpen}
+        close={openSigninModal}
+      />
+      <SignUpModal open={signOpen} close={openSignupModal} />
+
       <Hamburger>
-        <img src={hamburger} alt="user" width="28rem"></img>
+        {isLogin ? (
+          <NavMenu>
+            <ul id="main-menu">
+              <li>
+                <img src={hamburger} alt="user" width="28rem"></img>
+
+                <ul id="sub-menu">
+                  {auth === 1 ? (
+                    <li>
+                      <NavLink to="/mypage/doctorprofile">
+                        <DropDownButton>마이페이지</DropDownButton>
+                      </NavLink>
+                    </li>
+                  ) : auth === 0 ? (
+                    <li>
+                      <NavLink to="/authpage">
+                        <DropDownButton>관리자</DropDownButton>
+                      </NavLink>
+                    </li>
+                  ) : (
+                    <li>
+                      <NavLink to="/mypage/publicprofile">
+                        <DropDownButton>마이페이지</DropDownButton>
+                      </NavLink>
+                    </li>
+                  )}
+                  <li>
+                    <NavLink to="/qna">
+                      <DropDownButton>Q&A</DropDownButton>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <DropDownButton onClick={handleLogout}>
+                      로그아웃
+                    </DropDownButton>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </NavMenu>
+        ) : (
+          <NavMenu>
+            <ul id="main-menu">
+              <li>
+                <img src={hamburger} alt="user" width="28rem"></img>
+                <ul id="sub-menu">
+                  <li>
+                    <DropDownButton onClick={openSigninModal}>
+                      로그인
+                    </DropDownButton>
+                  </li>
+                  <li>
+                    <DropDownButton onClick={openSignupModal}>
+                      회원가입
+                    </DropDownButton>
+                  </li>
+                  <li>
+                    <NavLink to="/qna">
+                      <DropDownButton>Q&A</DropDownButton>
+                    </NavLink>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </NavMenu>
+        )}
       </Hamburger>
     </NavContainer>
   );

@@ -57,7 +57,7 @@ export const Title = styled.h1`
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
     text-align: center;
-    margin-left: 1.5rem;
+    margin-left: 0.5rem;
     margin-bottom: 1rem;
   }
 `;
