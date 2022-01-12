@@ -9,6 +9,9 @@ import DocMypage from "./pages/DocMypage.js";
 import ReviewPage from "./pages/ReviewPage.js";
 import Footer from "./components/Footer.js";
 import Kakao from "./components/Kakao.js";
+import QnaPage from "./pages/QnaPage.js";
+import QnaDetail from "./pages/QnaDetail.js";
+import ScrollTop from "./components/Scroll.js";
 
 import axios from "axios";
 
@@ -111,31 +114,32 @@ function App() {
     // );
   };
 
-  const getGoogleToken = async (authorizationCode) => {
-    await axios({
-      url: "http://localhost:80/oauth/google",
-      method: "post",
-      data: { authorizationCode },
-      withCredentials: true,
-    }).then((res) => {
-      console.log("여기", res.data);
-      console.log("여기", res.data.data.email);
-      console.log("여기", res.data.data.name);
-    });
-  };
+  // const getGoogleToken = async (authorizationCode) => {
+  //   await axios({
+  //     url: "http://localhost:4000/oauth/google",
+  //     method: "post",
+  //     data: { authorizationCode },
+  //     withCredentials: true,
+  //   }).then((res) => {
+  //     console.log("여기", res.data);
+  //     console.log("여기", res.data.data.email);
+  //     console.log("여기", res.data.data.name);
+  //   });
+  // };
 
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    console.log(`url ${url}`);
-    const authorizationCode = url.searchParams.get("code");
-    console.log(`authorizationCode ${authorizationCode}`);
-    if (authorizationCode) {
-      getGoogleToken(authorizationCode);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const url = new URL(window.location.href);
+  //   console.log(`url ${url}`);
+  //   const authorizationCode = url.searchParams.get("code");
+  //   console.log(`authorizationCode ${authorizationCode}`);
+  //   if (authorizationCode) {
+  //     getGoogleToken(authorizationCode);
+  //   }
+  // }, []);
 
   return (
     <>
+      <ScrollTop />
       <Nav
         isLogin={isLogin}
         auth={auth}
@@ -158,6 +162,8 @@ function App() {
           path="/oauth/callback/kakao"
           element={<Kakao LoginHandler={LoginHandler} />}
         />
+        <Route path="/qna" element={<QnaPage isLogin={isLogin} />} />
+        <Route path="/qnadetail" element={<QnaDetail isLogin={isLogin} />} />
       </Routes>
       <Footer />
     </>

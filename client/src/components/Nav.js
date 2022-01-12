@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Container, Button } from "../styles";
+import { Container } from "../styles";
 import Apang from "../images/apang.png";
 import SigninModal from "../components/modal/SigninModal.js";
 import SignUpModal from "../components/modal/SignUpModal.js";
+import hamburger from "../images/hamburger.png";
 
 export const NavContainer = styled(Container)`
   background: ${({ theme }) => theme.color.white};
@@ -12,6 +13,7 @@ export const NavContainer = styled(Container)`
   position: sticky;
   align-items: center;
   height: 6rem;
+  top: 0;
 `;
 
 export const LogoWrap = styled(Link)`
@@ -30,7 +32,7 @@ export const Logo = styled.img`
   } ;
 `;
 
-export const NavBtn = styled.li`
+export const NavMenu = styled.div`
   display: flex;
   position: absolute;
   align-items: center;
@@ -39,44 +41,50 @@ export const NavBtn = styled.li`
   right: 1rem;
   @media ${({ theme }) => theme.device.mobile} {
     right: 1rem;
-  } ;
-`;
-
-export const NavLink = styled(Link)`
-  text-decoration: none;
-`;
-
-export const NavMenu = styled.div``;
-
-export const DropDownListContainer = styled.div`
-  background: ${({ theme }) => theme.color.button};
-  display: block;
-  position: absolute;
-  right: 3.7rem;
-  width: 6.4rem;
-`;
-
-export const DropDownList = styled.ul``;
-
-export const MenuBtn = styled.button`
-  background: ${({ theme }) => theme.color.button};
-  color: ${({ theme }) => theme.color.white};
-  font-size: 1rem;
-  font-family: Noto Sans CJK KR;
-  display: block;
-  margin-right: auto;
-  margin-left: auto;
-  margin-bottom: 0.1em;
-  white-space: nowrap;
-  padding-right: 1rem;
-  padding-left: 1rem;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  &:hover {
-    background-color: ${({ theme }) => theme.color.button};
-    color: black;
   }
+
+  #main-menu > li {
+    float: left;
+    position: relative;
+    list-style: none;
+  }
+
+  #sub-menu {
+    position: absolute;
+    margin-top: 1rem;
+    margin-left: 0rem;
+    right: 0.1rem;
+    background: white;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.7s ease-in;
+    list-style: none;
+    border: 1px solid #8ac8ff;
+    border-radius: 0.1rem;
+  }
+
+  #sub-menu > li {
+    border-bottom: 1px solid #00000026;
+  }
+
+  #main-menu > li:hover #sub-menu {
+    opacity: 1;
+    visibility: visible;
+  }
+`;
+
+export const Hamburger = styled.button`
+  display: none;
+  @media ${({ theme }) => theme.device.mobile} {
+    color: ${({ theme }) => theme.color.hamburger};
+    background-color: ${({ theme }) => theme.color.white};
+    display: flex;
+    position: absolute;
+    right: 1rem;
+    justify-content: center;
+    align-items: center;
+    border: none;
+  } ;
 `;
 
 export const Btn = styled.button`
@@ -88,23 +96,51 @@ export const Btn = styled.button`
   white-space: nowrap;
   padding-right: 1rem;
   padding-left: 1rem;
-  color: #3b7de0;
-  font-size: 1.3rem;
-  font-weight: bold;
+  color: ${({ theme }) => theme.color.main};
+  font-size: 1rem;
   outline: none;
   border: none;
   cursor: pointer;
+  z-index: 99;
+  :hover {
+    background-color: #8ac8ff;
+    color: white;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    display: none;
+  } ;
 `;
 
+export const DropDownButton = styled.button`
+  background: white;
+  border: none;
+  padding: 0.5rem;
+  list-style: none;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  width: 10rem;
+  color: ${({ theme }) => theme.color.main};
+  :hover {
+    background-color: #8ac8ff;
+    color: white;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    :hover {
+      background-color: ${({ theme }) => theme.color.button};
+    }
+  } ;
+`;
+
+export const NavLink = styled(Link)`
+  text-decoration: none;
+`;
 function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
-  const [isDropOpen, setIsDropOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [signOpen, setSignOpen] = useState(false);
 
-  const openDropHandler = () => {
-    console.log("클릭되었나요?");
-    setIsDropOpen(!isDropOpen);
-  };
   const openSigninModal = () => {
     console.log("로그인 모달 오픈되었나요?");
     setLoginOpen(!loginOpen);
@@ -116,62 +152,87 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
   };
 
   return (
-    <>
-      <NavContainer>
-        <LogoWrap to="/">
-          <Logo src={Apang} />
-        </LogoWrap>
-        <NavBtn>
-          <NavMenu>
-            <Btn onClick={openDropHandler}>메뉴</Btn>
-            {isDropOpen ? (
-              <DropDownListContainer>
-                {/* 로그인여부에 따라 보이는 메뉴가 다름 */}
-                {isLogin ? (
-                  <DropDownList>
-                    {auth === 1 ? ( //의사일 경우 의사마이보이게.
-                      <>
-                        <NavLink to="/mypage/doctorprofile">
-                          <MenuBtn>의사마이</MenuBtn>
-                        </NavLink>
-                      </>
-                    ) : auth === 0 ? (
-                      <NavLink to="/authpage">
-                        <MenuBtn>관리자</MenuBtn>
-                      </NavLink>
-                    ) : (
-                      <>
-                        <NavLink to="/mypage/publicprofile">
-                          <MenuBtn>일반마이</MenuBtn>
-                        </NavLink>
-                      </>
-                    )}
-
-                    <MenuBtn onClick={handleLogout}>로그아웃</MenuBtn>
-                  </DropDownList>
+    <NavContainer>
+      <LogoWrap to="/">
+        <Logo src={Apang} />
+      </LogoWrap>
+      {isLogin ? (
+        <NavMenu>
+          <ul id="main-menu">
+            <li>
+              <Btn>Menu</Btn>
+              <ul id="sub-menu">
+                {auth === 1 ? ( //
+                  <li>
+                    <NavLink to="/mypage/doctorprofile">
+                      <DropDownButton>마이페이지</DropDownButton>
+                    </NavLink>
+                  </li>
+                ) : auth === 0 ? (
+                  <li>
+                    <NavLink to="/authpage">
+                      <DropDownButton>관리자</DropDownButton>
+                    </NavLink>
+                  </li>
                 ) : (
-                  <DropDownList>
-                    <MenuBtn onClick={openSigninModal}>로그인</MenuBtn>
-                    <SigninModal
-                      handleResponseSuccess={handleResponseSuccess}
-                      open={loginOpen}
-                      close={openSigninModal}
-                    />
-
-                    <MenuBtn onClick={openSignupModal}>회원가입</MenuBtn>
-                    <SignUpModal open={signOpen} close={openSignupModal} />
-                  </DropDownList>
+                  <li>
+                    <NavLink to="/mypage/publicprofile">
+                      <DropDownButton>마이페이지</DropDownButton>
+                    </NavLink>
+                  </li>
                 )}
-              </DropDownListContainer>
-            ) : null}
-          </NavMenu>
 
-          <NavLink to="/">
-            <Button>Q&A</Button>
-          </NavLink>
-        </NavBtn>
-      </NavContainer>
-    </>
+                <li>
+                  <DropDownButton onClick={handleLogout}>
+                    로그아웃
+                  </DropDownButton>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <NavLink to="/qna">
+                <Btn>Q&A</Btn>
+              </NavLink>
+            </li>
+          </ul>
+        </NavMenu>
+      ) : (
+        <NavMenu>
+          <ul id="main-menu">
+            <li>
+              <Btn>Menu</Btn>
+              <ul id="sub-menu">
+                <li>
+                  <DropDownButton onClick={openSigninModal}>
+                    로그인
+                  </DropDownButton>
+                  <SigninModal
+                    handleResponseSuccess={handleResponseSuccess}
+                    open={loginOpen}
+                    close={openSigninModal}
+                  />
+                </li>
+                <li>
+                  <DropDownButton onClick={openSignupModal}>
+                    회원가입
+                  </DropDownButton>
+                  <SignUpModal open={signOpen} close={openSignupModal} />
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <NavLink to="/qna">
+                <Btn>Q&A</Btn>
+              </NavLink>
+            </li>
+          </ul>
+        </NavMenu>
+      )}
+      <Hamburger>
+        <img src={hamburger} alt="user" width="28rem"></img>
+      </Hamburger>
+    </NavContainer>
   );
 }
 

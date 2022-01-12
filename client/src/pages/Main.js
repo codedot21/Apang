@@ -1,26 +1,30 @@
 import React from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
-import Hospital from "../images/hospital.jpg";
+import Hospital from "../images/hospital.png";
 import Qna from "../images/qna.png";
 import Review from "../images/review.png";
-import Find from "../images/search.png";
+import Find from "../images/searchdoc.png";
 import Doc from "../images/doc.jpg";
+import SearchIcon from "../images/search.svg";
+import { Link } from "react-router-dom";
 
 export const MainContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
-  height: 65rem;
+  height: 55rem;
   display: flex;
   justify-content: center;
   align-items: center;
   @media ${({ theme }) => theme.device.ipad} {
     display: block;
     text-align: center;
+    margin-top: 20%;
     height: 100%;
   }
   @media ${({ theme }) => theme.device.mobile} {
     display: block;
     text-align: center;
+    margin-top: 50%;
     height: 100%;
   }
 `;
@@ -32,6 +36,7 @@ export const MainWrap = styled.div`
     margin-right: 0;
   }
 `;
+
 export const ImgWrap = styled.div`
   @media ${({ theme }) => theme.device.mobile} {
     text-align: center;
@@ -39,7 +44,7 @@ export const ImgWrap = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 3.4rem;
+  font-size: 4.3rem;
   font-weight: 600;
   margin-bottom: 1rem;
 
@@ -47,16 +52,18 @@ export const Title = styled.h1`
     font-size: 2.9rem;
     text-align: center;
     margin-bottom: 1.3rem;
+    margin-left: 2rem;
   }
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
     text-align: center;
+    margin-left: 1.5rem;
     margin-bottom: 1rem;
   }
 `;
 
 export const Text = styled.p`
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   margin-bottom: 2rem;
   margin-right: 2rem;
 
@@ -64,29 +71,13 @@ export const Text = styled.p`
     font-size: 1.7rem;
     text-align: center;
     margin-bottom: 1.3rem;
+    margin-left: 5rem;
   }
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 0.8rem;
     text-align: center;
+    margin-left: 2.8rem;
     margin-bottom: 1.3rem;
-  }
-`;
-
-export const Search = styled.p`
-  & > input {
-    padding-top: 0.7rem;
-    padding-bottom: 0.5rem;
-    padding-left: 0.5rem;
-    width: 23rem;
-    height: 3rem;
-    font-size: 1.5rem;
-    border: 0.1rem solid black;
-  }
-  @media ${({ theme }) => theme.device.ipad} {
-    display: none;
-  }
-  @media ${({ theme }) => theme.device.mobile} {
-    display: none;
   }
 `;
 
@@ -99,6 +90,45 @@ export const Img = styled.img`
   @media ${({ theme }) => theme.device.mobile} {
     width: 60rem;
     max-width: 20rem;
+  }
+`;
+
+export const Search = styled.div`
+  & form {
+    position: relative;
+    text-align: center;
+    width: 20rem;
+    margin: 0 auto;
+    margin-top: 3rem;
+    margin-left: 0;
+    & input {
+      outline: none;
+      border: none;
+      width: 24rem;
+      height: 3.5rem;
+      font-size: 1.5rem;
+      padding-left: 0.5rem;
+      border: 0.2rem solid #63b5f6;
+      border-radius: 10px;
+    }
+    & button {
+      position: absolute;
+      width: 1%;
+      height: 100%;
+      border: none;
+      background-color: transparent;
+      top: 0;
+      right: 0;
+    }
+    & img {
+      width: 2.8rem;
+    }
+  }
+  @media ${({ theme }) => theme.device.ipad} {
+    display: none;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    display: none;
   }
 `;
 
@@ -125,7 +155,7 @@ export const ContentWrapReview = styled.div`
 
 export const ContentWrapQna = styled.div`
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2.5rem;
   @media ${({ theme }) => theme.device.mobile} {
     align-items: center;
   }
@@ -133,6 +163,7 @@ export const ContentWrapQna = styled.div`
 
 export const ContentWrapFind = styled.div`
   text-align: center;
+  margin-bottom: 2.5rem;
   @media ${({ theme }) => theme.device.mobile} {
     align-items: center;
   }
@@ -154,15 +185,15 @@ export const BoxWrapQna = styled.div`
 
 export const BoxWrapFind = styled.div`
   text-align: center;
-  margin-top: 7rem;
-  margin-bottom: 3rem;
+  // margin-top: 1em;
+  // margin-bottom: 0.1rem;
   @media ${({ theme }) => theme.device.mobile} {
     align-items: center;
   }
 `;
 
 export const ContentTitle = styled.p`
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 0.7rem;
   font-weight: 500;
   @media ${({ theme }) => theme.device.mobile} {
@@ -173,7 +204,7 @@ export const ContentTitle = styled.p`
 `;
 
 export const ContentText = styled.p`
-  font-size: 1.7rem;
+  font-size: 1.3rem;
   margin-bottom: 1.5rem;
   font-weight: 400;
   @media ${({ theme }) => theme.device.mobile} {
@@ -186,6 +217,7 @@ export const ContentText = styled.p`
 export const ImgThree = styled.img`
   width: 26rem;
   margin-bottom: 2rem;
+  // border: 1px solid #63b5f6;
   @media ${({ theme }) => theme.device.mobile} {
     width: 15rem;
     max-width: 20rem;
@@ -193,7 +225,7 @@ export const ImgThree = styled.img`
   }
 `;
 
-export const Button = styled.button`
+export const Button = styled(Link)`
   margin: 4rem 4.7rem 0.1rem 4rem;
   background: #6ec5ff;
   white-space: nowrap;
@@ -203,7 +235,8 @@ export const Button = styled.button`
   border: none;
   cursor: pointer;
   border-radius: 30px;
-  font-size: 2rem;
+  font-size: 1.5rem;
+  text-decoration: none;
   &:hover {
     background: #fff;
     background-color: #002171;
@@ -219,12 +252,38 @@ export const Button = styled.button`
   }
 
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 1rem;
-    width: 10rem;
-    max-width: 20rem;
-    margin-left: 6.5rem;
-    margin-top: 1rem;
-    padding: 0.3rem;
+    // font-size: 1rem;
+    // width: 10rem;
+    // max-width: 20rem;
+    // margin-left: 6.5rem;
+    // margin-top: 1rem;
+    // padding: 0.3rem;
+    display: none;
+  }
+`;
+
+export const NavLink = styled(Link)`
+  text-decoration: none;
+`;
+
+export const SubTitle = styled.h1`
+  font-size: 3.4rem;
+  font-weight: 600;
+  margin-top: 8rem;
+
+  @media ${({ theme }) => theme.device.ipad} {
+    // font-size: 2.9rem;
+    // text-align: center;
+    // margin-bottom: 1.3rem;
+    // margin-left: 2rem;
+    display: none;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    // font-size: 1.5rem;
+    // text-align: center;
+    // margin-left: 1.5rem
+    // margin-bottom: 1rem;
+    display: none;
   }
 `;
 
@@ -234,9 +293,16 @@ function Main() {
       <MainContainer>
         <MainWrap>
           <Title>어디가 아팡?</Title>
-          <Text>원하는 진료과목을 선택해주세요</Text>
+          {/* <Text>원하는 진료과목을 선택해주세요</Text> */}
           <Search>
-            <input type="text" placeholder="입력해주세요" />
+            <form>
+              <input type="text" placeholder="입력해주세요" />
+              <NavLink to="/">
+                <button>
+                  <img src={SearchIcon} alt="SearchIcon" />
+                </button>
+              </NavLink>
+            </form>
           </Search>
         </MainWrap>
         <ImgWrap>
@@ -272,12 +338,12 @@ function Main() {
       <MainContainer>
         <Img src={Doc}></Img>
         <MainWrapQna>
-          <Title>
+          <SubTitle>
             전문가의 조언을
             <br />
             들을 수 있어요
-          </Title>
-          <Button>Q&A 가기</Button>
+          </SubTitle>
+          <Button to="/qna">Q&A 가기</Button>
         </MainWrapQna>
       </MainContainer>
     </>
