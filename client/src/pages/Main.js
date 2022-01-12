@@ -44,7 +44,7 @@ export const ImgWrap = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 3.4rem;
+  font-size: 4.3rem;
   font-weight: 600;
   margin-bottom: 1rem;
 
@@ -63,7 +63,7 @@ export const Title = styled.h1`
 `;
 
 export const Text = styled.p`
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   margin-bottom: 2rem;
   margin-right: 2rem;
 
@@ -99,29 +99,29 @@ export const Search = styled.div`
     text-align: center;
     width: 20rem;
     margin: 0 auto;
-    margin-top: 1rem;
+    margin-top: 3rem;
     margin-left: 0;
     & input {
       outline: none;
       border: none;
-      width: 20rem;
-      height: 2.4rem;
-      font-size: 1rem;
+      width: 24rem;
+      height: 3.5rem;
+      font-size: 1.5rem;
       padding-left: 0.5rem;
       border: 0.2rem solid #63b5f6;
       border-radius: 10px;
     }
     & button {
       position: absolute;
-      width: 2.4rem;
-      height: 2.4rem;
+      width: 1%;
+      height: 100%;
       border: none;
       background-color: transparent;
       top: 0;
       right: 0;
     }
     & img {
-      width: 1.3rem;
+      width: 2.8rem;
     }
   }
   @media ${({ theme }) => theme.device.ipad} {
@@ -193,7 +193,7 @@ export const BoxWrapFind = styled.div`
 `;
 
 export const ContentTitle = styled.p`
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 0.7rem;
   font-weight: 500;
   @media ${({ theme }) => theme.device.mobile} {
@@ -204,7 +204,7 @@ export const ContentTitle = styled.p`
 `;
 
 export const ContentText = styled.p`
-  font-size: 1.7rem;
+  font-size: 1.3rem;
   margin-bottom: 1.5rem;
   font-weight: 400;
   @media ${({ theme }) => theme.device.mobile} {
@@ -235,7 +235,7 @@ export const Button = styled(Link)`
   border: none;
   cursor: pointer;
   border-radius: 30px;
-  font-size: 2rem;
+  font-size: 1.5rem;
   text-decoration: none;
   &:hover {
     background: #fff;
@@ -252,17 +252,39 @@ export const Button = styled(Link)`
   }
 
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 1rem;
-    width: 10rem;
-    max-width: 20rem;
-    margin-left: 6.5rem;
-    margin-top: 1rem;
-    padding: 0.3rem;
+    // font-size: 1rem;
+    // width: 10rem;
+    // max-width: 20rem;
+    // margin-left: 6.5rem;
+    // margin-top: 1rem;
+    // padding: 0.3rem;
+    display: none;
   }
 `;
 
 export const NavLink = styled(Link)`
   text-decoration: none;
+`;
+
+export const SubTitle = styled.h1`
+  font-size: 3.4rem;
+  font-weight: 600;
+  margin-top: 8rem;
+
+  @media ${({ theme }) => theme.device.ipad} {
+    // font-size: 2.9rem;
+    // text-align: center;
+    // margin-bottom: 1.3rem;
+    // margin-left: 2rem;
+    display: none;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    // font-size: 1.5rem;
+    // text-align: center;
+    // margin-left: 1.5rem
+    // margin-bottom: 1rem;
+    display: none;
+  }
 `;
 
 function Main() {
@@ -271,7 +293,7 @@ function Main() {
       <MainContainer>
         <MainWrap>
           <Title>어디가 아팡?</Title>
-          <Text>원하는 진료과목을 선택해주세요</Text>
+          {/* <Text>원하는 진료과목을 선택해주세요</Text> */}
           <Search>
             <form>
               <input type="text" placeholder="입력해주세요" />
@@ -316,11 +338,11 @@ function Main() {
       <MainContainer>
         <Img src={Doc}></Img>
         <MainWrapQna>
-          <Title>
+          <SubTitle>
             전문가의 조언을
             <br />
             들을 수 있어요
-          </Title>
+          </SubTitle>
           <Button to="/qna">Q&A 가기</Button>
         </MainWrapQna>
       </MainContainer>

@@ -1,16 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import user from "../images/user.png";
 
 export const QnaBox = styled.div`
   border: 0.1rem solid #63b5f6;
+  color: black;
   border-radius: 10px;
   max-width: 1300px;
   width: 100%;
   height: 10rem;
   margin-bottom: 2rem;
-  a {
+  :hover {
+    box-shadow: #63b5f6 0.1rem 0.1rem 0.1rem 0.1rem;
     text-decoration: none;
   }
 `;
@@ -50,6 +51,7 @@ export const Tag = styled.div`
   margin-bottom: 0.5rem;
   .tag {
     margin-right: 0.5rem;
+    margin-top: 0.5rem;
     width: auto;
     height: 1.3rem;
     display: flex;

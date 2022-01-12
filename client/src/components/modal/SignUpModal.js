@@ -14,6 +14,7 @@ export const ModalBackGround = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 99;
 `;
 
 export const ModalBox = styled.div`
@@ -226,38 +227,38 @@ function SignUpModal({ open, close }) {
   };
 
   const doctorSignUp = () => {
-    if (check(publicInfo.email, publicInfo.password) === false) {
-      setErrorMessage("이메일 형식과 비밀번호를 확인해 주세요");
-      return;
-    } else {
-      axios
-        .post("http://localhost:4000/doctor/signup", doctorInfo, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          // console.log(res);
-          if (res.data.error === 1) {
-            Swal.fire({
-              icon: "warning",
-              title: "Apang 회원가입",
-              text: "모든항목을 입력해 주세요.",
-            });
-          } else if (res.data.error === 2) {
-            Swal.fire({
-              icon: "warning",
-              title: "Apang 회원가입",
-              text: "이메일이 존재합니다.",
-            });
-          } else if (res.data.status === 201) {
-            Swal.fire({
-              icon: "success",
-              title: "Apang 회원가입",
-              text: "회원가입 신청이 완료되었습니다.",
-            });
-            close();
-          }
-        });
-    }
+    // if (check(publicInfo.email, publicInfo.password) === false) {
+    //   setErrorMessage("이메일 형식과 비밀번호를 확인해 주세요");
+    //   return;
+    // } else {
+    axios
+      .post("http://localhost:4000/doctor/signup", doctorInfo, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        // console.log(res);
+        if (res.data.error === 1) {
+          Swal.fire({
+            icon: "warning",
+            title: "Apang 회원가입",
+            text: "모든항목을 입력해 주세요.",
+          });
+        } else if (res.data.error === 2) {
+          Swal.fire({
+            icon: "warning",
+            title: "Apang 회원가입",
+            text: "이메일이 존재합니다.",
+          });
+        } else if (res.status === 201) {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 회원가입",
+            text: "회원가입 신청이 완료되었습니다.",
+          });
+          close();
+        }
+      });
+    // }
   };
 
   return open ? (

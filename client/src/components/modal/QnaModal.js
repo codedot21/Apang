@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 
 export const ModalBackGround = styled.div`
   position: fixed;
@@ -32,6 +31,11 @@ export const QnaHeader = styled.div`
   font-weight: 500;
   color: black;
   font-size: 1.5rem;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1rem;
+    padding: 1.5rem 1.5rem 1rem 10rem;
+  }
 
   & > button {
     position: absolute;
@@ -113,6 +117,11 @@ export const Button = styled.button`
     background: #fff;
     background-color: #002171;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 0.8rem;
+    padding: 0.5rem 9rem 0.5rem 9rem;
+    margin-left: 1rem;
+  }
 `;
 
 export const TagsInput = styled.div`
@@ -123,9 +132,16 @@ export const TagsInput = styled.div`
   min-height: 1rem;
   width: 31.6rem;
   padding: 0 0.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1rem;
+    margin-left: 0;
+    width: 21.5rem;
+  }
+
   > ul {
     display: flex;
     flex-wrap: wrap;
+
     > .tag {
       width: auto;
       height: 1.8rem;
@@ -182,8 +198,8 @@ function QnaModal({ open, close }) {
   };
 
   return open ? (
-    <ModalBackGround>
-      <ModalBox>
+    <ModalBackGround onClick={close}>
+      <ModalBox onClick={(e) => e.stopPropagation()}>
         <QnaHeader>
           질문하기
           <button onClick={close}> &times; </button>
@@ -250,7 +266,7 @@ function QnaModal({ open, close }) {
           </div>
         </QnaBody>
         <QnaFooter>
-          <Button>등록 </Button>
+          <Button>등록</Button>
         </QnaFooter>
       </ModalBox>
     </ModalBackGround>
