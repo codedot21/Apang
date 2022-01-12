@@ -12,6 +12,8 @@ import Kakao from "./components/Kakao.js";
 import QnaPage from "./pages/QnaPage.js";
 import QnaDetail from "./pages/QnaDetail.js";
 import ScrollTop from "./components/Scroll.js";
+import Medical from "./pages/Medical.js";
+import MedicalDetail from "./pages/MedicalDetail.js";
 
 import axios from "axios";
 
@@ -22,6 +24,25 @@ function App() {
   const [userInfo, setUserInfo] = useState(null);
   // const [accessToken, setAccessToken] = useState("");
   const [auth, setAuth] = useState("");
+
+  // map 상태
+  const [medical, setMedical] = useState("");
+
+  //map 함수
+
+  const medicalhandling = (value) => {
+    setMedical(value);
+    console.log(medical);
+  };
+
+  // 병원 정보
+  const [medicalInfo, setMedicalInfo] = useState("");
+
+  // 정보 가져오기
+  const medicalInfoHandling = (value) => {
+    setMedicalInfo(value);
+    console.log(medicalInfo);
+  };
 
   // useEffect(() => {
   //   setUserInfo(localStorage.getItem("userInfo"));
@@ -67,9 +88,9 @@ function App() {
   //   isAuthenticated(authnumber);
   // };
 
-  useEffect(() => {
-    isAuthenticated();
-  }, []); //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
+  // useEffect(() => {
+  //   isAuthenticated();
+  // }, []); //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
 
   const LoginHandler = (data) => {
     setUserInfo(data);
@@ -147,7 +168,7 @@ function App() {
         handleLogout={handleLogout}
       />
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<Main medicalhandling={medicalhandling} />} />
         <Route path="/authpage" element={<AuthPage />} />
         <Route
           path="/mypage/publicprofile"
@@ -157,24 +178,31 @@ function App() {
           path="/mypage/doctorprofile"
           element={<DocMypage userInfo={userInfo} />}
         />
-        <Route path="/reviewpage" element={<ReviewPage />} />
+        <Route
+          path="/reviewpage"
+          element={<ReviewPage userInfo={userInfo} />}
+        />
         <Route
           path="/oauth/callback/kakao"
           element={<Kakao LoginHandler={LoginHandler} />}
         />
+        <Route path="/qna" element={<QnaPage isLogin={isLogin} />} />
+        <Route path="/qnadetail" element={<QnaDetail isLogin={isLogin} />} />
         <Route
-          path="/qna"
+          path="/medicallist"
           element={
-            <QnaPage isLogin={isLogin} userInfo={userInfo} auth={auth} />
+            <Medical
+              medical={medical}
+              medicalInfoHandling={medicalInfoHandling}
+            />
           }
         />
         <Route
-          path="/qnadetail"
-          element={
-            <QnaDetail isLogin={isLogin} userInfo={userInfo} auth={auth} />
-          }
+          path="/medicaldetail"
+          element={<MedicalDetail medicalInfo={medicalInfo} />}
         />
       </Routes>
+
       <Footer />
     </>
   );

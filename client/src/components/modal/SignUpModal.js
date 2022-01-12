@@ -132,8 +132,7 @@ function SignUpModal({ open, close }) {
   const [errorMessage, setErrorMessage] = useState("");
   // 유효성 검사
   const check = (email, password) => {
-    let emailRegExp =
-      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     let pwdRegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
 
     if (!emailRegExp.test(email)) {
@@ -182,58 +181,55 @@ function SignUpModal({ open, close }) {
   };
 
   const publicSignUp = () => {
-    if (check(publicInfo.email, publicInfo.password) === false) {
-      setErrorMessage("이메일 형식과 비밀번호를 확인해 주세요");
-      return;
-    }
-    // else if (isMoreThan4Length(publicInfo.nickname)) {
-    //   setErrorMessage("닉네임은 2~8글자 입니다.");
+    // if (check(publicInfo.email, publicInfo.password) === false) {
+    //   setErrorMessage("이메일 형식과 비밀번호를 확인해 주세요");
+    //   return;
     // }
-    else {
-      setErrorMessage("사용가능한 형식 입니다.");
-      axios
-        .post("http://localhost:80/public/signup", publicInfo, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          // console.log("회원가입 완료");
-          if (res.data.error === 1) {
-            Swal.fire({
-              icon: "warning",
-              title: "Apang 회원가입",
-              text: "모든항목을 입력해 주세요.",
+    // else {
+    setErrorMessage("사용가능한 형식 입니다.");
+    axios
+      .post("http://localhost:80/public/signup", publicInfo, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        // console.log("회원가입 완료");
+        if (res.data.error === 1) {
+          Swal.fire({
+            icon: "warning",
+            title: "Apang 회원가입",
+            text: "모든항목을 입력해 주세요.",
+          });
+        } else if (res.data.error === 2) {
+          Swal.fire({
+            icon: "warning",
+            title: "Apang 회원가입",
+            text: "이미 존재하는 이메일입니다.",
+          });
+        } else if (res.data.error === 3) {
+          Swal.fire({
+            icon: "warning",
+            title: "Apang 회원가입",
+            text: "이미 존재하는 닉네임 입니다.",
+          });
+        } else if (res.status === 201) {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 회원가입",
+            text: "회원가입 완료 되었습니다.",
+          });
+          close();
+          delete publicInfo.nickname;
+          axios
+            .post("http://localhost:80/common/signin", publicInfo, {
+              withCredentials: true,
+            })
+            .then((res) => {
+              console.log("회원가입 후 로그인 완료");
             });
-          } else if (res.data.error === 2) {
-            Swal.fire({
-              icon: "warning",
-              title: "Apang 회원가입",
-              text: "이미 존재하는 이메일입니다.",
-            });
-          } else if (res.data.error === 3) {
-            Swal.fire({
-              icon: "warning",
-              title: "Apang 회원가입",
-              text: "이미 존재하는 닉네임 입니다.",
-            });
-          } else if (res.status === 201) {
-            Swal.fire({
-              icon: "success",
-              title: "Apang 회원가입",
-              text: "회원가입 완료 되었습니다.",
-            });
-            close();
-            delete publicInfo.nickname;
-            axios
-              .post("http://localhost:80/common/signin", publicInfo, {
-                withCredentials: true,
-              })
-              .then((res) => {
-                console.log("회원가입 후 로그인 완료");
-              });
-          }
-          // navigate("/");
-        });
-    }
+        }
+        // navigate("/");
+      });
+    // }
   };
 
   const doctorSignUp = () => {
