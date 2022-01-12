@@ -20,8 +20,9 @@ function App() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
-  // const [accessToken, setAccessToken] = useState("");
+  const [qnaInfo, setqnaInfo] = useState(""); //qna 전부 가져오는것
   const [auth, setAuth] = useState("");
+  const [qnaDetail, setqnaDetail] = useState("");
 
   const isAuthenticated = () => {
     //쿠키에 jwt가 있는지 없는지 랜더링될떄마다 확인하는 함수..?
@@ -38,6 +39,7 @@ function App() {
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth); //nav에 내려주기 위해
           setIsLogin(true);
+          uploadSuccess();
           // navigate("/");
         });
     } else if (authnumber === 1) {
@@ -46,10 +48,11 @@ function App() {
           withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
         })
         .then((res) => {
-          console.log(res.data.userInfo);
+          console.log(res.data);
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth);
           setIsLogin(true);
+          uploadSuccess();
           // navigate("/");
         });
     } else if (isNaN(authnumber)) {
@@ -65,6 +68,7 @@ function App() {
             console.log("user : ", user);
             console.log(user.accessToken);
             localStorage.setItem("userid", user.data.id);
+            console.log(localStorage.getItem("userid"));
             const userInfo = {
               id: user.data.id,
               nickname: user.data.properties.nickname,
@@ -73,31 +77,47 @@ function App() {
             console.log(userInfo);
             setUserInfo(userInfo);
             setIsLogin(true);
+            uploadSuccess();
             navigate("/");
           } else {
             window.alert("로그인에 실패하였습니다.");
           }
         });
     }
+    uploadSuccess();
   };
 
   const handleResponseSuccess = (authnumber) => {
     localStorage.setItem("auth", authnumber);
     isAuthenticated();
   };
-  // const handleResponseSuccess = (authnumber) => {
-  //   isAuthenticated(authnumber);
-  // };
+
+  const uploadSuccess = () => {
+    console.log("uploadsuccess실행됨?");
+    axios
+      .post(
+        "http://localhost:80/qna/info",
+        { kakao_userid: localStorage.getItem("userid") },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
+        setqnaInfo(res.data.qnaInfo);
+      });
+  };
 
   useEffect(() => {
     isAuthenticated();
   }, []); //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
 
+  // useEffect(() => {
+  //   uploadSuccess();
+  // }, []);
+
   const LoginHandler = () => {
     isAuthenticated();
-    // setUserInfo(data);
-    // console.log(userInfo);
-    // setIsLogin(true);
   };
 
   const handleLogout = () => {
@@ -122,22 +142,12 @@ function App() {
         alert("로그아웃이 되었습니다.");
         navigate("/");
       });
-    // // .catch(() =>
-    // axios
-    //   .post("http://localhost:80/common/kakaosignout", {
-    //     userid: localStorage.getItem("userid"),
-    //   })
-    //   .then((res) => {
-    //     setUserInfo("");
-    //     setIsLogin(false);
-    //     localStorage.removeItem("userid");
-    //     localStorage.removeItem("ACCESS_TOKEN");
-    //     alert("로그아웃이 되었습니다.");
-    //     navigate("/");
-    //   });
-    // );
   };
 
+  const handleQnaInfo = (qna) => {
+    console.log(qna);
+    setqnaDetail(qna);
+  };
   // const getGoogleToken = async (authorizationCode) => {
   //   await axios({
   //     url: "http://localhost:4000/oauth/google",
@@ -166,7 +176,7 @@ function App() {
       <ScrollTop />
       <Nav
         isLogin={isLogin}
-        auth={auth}
+        auth={parseInt(localStorage.getItem("auth"))}
         handleResponseSuccess={handleResponseSuccess}
         handleLogout={handleLogout}
       />
@@ -186,8 +196,21 @@ function App() {
           path="/oauth/callback/kakao"
           element={<Kakao LoginHandler={LoginHandler} />}
         />
-        <Route path="/qna" element={<QnaPage isLogin={isLogin} />} />
-        <Route path="/qnadetail" element={<QnaDetail isLogin={isLogin} />} />
+        <Route
+          path="/qna"
+          element={
+            <QnaPage
+              handleQnaInfo={handleQnaInfo}
+              uploadSuccess={uploadSuccess}
+              qnaInfo={qnaInfo}
+              isLogin={isLogin}
+            />
+          }
+        />
+        <Route
+          path="/qna/detail/:id"
+          element={<QnaDetail isLogin={isLogin} qnaDetail={qnaDetail} />}
+        />
       </Routes>
       <Footer />
     </>

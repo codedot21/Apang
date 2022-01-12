@@ -203,6 +203,7 @@ const MyreviewTitle = styled.h2`
 // 대답 끝
 
 function DocMypage(props) {
+  console.log(props.useInfo);
   const [imgInfo, setImgInfo] = useState({
     file: [],
     filepreview: null,

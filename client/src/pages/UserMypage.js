@@ -194,6 +194,19 @@ const MyreviewTitle = styled.h2`
 
 // 상현 수정
 function UserMypage(props) {
+  // axios
+  //     .post(
+  //       "http://localhost:80/qna/info",
+  //       { kakao_userid: localStorage.getItem("userid") },
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     )
+  //     .then((res) => {
+  //       console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
+  //       setqnaInfo(res.data.qnaInfo);
+  //     });
+
   console.log(props.userInfo);
   const [imgInfo, setImgInfo] = useState({
     file: [],
@@ -375,6 +388,8 @@ function UserMypage(props) {
           <hr />
           {/*MY Q&A 시작  */}
           <MyreviewTitle>My Q&A</MyreviewTitle>
+          {/* props.userInfo.id === props.qnaInfo.users_id 필터함수쓰기*/}
+
           {/*MY Q&A 끝  */}
         </UserContainer>
       ) : (
