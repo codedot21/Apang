@@ -34,7 +34,7 @@ export const ModalBox = styled.div`
 
 export const LoginHeader = styled.div`
   position: relative;
-  padding: 1.5rem 3.5rem 1rem 3.5rem;
+  padding: 1.5rem 3.5rem 1rem 9.3rem;
   background-color: #fbf3ed;
   font-weight: 500;
   color: black;
@@ -61,7 +61,7 @@ export const LoginBody = styled.div`
   background-color: #fbf3ed;
 
   & > div {
-    padding: 0.3rem 0.7rem 0.7rem 0.7rem;
+    padding: 0rem 0.7rem 0.7rem 0.7rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,24 +83,25 @@ export const LoginBody = styled.div`
 `;
 
 export const LoginFooter = styled.div`
-  padding: 0.1rem 1rem 1rem 1rem;
+  padding: 0.1rem 1rem 1rem 6.8rem;
   background-color: #fbf3ed;
 `;
 
 export const SocialLoginHeader = styled.div`
   font-size: 0.8rem;
   padding-top: 0.1rem;
+  padding-left: 1.2rem;
   padding-bottom: 1rem;
   background-color: #fbf3ed;
 `;
 
 // export const SocialLogin = styled(Link)``;
 export const SocialLogin = styled.a`
-  padding: 0.1rem 1rem 1rem 1rem;
+  padding: 0.1rem 1rem 1rem 0.8rem;
 `;
 
 export const Button = styled.button`
-  margin: 0.7rem 2rem;
+  margin: 0rem 2rem;
   background: #6ec5ff;
   white-space: nowrap;
   padding: 0.6rem 7.3rem;
@@ -144,10 +145,10 @@ function SigninModal({ open, close, handleResponseSuccess }) {
   const handleSignIn = () => {
     const { email, password } = userInfo;
     if (email === "") {
-      setErrorMessage(message.loginEmail);
+      Swal.fire({ icon: "error", title: "로그인 실패", text: "로그인 실패" });
       return;
     } else if (password === "") {
-      setErrorMessage(message.loginPassword);
+      Swal.fire({ icon: "error", title: "로그인 실패", text: "로그인 실패" });
       return;
     } else {
       axios

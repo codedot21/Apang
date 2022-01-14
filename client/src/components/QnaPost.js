@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import doctor from "../images/doctor.png";
 
 export const QnaDocContainer = styled(Container)`
+  background-color: ${({ theme }) => theme.color.white};
+  display: flex;
+  padding: 0 1rem 1rem;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1;
+  background: #9bbbd4;
+  width: 71.5rem;
+  @media ${({ theme }) => theme.device.ipad} {
+    width: 45.8rem;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 21.4rem;
+  }
+`;
+
+export const QnaEmptyContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
   display: flex;
   padding: 1rem 2rem;
@@ -14,6 +32,7 @@ export const QnaDocContainer = styled(Container)`
   justify-content: center;
   align-items: center;
   z-index: 1;
+  background: white;
 `;
 
 export const QnaListContainer = styled(Container)`
@@ -62,7 +81,7 @@ export const Button = styled.button`
   border: none;
   width: 5rem;
   height: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: auto;
   margin-left: 69.5rem;
   &:hover {
     background-color: ${({ theme }) => theme.color.hover};
@@ -73,7 +92,7 @@ export const Button = styled.button`
   }
   @media ${({ theme }) => theme.device.mobile} {
     width: 4rem;
-    margin-left: 15rem;
+    margin-left: 16rem;
   }
 `;
 
@@ -92,14 +111,24 @@ export const QnaBox = styled.div`
   // margin-bottom: 2rem;
 `;
 
+export const EmptyBox = styled.div`
+  margin-bottom: 10%;
+`;
+
 export const QnaDocBox = styled.div`
-  border: 0.1rem solid #63b5f6;
+  margin-top: 1rem;
+
   color: black;
   border-radius: 10px;
-  max-width: 1300px;
-  width: 48%;
-  height: 50%;
-  // margin-bottom: 2rem;
+
+  background: #ffffff;
+  margin-right: 30rem;
+  @media ${({ theme }) => theme.device.ipad} {
+    margin-right: 20rem;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    margin-right: 6rem;
+  }
 `;
 
 export const ContentWrap = styled.div`
@@ -127,6 +156,42 @@ export const ProfileDoc = styled.div`
   .Id {
     margin-left: 0.5rem;
   }
+  .commentFront {
+    cursor:pointer;
+    margin-left:18rem;
+    @media ${({ theme }) => theme.device.ipad} {
+      margin-left: 1.2rem;
+      font-size: 0.7rem;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-left: 1.5rem;
+      font-size: 0.5rem;
+    }
+  }
+  .commentMiddle {
+    cursor:pointer;
+    margin-left: 0.5rem;
+    @media ${({ theme }) => theme.device.ipad} {
+      margin-left: 0.8rem;
+      font-size: 0.7rem;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      font-size: 0.5rem;
+    }
+  }
+  .commentBack {
+    cursor:pointer;
+    margin-left: 0.5rem;
+    @media ${({ theme }) => theme.device.ipad} {
+      margin-left: 0.8rem;
+      font-size: 0.7rem;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-left: 0;
+      font-size: 0.5rem;
+    }
 `;
 
 export const ContentTitle = styled.div`
@@ -145,8 +210,21 @@ export const ContentText = styled.div`
 
 export const ContentDocText = styled.div`
   display: flex;
-  height: 2.2rem;
   font-size: 0.8rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 26rem;
+  @media ${({ theme }) => theme.device.ipad} {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 12rem;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 12rem;
+  }
 `;
 
 export const TagsInput = styled.div`
@@ -166,6 +244,7 @@ export const TagsInput = styled.div`
   }
 
   > textarea {
+    whitespace: pre-line;
     resize: none;
     display: block;
     outline: none;
@@ -176,7 +255,47 @@ export const TagsInput = styled.div`
   }
 `;
 
-function QnaPost({ isLogin }) {
+export const Ren = styled.div`
+  > textarea {
+    whitespace: pre-line;
+    resize: none;
+    outline: none;
+    border: hidden;
+    width: 100%;
+    height: 5rem;
+    font-size: 0.8rem;
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-: auto;
+    }
+    :enabled {
+      border: 0.1rem solid #dee2e6;
+      border-radius: 10px;
+      &:focus {
+        outline: 0.1rem solid #63b5f6;
+      }
+    }
+    :disabled {
+      background: none;
+      color: black;
+    }
+  }
+`;
+
+function QnaPost({ isLogin, userInfo, auth }) {
+  const [comment, setComment] = useState([]);
+
+  const inputRef = useRef(null);
+  const addComment = (event) => {
+    const result = [];
+    for (let el of comment) {
+      if (el === event.target.value) result.push(event.target.value);
+    }
+    if (result.length === 0 && event.target.value !== "") {
+      setComment([...comment, event.target.value]);
+      event.target.value = "";
+    }
+  };
+
   const handleClick = () => {
     Swal.fire({
       icon: "error",
@@ -185,37 +304,136 @@ function QnaPost({ isLogin }) {
     });
   };
 
+  const handleEdit = () => {
+    inputRef.current.disabled = false;
+    inputRef.current.focus();
+  };
+
+  const handleClear = () => {
+    inputRef.current.disabled = true;
+    Swal.fire({
+      icon: "success",
+      // title: "?",
+      text: "댓글이 성공적으로 수정되었습니다",
+    });
+  };
+
+  const handleDelete = (event) => {
+    setComment([]);
+    Swal.fire({
+      icon: "success",
+      text: "댓글이 성공적으로 삭제되었습니다",
+    });
+  };
+
+  // 서버 요청 힘수 지우지 말 것
+  // 댓글 등록 요청
+  // const commentPost = () => {
+  //   if (islogin && auth === 1 && inputRef.current.value !== "") {
+  //   axios.post('http://localhost:80/comment', {
+  //   qna_id: id,
+  //   })
+  //   .then((res) => {
+  //  setComment([...res.data.data]);
+  //   })
+
+  // 댓글 수정 요청
+  // const commentUpdate = () => {
+  //   axios
+  //   .put(`http://localhost:80/comment/${comment_id}`, {
+  //   qna_id: id,
+  //   content: inputRef.current.value,
+  //         })
+  //         .then((res) => {
+  //           setComment([...res.data.data]);
+  //         });
+  //     };
+
+  // 댓글 삭제 요청
+  // const commentDelete = () => {
+  //   axios
+  //     .delete(`http://localhost:80/comment/${comment_id}`, {
+  //       data: { qna_id: id },
+  //     })
+  //     .then((res) => {
+  //       setComment([...res.data.data]);
+  //     });
+  // };
+
   return (
     <>
-      <QnaDocContainer>
-        <QnaDocBox>
-          <ContentWrap>
-            <ProfileDoc>
-              <img src={doctor} width="20rem" alt="doctor" />
-              <div className="Id">김코딩 선생님</div>
-            </ProfileDoc>
-            <ContentDocText>
-              많이 불편하시겠어요! 평소 음식을 드실때 너무 급하게 먹거나 밀가루
-              음식을 많이 드시나요? 평소 식습관이 중요합니다
-            </ContentDocText>
-          </ContentWrap>
-        </QnaDocBox>
-      </QnaDocContainer>
-
-      <QnaPostContainer>
-        <TagsInput>
-          <textarea
-            className="textarea"
-            type="textarea"
-            placeholder="내용을 입력해주세요"
-          />
-        </TagsInput>
-      </QnaPostContainer>
-
+      {comment.map((comment, index) => (
+        <QnaDocContainer key={index}>
+          <QnaDocBox>
+            <ContentWrap>
+              <ProfileDoc>
+                <img
+                  src={require(`../../public/uploads/${userInfo.profile_img}`)}
+                  width="20rem"
+                  alt="profile"
+                />
+                {isLogin & (auth === 1) ? (
+                  <div className="Id">
+                    {userInfo.name}
+                    <span className="commentFront" onClick={handleEdit}>
+                      수정
+                    </span>
+                    <span className="commentMiddle">|</span>
+                    <span className="commentBack" onClick={handleClear}>
+                      등록
+                    </span>
+                    <span className="commentMiddle">|</span>
+                    <span className="commentBack" onClick={handleDelete}>
+                      삭제
+                    </span>
+                  </div>
+                ) : (
+                  <div className="Id">{userInfo.nickname}</div>
+                )}
+              </ProfileDoc>
+              {isLogin & (auth === 1) ? (
+                <Ren>
+                  <textarea
+                    disabled
+                    type="text"
+                    defaultValue={comment}
+                    ref={inputRef}
+                  />
+                </Ren>
+              ) : (
+                <ContentDocText>{comment}</ContentDocText>
+              )}
+            </ContentWrap>
+          </QnaDocBox>
+        </QnaDocContainer>
+      ))}
+      {isLogin & (auth === 1) ? (
+        <QnaPostContainer>
+          <TagsInput>
+            <textarea
+              className="textarea"
+              type="textarea"
+              placeholder="선생님의 답변을 기다리고 있어요"
+              onKeyUp={(e) => (e.key === "Enter" ? addComment(e) : null)}
+            />
+          </TagsInput>
+        </QnaPostContainer>
+      ) : (
+        <QnaPostContainer>
+          <TagsInput>
+            <textarea
+              className="textarea"
+              type="textarea"
+              placeholder="선생님만 답변하실 수 있어요"
+              onClick={handleClick}
+            />
+          </TagsInput>
+        </QnaPostContainer>
+      )}
       <QnaListContainer>
         <QnaWrap>
           <QnaWrap>
-            {isLogin ? (
+            {isLogin & (auth === 1) ? (
               <Button>댓글달기</Button>
             ) : (
               <Button onClick={handleClick}>댓글달기</Button>

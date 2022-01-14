@@ -187,13 +187,27 @@ function App() {
         />
         <Route
           path="/qna"
-          element={<QnaPage handleQnaInfo={handleQnaInfo} isLogin={isLogin} />}
+          element={
+            <QnaPage
+              handleQnaInfo={handleQnaInfo}
+              isLogin={isLogin}
+              userInfo={userInfo}
+              auth={parseInt(localStorage.getItem("auth"))}
+            />
+          }
         />
 
         <Route path="/medicallist" element={<Medical />} />
         <Route
           path="/qna/detail/:id"
-          element={<QnaDetail isLogin={isLogin} qnaDetail={qnaDetail} />}
+          element={
+            <QnaDetail
+              isLogin={isLogin}
+              qnaDetail={qnaDetail}
+              userInfo={userInfo}
+              auth={parseInt(localStorage.getItem("auth"))}
+            />
+          }
         />
       </Routes>
 

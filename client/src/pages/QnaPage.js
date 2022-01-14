@@ -45,9 +45,6 @@ export const QnaTextContainer = styled(Container)`
 `;
 
 export const QnaWrap = styled.div`
-  // display: block;
-  // margin-left: 0;
-  // margin-right: 0;
   width: 100%;
   @media ${({ theme }) => theme.device.ipad} {
     display: block;
@@ -230,7 +227,7 @@ export const ContentComment = styled.div`
   margin-right: 1rem;
 `;
 
-function QnaPage({ isLogin, handleQnaInfo }) {
+function QnaPage({ isLogin, handleQnaInfo, auth }) {
   const [QuestionOpen, setQuestionOpen] = useState(false);
   const [qnaInfo, setqnaInfo] = useState([]); //qna 전부 가져오는것
   // const [, updateState] = useState();
@@ -264,6 +261,14 @@ function QnaPage({ isLogin, handleQnaInfo }) {
     });
   };
 
+  const handleDocClick = () => {
+    Swal.fire({
+      icon: "error",
+      title: "의사선생님이신가요?",
+      text: "선생님은 댓글만 작성하실 수 있어요",
+    });
+  };
+
   return (
     <>
       <QnaContainer>
@@ -293,8 +298,10 @@ function QnaPage({ isLogin, handleQnaInfo }) {
           <>
             <QnaWrap>
               <QnaWrap>
-                {isLogin ? (
+                {isLogin & (auth === 2) ? (
                   <Button onClick={openQuestionModal}>질문하기</Button>
+                ) : isLogin & (auth === 1) ? (
+                  <Button onClick={handleDocClick}>질문하기</Button>
                 ) : (
                   <Button onClick={handleClick}>질문하기</Button>
                 )}
