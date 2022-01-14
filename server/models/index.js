@@ -42,18 +42,37 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
+//join 데이터
 // associations
+//users : reviews = 1:N
+//users : qna = 1:N
+//qna : comments = 1:N
+//doctors : comments = 1:N
+//qna_hashTag : qna = 1:N
+//qna_hashTag : hashTag = 1:N
+
 // const { users, comments, doctors, hashtag, qna, reviews } = sequelize.models;
-// users.hasMany(reviews);
-// reviews.belongsTo(users);
-// users.hasMany(qna);
-// qna.belongsTo(users); //
-// qna.hasMany(comments); //
-// comments.belongsTo(qna);
-// doctors.hasMany(comments);
-// comments.belongsTo(doctors);
-// hashtag.hasMany(qna); //
-// qna.hasMany(hashtag); //
+// //users : reviews = 1:N
+// users.hasMany(reviews, { foreignKey: "users_id" }); //1
+// reviews.belongsTo(users, { foreignKey: "users_id" }); //N
+
+// //users : qna = 1:N
+// users.hasMany(qna, { foreignKey: "users_id" }); //1
+// qna.belongsTo(users, { foreignKey: "users_id" }); //N
+
+// //qna : comments = 1:N
+// qna.hasMany(comments, { foreignKey: "qna_id" }); //1
+// comments.belongsTo(qna, { foreignKey: "qna_id" }); //N
+
+// //doctors : comments = 1:N
+// doctors.hasMany(comments, { foreignKey: "doctors_id" });
+// comments.belongsTo(doctors, { foreignKey: "doctors_id" });
+
+// //hashtage : qna = N:M
+// qna.belongsToMany(hashtag, { through: "qna_hashtag", foreignKey: "qna_id" }); //
+// hashtag.belongsToMany(qna, {
+//   through: "qna_hashtag",
+//   foreignKey: "hashtag_id",
+// }); //
 
 module.exports = db;

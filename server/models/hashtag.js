@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class hashtag extends Model {
     /**
@@ -11,13 +9,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.hashtag.belongsToMany(models.qna, {
+        through: "qna_hashtag",
+        foreignKey: "hashtag_id",
+      }); //
     }
-  };
-  hashtag.init({
-    hashtag: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'hashtag',
-  });
+  }
+  hashtag.init(
+    {
+      hashtag: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: "hashtag",
+    }
+  );
   return hashtag;
 };

@@ -78,34 +78,27 @@ export const ContentComment = styled.div`
   }
 `;
 
-function Qna({ qnaInfo, handleQnaInfo }) {
-  console.log("qnaInfo 안들어오나?", qnaInfo);
+function Qna({ title, nickname, content, handleQnaInfo }) {
   return (
     <>
-      {qnaInfo
-        ? qnaInfo.map((qna) => {
-            return (
-              <Linked to={`/qna/detail/${qna.id}`}>
-                <QnaBox key={qna.id} onClick={() => handleQnaInfo(qna)}>
-                  <ContentWrap>
-                    <Profile>
-                      <img src={user} width="20rem" />
-                      <div className="Id">맨날아파</div>
-                    </Profile>
-                    <ContentTitle>{qna.title}</ContentTitle>
-                    <ContentText>{qna.content}</ContentText>
-                    <Tag>
-                      <div className="tag">#아파요</div>
-                      <div className="tag">#안아파요</div>
-                      <div className="tag">#덜아파요</div>
-                    </Tag>
-                    <ContentComment>댓글 1</ContentComment>
-                  </ContentWrap>
-                </QnaBox>
-              </Linked>
-            );
-          })
-        : null}
+      {title ? (
+        <QnaBox onClick={() => handleQnaInfo({ title, nickname, content })}>
+          <ContentWrap>
+            <Profile>
+              <img src={user} alt="profile" width="20rem" />
+              <div className="Id">{nickname}</div>
+            </Profile>
+            <ContentTitle>{title}</ContentTitle>
+            <ContentText>{content}</ContentText>
+            <Tag>
+              <div className="tag">#아파요</div>
+              <div className="tag">#안아파요</div>
+              <div className="tag">#덜아파요</div>
+            </Tag>
+            <ContentComment>댓글 1</ContentComment>
+          </ContentWrap>
+        </QnaBox>
+      ) : null}
     </>
   );
 }

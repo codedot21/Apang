@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import Qna from "../components/Qna";
 import Doc from "../images/doc.png";
 import QnaModal from "../components/modal/QnaModal.js";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 export const QnaContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -229,8 +230,26 @@ export const ContentComment = styled.div`
   }
 `;
 
-function QnaPage({ isLogin, uploadSuccess, qnaInfo, handleQnaInfo }) {
+function QnaPage({ isLogin, handleQnaInfo }) {
   const [QuestionOpen, setQuestionOpen] = useState(false);
+  const [qnaInfo, setqnaInfo] = useState([]); //qna 전부 가져오는것
+  // const [, updateState] = useState();
+  // const forceUpdate = useCallback(() => updateState({}), []);
+
+  useEffect(() => {
+    axios
+      .post(
+        "http://localhost:80/qna/info",
+        { kakao_userid: localStorage.getItem("userid") },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
+        setqnaInfo(res.data.qnaInfo);
+      });
+  }, []);
 
   const openQuestionModal = () => {
     console.log("질문하기 모달 오픈되었나요?");
@@ -283,21 +302,37 @@ function QnaPage({ isLogin, uploadSuccess, qnaInfo, handleQnaInfo }) {
       </QnaTextContainer>
 
       <QnaListContainer>
-        <QnaWrap>
-          <QnaWrap>
-            {isLogin ? (
-              <Button onClick={openQuestionModal}>질문하기</Button>
-            ) : (
-              <Button onClick={handleClick}>질문하기</Button>
-            )}
-            <QnaModal
-              uploadSuccess={uploadSuccess}
-              open={QuestionOpen}
-              close={openQuestionModal}
-            />
-          </QnaWrap>
-          <Qna qnaInfo={qnaInfo} handleQnaInfo={handleQnaInfo} />
-        </QnaWrap>
+        {qnaInfo ? (
+          <>
+            <QnaWrap>
+              <QnaWrap>
+                {isLogin ? (
+                  <Button onClick={openQuestionModal}>질문하기</Button>
+                ) : (
+                  <Button onClick={handleClick}>질문하기</Button>
+                )}
+                <QnaModal
+                  // forceUpdate={forceUpdate}
+                  open={QuestionOpen}
+                  close={openQuestionModal}
+                />
+              </QnaWrap>
+
+              {qnaInfo.map((qna) => {
+                return (
+                  <Linked to={`/qna/detail/${qna.id}`}>
+                    <Qna
+                      handleQnaInfo={handleQnaInfo}
+                      title={qna.title}
+                      content={qna.content}
+                      nickname={qna.user ? qna.user.nickname : "Kakao"}
+                    />
+                  </Linked>
+                );
+              })}
+            </QnaWrap>
+          </>
+        ) : null}
       </QnaListContainer>
     </>
   );

@@ -21,35 +21,30 @@ function App() {
   console.log("App.js랜더링");
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
-  const [qnaInfo, setqnaInfo] = useState(""); //qna 전부 가져오는것
+  const [userInfo, setUserInfo] = useState(null); //사용자 정보 :
   const [auth, setAuth] = useState("");
-  const [qnaDetail, setqnaDetail] = useState("");
+  const [qnaDetail, setqnaDetail] = useState({});
 
-  // map 상태
-  const [medical, setMedical] = useState("");
+  // // map 상태
+  // const [medical, setMedical] = useState("");
 
-  //map 함수
+  // //map 함수
 
-  const medicalhandling = (value) => {
-    setMedical(value);
-    console.log(medical);
-  };
+  // const medicalhandling = (value) => {
+  //   setMedical(value);
+  //   console.log(medical);
+  // };
 
-  // 병원 정보
-  const [medicalInfo, setMedicalInfo] = useState("");
+  // // 병원 정보
+  // const [medicalInfo, setMedicalInfo] = useState("");
 
-  // 정보 가져오기
-  const medicalInfoHandling = (value) => {
-    setMedicalInfo(value);
-    console.log(medicalInfo);
-  };
+  // // 정보 가져오기
+  // const medicalInfoHandling = (value) => {
+  //   setMedicalInfo(value);
+  //   console.log(medicalInfo);
+  // };
 
-  // useEffect(() => {
-  //   setUserInfo(localStorage.getItem("userInfo"));
-  // }, []);
   const isAuthenticated = () => {
-    //쿠키에 jwt가 있는지 없는지 랜더링될떄마다 확인하는 함수..?
     const authnumber = parseInt(localStorage.getItem("auth"));
     console.log(authnumber);
     if (authnumber === 2 || authnumber === 0) {
@@ -63,7 +58,6 @@ function App() {
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth); //nav에 내려주기 위해
           setIsLogin(true);
-          uploadSuccess();
           // navigate("/");
         });
     } else if (authnumber === 1) {
@@ -76,7 +70,6 @@ function App() {
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth);
           setIsLogin(true);
-          uploadSuccess();
           // navigate("/");
         });
     } else if (isNaN(authnumber)) {
@@ -101,14 +94,12 @@ function App() {
             console.log(userInfo);
             setUserInfo(userInfo);
             setIsLogin(true);
-            uploadSuccess();
             navigate("/");
           } else {
             window.alert("로그인에 실패하였습니다.");
           }
         });
     }
-    uploadSuccess();
   };
 
   const handleResponseSuccess = (authnumber) => {
@@ -116,30 +107,9 @@ function App() {
     isAuthenticated();
   };
 
-  const uploadSuccess = () => {
-    console.log("uploadsuccess실행됨?");
-    axios
-      .post(
-        "http://localhost:80/qna/info",
-        { kakao_userid: localStorage.getItem("userid") },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
-        setqnaInfo(res.data.qnaInfo);
-      });
-  };
-
   useEffect(() => {
     isAuthenticated();
   }, []);
-  //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
-
-  // useEffect(() => {
-  //   uploadSuccess();
-  // }, []);
 
   const LoginHandler = () => {
     isAuthenticated();
@@ -206,7 +176,7 @@ function App() {
         handleLogout={handleLogout}
       />
       <Routes>
-        <Route path="/" element={<Main medicalhandling={medicalhandling} />} />
+        <Route path="/" element={<Main />} />
         <Route path="/authpage" element={<AuthPage />} />
         <Route
           path="/mypage/publicprofile"
@@ -226,35 +196,16 @@ function App() {
         />
         <Route
           path="/qna"
-          element={
-            <QnaPage
-              handleQnaInfo={handleQnaInfo}
-              uploadSuccess={uploadSuccess}
-              qnaInfo={qnaInfo}
-              isLogin={isLogin}
-            />
-          }
+          element={<QnaPage handleQnaInfo={handleQnaInfo} isLogin={isLogin} />}
         />
 
-        <Route path="/qnadetail" element={<QnaDetail isLogin={isLogin} />} />
-        <Route
-          path="/medicallist"
-          element={
-            <Medical
-              medical={medical}
-              medicalInfoHandling={medicalInfoHandling}
-            />
-          }
-        />
+        <Route path="/medicallist" element={<Medical />} />
         <Route
           path="/qna/detail/:id"
           element={<QnaDetail isLogin={isLogin} qnaDetail={qnaDetail} />}
         />
 
-        <Route
-          path="/medicaldetail"
-          element={<MedicalDetail medicalInfo={medicalInfo} />}
-        />
+        <Route path="/medicaldetail" element={<MedicalDetail />} />
       </Routes>
 
       <Footer />

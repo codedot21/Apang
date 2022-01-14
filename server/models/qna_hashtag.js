@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class qna_hashtag extends Model {
     /**
@@ -11,14 +9,23 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.qna_hashtag.belongsTo(models.qna, {
+        foreignKey: "qna_id",
+      });
+      models.qna_hashtag.belongsTo(models.hashtag, {
+        foreignKey: "hashtag_id",
+      });
     }
-  };
-  qna_hashtag.init({
-    qna_id: DataTypes.INTEGER,
-    hashtag_id: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'qna_hashtag',
-  });
+  }
+  qna_hashtag.init(
+    {
+      qna_id: DataTypes.INTEGER,
+      hashtag_id: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: "qna_hashtag",
+    }
+  );
   return qna_hashtag;
 };
