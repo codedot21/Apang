@@ -216,7 +216,11 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
                   <DropDownButton onClick={openSignupModal}>
                     회원가입
                   </DropDownButton>
-                  <SignUpModal open={signOpen} close={openSignupModal} />
+                  <SignUpModal
+                    open={signOpen}
+                    close={openSignupModal}
+                    handleResponseSuccess={handleResponseSuccess}
+                  />
                 </li>
               </ul>
             </li>

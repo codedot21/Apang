@@ -13,7 +13,8 @@ import QnaPage from "./pages/QnaPage.js";
 import QnaDetail from "./pages/QnaDetail.js";
 import ScrollTop from "./components/Scroll.js";
 import Medical from "./pages/Medical.js";
-import MedicalDetail from "./pages/MedicalDetail.js";
+import Swal from "sweetalert2";
+import { message } from "./modules/message";
 
 import axios from "axios";
 
@@ -25,28 +26,9 @@ function App() {
   const [auth, setAuth] = useState("");
   const [qnaDetail, setqnaDetail] = useState({});
 
-  // // map 상태
-  // const [medical, setMedical] = useState("");
-
-  // //map 함수
-
-  // const medicalhandling = (value) => {
-  //   setMedical(value);
-  //   console.log(medical);
-  // };
-
-  // // 병원 정보
-  // const [medicalInfo, setMedicalInfo] = useState("");
-
-  // // 정보 가져오기
-  // const medicalInfoHandling = (value) => {
-  //   setMedicalInfo(value);
-  //   console.log(medicalInfo);
-  // };
-
   const isAuthenticated = () => {
     const authnumber = parseInt(localStorage.getItem("auth"));
-    console.log(authnumber);
+    // console.log(authnumber);
     if (authnumber === 2 || authnumber === 0) {
       axios
         .get("http://localhost:80/public/userinfo", {
@@ -54,7 +36,7 @@ function App() {
         })
         .then((res) => {
           //console.log(res);
-          console.log(res.data.userInfo);
+          // console.log(res.data.userInfo);
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth); //nav에 내려주기 위해
           setIsLogin(true);
@@ -96,7 +78,11 @@ function App() {
             setIsLogin(true);
             navigate("/");
           } else {
-            window.alert("로그인에 실패하였습니다.");
+            Swal.fire({
+              icon: "error",
+              title: "Apang 로그인",
+              text: message.loginFail,
+            });
           }
         });
     }
@@ -127,14 +113,18 @@ function App() {
         { withCredentials: true } //서버-클라이언트 쿠키연결.
       )
       .then((res) => {
-        console.log("록아웃되니?");
+        // console.log("록아웃되니?");
         setUserInfo(null);
         setIsLogin(false);
         // setAccessToken("");
         localStorage.removeItem("userid");
         localStorage.removeItem("auth");
         localStorage.removeItem("accessToken");
-        alert("로그아웃이 되었습니다.");
+        Swal.fire({
+          icon: "success",
+          title: "또 만나요",
+          text: "로그아웃 되었습니다",
+        });
         navigate("/");
       });
   };
@@ -143,9 +133,10 @@ function App() {
     console.log(qna);
     setqnaDetail(qna);
   };
+
   // const getGoogleToken = async (authorizationCode) => {
   //   await axios({
-  //     url: "http://localhost:4000/oauth/google",
+  //     url: "http://localhost:80/oauth/google",
   //     method: "post",
   //     data: { authorizationCode },
   //     withCredentials: true,
@@ -204,8 +195,6 @@ function App() {
           path="/qna/detail/:id"
           element={<QnaDetail isLogin={isLogin} qnaDetail={qnaDetail} />}
         />
-
-        <Route path="/medicaldetail" element={<MedicalDetail />} />
       </Routes>
 
       <Footer />

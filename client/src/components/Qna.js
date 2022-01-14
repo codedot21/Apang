@@ -75,7 +75,6 @@ export const ContentComment = styled.div`
   height: 2.2rem;
   font-size: 0.8rem;
   margin-right: 1rem;
-  }
 `;
 
 function Qna({ title, nickname, content, handleQnaInfo }) {
