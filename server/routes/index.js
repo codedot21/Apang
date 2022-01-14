@@ -7,6 +7,7 @@ const qnaRouter = require("./qna");
 const reviewRouter = require("./review");
 const commonRouter = require("./common");
 const oauthRouter = require("./oauth");
+const hashtagRouter = require("./hashtag");
 
 router.use("/public", publicRouter);
 router.use("/comments", commentsRouter);
@@ -15,5 +16,6 @@ router.use("/qna", qnaRouter);
 router.use("/review", reviewRouter);
 router.use("/common", commonRouter);
 router.use("/oauth", oauthRouter);
+router.use("/hashtag", hashtagRouter);
 
 module.exports = router;

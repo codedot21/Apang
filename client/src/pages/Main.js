@@ -319,7 +319,7 @@ const Options = styled.option`
 const SerchButton = styled.button``;
 
 // map을 위한 테스트
-function Main({ medicalhandling }) {
+function Main() {
   const navigate = useNavigate();
   const serch = [
     { key: 1, value: "치과" },
@@ -334,7 +334,6 @@ function Main({ medicalhandling }) {
     setSelect(e.target.value);
   };
   console.log(select);
-  medicalhandling(select);
 
   return (
     <>

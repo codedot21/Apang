@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const ModalBackGround = styled.div`
   position: fixed;
@@ -179,10 +180,10 @@ export const TagsInput = styled.div`
   }
 `;
 
-function QnaModal({ open, close, uploadSuccess }) {
-  const initialTags = ["아파요", "안아파요", "덜아파요"];
+function QnaModal({ open, close }) {
+  const navigate = useNavigate();
+  const [tags, setTags] = useState(["아파요", "안아파요", "덜아파요"]);
 
-  const [tags, setTags] = useState(initialTags);
   const removeTags = (indexToRemove) => {
     setTags(tags.filter((el, index) => index !== indexToRemove));
   };
@@ -212,6 +213,33 @@ function QnaModal({ open, close, uploadSuccess }) {
   };
 
   const handleUpload = () => {
+    // const bodyFormData = new FormData();
+    // tags.forEach((tag) => {
+    //   bodyFormData.append("tags", tag);
+    // });
+    // axios.all(
+    //   [
+    //     axios.post(
+    //       "http://localhost:80/qna/upload",
+    //       { ...qnaInfo, kakao_userid: localStorage.getItem("userid") },
+    //       {
+    //         withCredentials: true,
+    //       }
+    //     ),
+    //     axios.post(
+    //       "http://localhost:80/hashtag/upload",
+    //       { bodyFormData },
+    //       {
+    //         withCredentials: true,
+    //       }
+    //     ),
+    //   ].then(
+    //     axios.spread((res1, res2) => {
+    //       close();
+    //       uploadSuccess();
+    //     })
+    //   )
+    // );
     axios
       .post(
         "http://localhost:80/qna/upload",
@@ -220,9 +248,23 @@ function QnaModal({ open, close, uploadSuccess }) {
           withCredentials: true,
         }
       )
+      .then(() => {
+        let payload = { tags: tags };
+        axios(
+          {
+            url: "http://localhost:80/hashtag/upload",
+            method: "post",
+            data: payload,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      })
       .then((res) => {
+        navigate("/");
+        navigate("/qna");
         close();
-        uploadSuccess();
       });
   };
 
@@ -300,7 +342,13 @@ function QnaModal({ open, close, uploadSuccess }) {
           </div>
         </QnaBody>
         <QnaFooter>
-          <Button onClick={handleUpload}>등록</Button>
+          <Button
+            onClick={() => {
+              handleUpload();
+            }}
+          >
+            등록
+          </Button>
         </QnaFooter>
       </ModalBox>
     </ModalBackGround>

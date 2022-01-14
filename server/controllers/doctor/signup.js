@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
             license: doctorInfo.license,
             auth: 1,
             agree: "false",
-            profile_img: "doctorprofile.jpeg",
+            profile_img: "doctorprofile.png",
           },
         })
         .then(([doctors, created]) => {
