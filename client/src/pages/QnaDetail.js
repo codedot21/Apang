@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Container } from "../styles";
 import question from "../images/question.png";
 import QnaUserPost from "../components/QnaUserPost.js";
+import Qna from "../components/Qna.js";
 import QnaPost from "../components/QnaPost.js";
 
 export const QnaContainer = styled(Container)`
@@ -40,9 +41,7 @@ function QnaDetail({ qnaDetail, isLogin, auth, userInfo }) {
           <Img src={question}></Img>
         </ImgWrap>
       </QnaContainer>
-
       <QnaUserPost qnaDetail={qnaDetail} userInfo={userInfo} />
-
       <QnaPost isLogin={isLogin} userInfo={userInfo} auth={auth} />
     </>
   );

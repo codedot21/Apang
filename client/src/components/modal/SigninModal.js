@@ -61,7 +61,7 @@ export const LoginBody = styled.div`
   background-color: #fbf3ed;
 
   & > div {
-    padding: 0.3rem 0.7rem 0.7rem 0.7rem;
+    padding: 0rem 0.7rem 0.7rem 0.7rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -101,7 +101,7 @@ export const SocialLogin = styled.a`
 `;
 
 export const Button = styled.button`
-  margin: 0.7rem 2rem;
+  margin: 0rem 2rem;
   background: #6ec5ff;
   white-space: nowrap;
   padding: 0.6rem 7.3rem;
@@ -145,10 +145,10 @@ function SigninModal({ open, close, handleResponseSuccess }) {
   const handleSignIn = () => {
     const { email, password } = userInfo;
     if (email === "") {
-      setErrorMessage(message.loginEmail);
+      Swal.fire({ icon: "error", title: "로그인 실패", text: "로그인 실패" });
       return;
     } else if (password === "") {
-      setErrorMessage(message.loginPassword);
+      Swal.fire({ icon: "error", title: "로그인 실패", text: "로그인 실패" });
       return;
     } else {
       axios

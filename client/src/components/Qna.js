@@ -47,6 +47,14 @@ export const ContentText = styled.div`
   // display: flex;
   height: 2.2rem;
   font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  line-height: 1rem;
+  height: 2rem;
   @media ${({ theme }) => theme.device.mobile} {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -65,7 +73,7 @@ export const Tag = styled.div`
   margin-bottom: 0.5rem;
   .tag {
     margin-right: 0.5rem;
-    // margin-top: 0.3rem;
+    margin-top: 0.7rem;
     width: auto;
     height: 1.3rem;
     display: flex;
@@ -103,9 +111,9 @@ function Qna({ title, nickname, content, handleQnaInfo }) {
             <ContentTitle>{title}</ContentTitle>
             <ContentText>{content}</ContentText>
             <Tag>
-              <div className="tag">#아파요</div>
-              <div className="tag">#안아파요</div>
-              <div className="tag">#덜아파요</div>
+              <div className="tag">아파요</div>
+              <div className="tag">안아파요</div>
+              <div className="tag">덜아파요</div>
             </Tag>
             <ContentComment>댓글 1</ContentComment>
           </ContentWrap>

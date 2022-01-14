@@ -201,6 +201,7 @@ export const TextArea = styled.div`
     border: none;
     width: 100%;
     height: 10rem;
+    padding-left: 0.5rem;
     font-size: 0.8rem;
     border: 0.1rem solid #dee2e6;
     border-radius: 10px;
@@ -212,7 +213,7 @@ export const TextArea = styled.div`
 
 function QnaModal({ open, close }) {
   const navigate = useNavigate();
-  const initialTags = ["아파요", "안아파요", "덜아파요"];
+  const [tags, setTags] = useState(["아파요", "안아파요", "덜아파요"]);
 
   const removeTags = (indexToRemove) => {
     setTags(tags.filter((el, index) => index !== indexToRemove));
@@ -299,8 +300,8 @@ function QnaModal({ open, close }) {
   };
 
   return open ? (
-    <ModalBackGround onClick={close}>
-      <ModalBox onClick={(e) => e.stopPropagation()}>
+    <ModalBackGround>
+      <ModalBox>
         <QnaHeader>
           질문하기
           <button onClick={close}> &times; </button>

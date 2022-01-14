@@ -156,6 +156,42 @@ export const ProfileDoc = styled.div`
   .Id {
     margin-left: 0.5rem;
   }
+  .commentFront {
+    cursor:pointer;
+    margin-left:18rem;
+    @media ${({ theme }) => theme.device.ipad} {
+      margin-left: 1.2rem;
+      font-size: 0.7rem;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-left: 1.5rem;
+      font-size: 0.5rem;
+    }
+  }
+  .commentMiddle {
+    cursor:pointer;
+    margin-left: 0.5rem;
+    @media ${({ theme }) => theme.device.ipad} {
+      margin-left: 0.8rem;
+      font-size: 0.7rem;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      font-size: 0.5rem;
+    }
+  }
+  .commentBack {
+    cursor:pointer;
+    margin-left: 0.5rem;
+    @media ${({ theme }) => theme.device.ipad} {
+      margin-left: 0.8rem;
+      font-size: 0.7rem;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-left: 0;
+      font-size: 0.5rem;
+    }
 `;
 
 export const ContentTitle = styled.div`
@@ -219,17 +255,36 @@ export const TagsInput = styled.div`
   }
 `;
 
-function QnaPost({ isLogin, userInfo, auth }) {
-  const handleClick = () => {
-    Swal.fire({
-      icon: "error",
-      title: "의사 선생님이신가요?",
-      text: "선생님만 답변하실 수 있어요",
-    });
-  };
+export const Ren = styled.div`
+  > textarea {
+    whitespace: pre-line;
+    resize: none;
+    outline: none;
+    border: hidden;
+    width: 100%;
+    height: 5rem;
+    font-size: 0.8rem;
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-: auto;
+    }
+    :enabled {
+      border: 0.1rem solid #dee2e6;
+      border-radius: 10px;
+      &:focus {
+        outline: 0.1rem solid #63b5f6;
+      }
+    }
+    :disabled {
+      background: none;
+      color: black;
+    }
+  }
+`;
 
+function QnaPost({ isLogin, userInfo, auth }) {
   const [comment, setComment] = useState([]);
 
+  const inputRef = useRef(null);
   const addComment = (event) => {
     const result = [];
     for (let el of comment) {
@@ -240,28 +295,70 @@ function QnaPost({ isLogin, userInfo, auth }) {
       event.target.value = "";
     }
   };
-  // 임시 만드는거
-  const inputRef = useRef(null);
-  // const inputUpdateRef = useRef(null);
-  // const [commentId, setCommentId] = useState(null);
-  function handleFocus() {
+
+  const handleClick = () => {
+    Swal.fire({
+      icon: "error",
+      title: "의사 선생님이신가요?",
+      text: "선생님만 답변하실 수 있어요",
+    });
+  };
+
+  const handleEdit = () => {
     inputRef.current.disabled = false;
     inputRef.current.focus();
-  }
-  function handleReset() {
-    inputRef.current.disabled = true;
-  }
+  };
 
-  // 댓글 요청
+  const handleClear = () => {
+    inputRef.current.disabled = true;
+    Swal.fire({
+      icon: "success",
+      // title: "?",
+      text: "댓글이 성공적으로 수정되었습니다",
+    });
+  };
+
+  const handleDelete = (event) => {
+    setComment([]);
+    Swal.fire({
+      icon: "success",
+      text: "댓글이 성공적으로 삭제되었습니다",
+    });
+  };
+
+  // 서버 요청 힘수 지우지 말 것
+  // 댓글 등록 요청
   // const commentPost = () => {
   //   if (islogin && auth === 1 && inputRef.current.value !== "") {
   //   axios.post('http://localhost:80/comment', {
   //   qna_id: id,
-  //   content: inputRef.current.value,
   //   })
   //   .then((res) => {
   //  setComment([...res.data.data]);
   //   })
+
+  // 댓글 수정 요청
+  // const commentUpdate = () => {
+  //   axios
+  //   .put(`http://localhost:80/comment/${comment_id}`, {
+  //   qna_id: id,
+  //   content: inputRef.current.value,
+  //         })
+  //         .then((res) => {
+  //           setComment([...res.data.data]);
+  //         });
+  //     };
+
+  // 댓글 삭제 요청
+  // const commentDelete = () => {
+  //   axios
+  //     .delete(`http://localhost:80/comment/${comment_id}`, {
+  //       data: { qna_id: id },
+  //     })
+  //     .then((res) => {
+  //       setComment([...res.data.data]);
+  //     });
+  // };
 
   return (
     <>
@@ -275,34 +372,41 @@ function QnaPost({ isLogin, userInfo, auth }) {
                   width="20rem"
                   alt="profile"
                 />
-                {auth === 1 ? (
-                  <div className="Id">{userInfo.name}</div>
+                {isLogin & (auth === 1) ? (
+                  <div className="Id">
+                    {userInfo.name}
+                    <span className="commentFront" onClick={handleEdit}>
+                      수정
+                    </span>
+                    <span className="commentMiddle">|</span>
+                    <span className="commentBack" onClick={handleClear}>
+                      등록
+                    </span>
+                    <span className="commentMiddle">|</span>
+                    <span className="commentBack" onClick={handleDelete}>
+                      삭제
+                    </span>
+                  </div>
                 ) : (
                   <div className="Id">{userInfo.nickname}</div>
                 )}
               </ProfileDoc>
               {isLogin & (auth === 1) ? (
-                <ContentDocText>{comment}</ContentDocText>
+                <Ren>
+                  <textarea
+                    disabled
+                    type="text"
+                    defaultValue={comment}
+                    ref={inputRef}
+                  />
+                </Ren>
               ) : (
-                <input
-                  disabled
-                  type="text"
-                  ref={inputRef}
-                  defaultValue={comment}
-                />
+                <ContentDocText>{comment}</ContentDocText>
               )}
             </ContentWrap>
-            {isLogin & (auth === 1)
-              ? null
-              : // <div>
-                //   <button onClick={handleFocus}>수정</button>
-                //   <button onClick={handleReset}>확인</button>
-                // </div>
-                null}
           </QnaDocBox>
         </QnaDocContainer>
       ))}
-
       {isLogin & (auth === 1) ? (
         <QnaPostContainer>
           <TagsInput>

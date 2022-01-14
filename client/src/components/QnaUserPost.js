@@ -86,7 +86,7 @@ export const ContentText = styled.div`
   }
 `;
 
-function QnaUserPost({ qnaDetail }) {
+function QnaUserPost({ qnaDetail, userInfo }) {
   console.log(qnaDetail);
   return (
     <QnaUserContainer>
@@ -94,7 +94,7 @@ function QnaUserPost({ qnaDetail }) {
         <ContentWrap>
           <Profile>
             <img src={user} width="20rem" alt="doctor" />
-            <div className="Id">맨날아파</div>
+            <div className="Id">{qnaDetail.nickname}</div>
           </Profile>
           <ContentTitle>{qnaDetail.title}</ContentTitle>
           <ContentText>{qnaDetail.content}</ContentText>

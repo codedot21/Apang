@@ -25,7 +25,7 @@ export const ModalBox = styled.div`
   width: 100%;
   height: 100%;
   max-width: 23rem;
-  max-height: 40rem;
+  height: 37rem;
   border-radius: 1rem;
   background-color: #fbf3ed;
   overflow: hidden;
@@ -69,13 +69,14 @@ export const LoginBody = styled.div`
   background-color: #fbf3ed;
 
   & > div {
-    padding: 0.3rem 0.7rem 0.7rem 0.7rem;
-    display: flex;
+    padding: 0 0.7rem 0.7rem 2rem;
+    display: block;
     align-items: center;
     justify-content: center;
   }
 
   & > div > input {
+    display: block;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     padding-left: 0.5rem;
@@ -107,7 +108,7 @@ export const SocialLoginHeader = styled.div`
 export const SocialLogin = styled(Link)``;
 
 export const Button = styled.button`
-  margin: 0.7rem 2rem;
+  margin: 0rem 2rem;
   background: #6ec5ff;
   white-space: nowrap;
   padding: 0.6rem 7rem;
@@ -131,13 +132,11 @@ export const BtnMenu = styled.button`
   border: none;
 `;
 
-export const Msg = styled.div`
+export const Msg = styled.span`
+  margin: 0 3.5rem;
   color: red;
-<<<<<<< HEAD
-  text-align: center;
-=======
-  font-size: 13px;
->>>>>>> 2fda1a5c2f3dd652768ddfb99ba9a00cef688d84
+  margin-top: 0;
+  font-size: 0.8rem;
 `;
 
 function SignUpModal({ open, close, handleResponseSuccess }) {
@@ -370,26 +369,27 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
               close();
             }}
           >
-            {" "}
-            &times;{" "}
+            &times;
           </button>
         </LoginHeader>
-        <input
-          type="radio"
-          name="user"
-          value="doctor"
-          onClick={handleClick}
-          defaultChecked={false}
-        />
-        <BtnMenu>의사</BtnMenu>
-        <input
-          type="radio"
-          name="user"
-          value="public"
-          onChange={handleClick}
-          defaultChecked={true}
-        />
-        <BtnMenu>일반</BtnMenu>
+        <SelectHeader>
+          <input
+            type="radio"
+            name="user"
+            value="public"
+            onChange={handleClick}
+            defaultChecked={true}
+          />
+          <BtnMenu>일반</BtnMenu>
+          <input
+            type="radio"
+            name="user"
+            value="doctor"
+            onClick={handleClick}
+            defaultChecked={false}
+          />
+          <BtnMenu>의사</BtnMenu>
+        </SelectHeader>
         {isSelect === "public" ? (
           <LoginBody>
             <div>
@@ -400,8 +400,9 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
                 onChange={publicChange("email")}
                 value={publicInfo.email}
               />
+              <Msg>{errorMessage.email}</Msg>
             </div>
-            <Msg>{errorMessage.email}</Msg>
+
             <div>
               <input
                 id="password"
@@ -410,8 +411,9 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
                 onChange={publicChange("password")}
                 value={publicInfo.password}
               />
+              <Msg>{errorMessage.password}</Msg>
             </div>
-            <Msg>{errorMessage.password}</Msg>
+
             <div>
               <input
                 id="nickname"
@@ -420,9 +422,9 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
                 onChange={publicChange("nickname")}
                 value={publicInfo.nickname}
               />
+              <Msg>{errorMessage.nickname}</Msg>
+              <Msg>{errorMessage.confirm}</Msg>
             </div>
-            <Msg>{errorMessage.nickname}</Msg>
-            <Msg>{errorMessage.confirm}</Msg>
             <Button onClick={publicSignUp}>가입하기</Button>
           </LoginBody>
         ) : (
@@ -434,8 +436,9 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
                 placeholder="이메일"
                 onChange={doctorChange("email")}
               />
+              <Msg>{errorMessage.email}</Msg>
             </div>
-            <Msg>{errorMessage.email}</Msg>
+
             <div>
               <input
                 id="password"
@@ -443,8 +446,9 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
                 placeholder="비밀번호"
                 onChange={doctorChange("password")}
               />
+              <Msg>{errorMessage.password}</Msg>
             </div>
-            <Msg>{errorMessage.password}</Msg>
+
             <div>
               <input
                 id="name"
@@ -452,8 +456,9 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
                 placeholder="이름"
                 onChange={doctorChange("name")}
               />
+              <Msg>{errorMessage.name}</Msg>
             </div>
-            <Msg>{errorMessage.name}</Msg>
+
             <div>
               <input
                 id="license"
@@ -461,8 +466,9 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
                 placeholder="면허 번호"
                 onChange={doctorChange("license")}
               />
+              <Msg>{errorMessage.license}</Msg>
             </div>
-            <Msg>{errorMessage.license}</Msg>
+
             <div>
               <input
                 id="hospital"
@@ -470,9 +476,10 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
                 placeholder="병원 이름"
                 onChange={doctorChange("hospital")}
               />
+              <Msg>{errorMessage.hospital}</Msg>
+              <Msg>{errorMessage.confirm}</Msg>
             </div>
-            <Msg>{errorMessage.hospital}</Msg>
-            <Msg>{errorMessage.confirm}</Msg>
+
             <Button onClick={doctorSignUp}>신청하기</Button>
           </LoginBody>
         )}
