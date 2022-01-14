@@ -9,8 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.hashtag.belongsToMany(models.qna, {
-        through: "qna_hashtag",
+      // models.hashtag.belongsToMany(models.qna, {
+      //   through: "qna_hashtag",
+      //   foreignKey: "hashtag_id",
+      // }); //
+      models.hashtag.hasMany(models.qna_hashtag, {
         foreignKey: "hashtag_id",
       }); //
     }

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import doctor from "../images/doctor.png";
+import axios from "axios";
 
 export const QnaDocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -177,30 +178,77 @@ export const TagsInput = styled.div`
 `;
 
 function QnaPost({ isLogin }) {
-  const handleClick = () => {
-    Swal.fire({
-      icon: "error",
-      title: "의사 선생님이신가요?",
-      text: "선생님만 답변하실 수 있어요",
+  const navigate = useNavigate();
+  const [contentInfo, setContentInfo] = useState({
+    content: "",
+  });
+
+  const handleInputChange = (key) => (e) => {
+    setContentInfo({
+      ...contentInfo,
+      [key]: e.target.value,
     });
+  };
+
+  let qna_id = document.location.href;
+  qna_id = qna_id.substring(qna_id.length - 1, qna_id.length);
+  console.log(qna_id);
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    axios
+      .post(
+        "http://localhost:80/comments/info",
+        { qna_id: qna_id },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        console.log("모니?", res);
+        setComments(res.data.comments);
+      });
+  }, []);
+
+  // console.log(qna_id);
+  const handleClick = () => {
+    if (localStorage.getItem("auth") === "1") {
+      console.log("content몰까?", contentInfo);
+      let payload = { content: contentInfo.content, qna_id: qna_id };
+      axios
+        .post("http://localhost:80/comments/upload", payload, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          navigate("/qna");
+          navigate(`/qna/detail/${qna_id}`);
+        });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "의사 선생님이신가요?",
+        text: "선생님만 답변하실 수 있어요",
+      });
+    }
   };
 
   return (
     <>
-      <QnaDocContainer>
-        <QnaDocBox>
-          <ContentWrap>
-            <ProfileDoc>
-              <img src={doctor} width="20rem" alt="doctor" />
-              <div className="Id">김코딩 선생님</div>
-            </ProfileDoc>
-            <ContentDocText>
-              많이 불편하시겠어요! 평소 음식을 드실때 너무 급하게 먹거나 밀가루
-              음식을 많이 드시나요? 평소 식습관이 중요합니다
-            </ContentDocText>
-          </ContentWrap>
-        </QnaDocBox>
-      </QnaDocContainer>
+      {comments.map((comment) => {
+        return (
+          <QnaDocContainer>
+            <QnaDocBox>
+              <ContentWrap>
+                <ProfileDoc>
+                  <img src={doctor} width="20rem" alt="doctor" />
+                  <div className="Id">김코딩 선생님</div>
+                </ProfileDoc>
+                <ContentDocText>{comment.content}</ContentDocText>
+              </ContentWrap>
+            </QnaDocBox>
+          </QnaDocContainer>
+        );
+      })}
 
       <QnaPostContainer>
         <TagsInput>
@@ -208,18 +256,28 @@ function QnaPost({ isLogin }) {
             className="textarea"
             type="textarea"
             placeholder="내용을 입력해주세요"
+            onChange={handleInputChange("content")}
+            value={contentInfo.content}
           />
+          {/* <input
+              id="loginEmail"
+              type="email"
+              placeholder="이메일"
+              onChange={handleInputChange("email")}
+              value={userInfo.email}
+            /> */}
         </TagsInput>
       </QnaPostContainer>
 
       <QnaListContainer>
         <QnaWrap>
           <QnaWrap>
-            {isLogin ? (
+            {/* {isLogin ? (
               <Button>댓글달기</Button>
             ) : (
               <Button onClick={handleClick}>댓글달기</Button>
-            )}
+            )} */}
+            <Button onClick={handleClick}>댓글달기</Button>
           </QnaWrap>
         </QnaWrap>
       </QnaListContainer>

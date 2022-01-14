@@ -11,8 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       models.qna.belongsTo(models.users, { foreignKey: "users_id" }); //N
       models.qna.hasMany(models.comments, { foreignKey: "qna_id" }); //1
-      models.qna.belongsToMany(models.hashtag, {
-        through: "qna_hashtag",
+      // models.qna.belongsToMany(models.hashtag, {
+      //   through: "qna_hashtag",
+      //   foreignKey: "qna_id",
+      // }); //
+      models.qna.hasMany(models.qna_hashtag, {
         foreignKey: "qna_id",
       }); //
     }

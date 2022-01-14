@@ -1,29 +1,29 @@
-module.exports = (req, res) => {};
-// const { comments } = require("../../models");
-// const { isAuthorized } = require("../tokenFunctions");
+const { comments } = require("../../models");
+const { isAuthorized } = require("../tokenFunctions");
 
-// module.exports = async (req, res) => {
-//   const accessTokenData = isAuthorized(req);
-
-//     if (!accessTokenData) {
-//       res.status(401).send({ data: null, message: "Invalid Token" });
-//     } else if (accessTokenData) {
-//       if (
-//         req.body.content === "" ||
-
-//       ) {
-//         res.status(400).send({ message: "Bad Request" });
-//       } else {
-//         await qna
-//           .create({
-//             title: qnaInfo.title,
-//             content: qnaInfo.content,
-//             users_id: accessTokenData.id, //kakao userid를 적는다. 한자리 숫자가 아니라 여러개라 섞이지 않을듯?
-//             category: qnaInfo.category,
-//           })
-//           .then(() => {
-//             res.status(201).send({ message: "QnA Upload Ok" });
-//           });
-//       }
-//     }
-//   }
+module.exports = async (req, res) => {
+  console.log("들어오기는하니?", req); //null값.. 토큰이 안들어온다..
+  const accessTokenData = isAuthorized(req);
+  console.log("의사토큰있니?", accessTokenData);
+  if (!accessTokenData) {
+    res.status(401).send({ data: null, message: "Invalid Token" });
+  } else if (accessTokenData) {
+    if (accessTokenData.agree === "false") {
+      res.status(403).send({ message: "Only Doctor" });
+    } else if (accessTokenData.agree === "true") {
+      if (req.body.content === "") {
+        res.status(400).send({ message: "Bad Request" });
+      } else {
+        await comments
+          .create({
+            content: req.body.content,
+            qna_id: parseInt(req.body.qna_id),
+            doctors_id: accessTokenData.id,
+          })
+          .then(() => {
+            res.status(201).send({ message: "Comments Upload Ok" });
+          });
+      }
+    }
+  }
+};

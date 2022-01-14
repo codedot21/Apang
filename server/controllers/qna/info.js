@@ -74,27 +74,39 @@ module.exports = async (req, res) => {
       }
     }
   } else {
-    // const qnaInfo = await qna.findAll({ include: users });
-    const qnaInfo = await qna.findAll({
-      include: [
-        {
-          model: users,
-        },
-      ],
-      // include: [
-      //   {
-      //     model: qna_hashtag,
-      //     include: [
-      //       {
-      //         model: hashtag,
-      //         attributes: ["id", "hashtag", "createdAt", "updatedAt"],
-      //       },
-      //     ],
-      //   },
-      // ],
-      order: [["id", "DESC"]],
-    });
-    // console.log("qnaInfo는?", qnaInfo[1].user);
-    res.status(200).send({ qnaInfo: qnaInfo });
+    if (!req.body.filter || req.body.filter === "전체") {
+      const qnaInfo = await qna.findAll({
+        include: [
+          {
+            model: users,
+          },
+          // {
+          //   model: qna_hashtag,
+          //   include: [{ model: hashtag}],
+          //   // attribute: ["id", "hashtag", "createdAt", "updatedAt"],
+          // },
+        ],
+        // include: [
+        //   {
+        //     model: qna_hashtag,
+        //     include: [
+        //       {
+        //         model: hashtag,
+        //         attributes: ["id", "hashtag", "createdAt", "updatedAt"],
+        //       },
+        //     ],
+        //   },
+        // ],
+        order: [["id", "DESC"]],
+      });
+      res.status(200).send({ qnaInfo: qnaInfo });
+    } else {
+      // console.log("filter : ", req.body.filter);
+      const filterInfo = await qna.findAll({
+        where: { category: req.body.filter },
+        order: [["id", "DESC"]],
+      });
+      res.status(200).send({ qnaInfo: filterInfo });
+    }
   }
 };

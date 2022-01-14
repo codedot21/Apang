@@ -33,6 +33,7 @@ export const ImgWrap = styled.div`
 
 function QnaDetail({ qnaDetail, isLogin }) {
   console.log(qnaDetail);
+
   return (
     <>
       <QnaContainer>

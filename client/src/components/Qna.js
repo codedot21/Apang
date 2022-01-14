@@ -77,14 +77,22 @@ export const ContentComment = styled.div`
   margin-right: 1rem;
 `;
 
-function Qna({ title, nickname, content, handleQnaInfo }) {
+function Qna({ title, nickname, content, handleQnaInfo, profile_img }) {
   return (
     <>
       {title ? (
-        <QnaBox onClick={() => handleQnaInfo({ title, nickname, content })}>
+        <QnaBox
+          onClick={() =>
+            handleQnaInfo({ title, nickname, content, profile_img })
+          }
+        >
           <ContentWrap>
             <Profile>
-              <img src={user} alt="profile" width="20rem" />
+              <img
+                src={require(`../../public/uploads/${profile_img}`)}
+                alt="profile"
+                width="20rem"
+              />
               <div className="Id">{nickname}</div>
             </Profile>
             <ContentTitle>{title}</ContentTitle>

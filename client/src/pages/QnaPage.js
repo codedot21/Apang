@@ -263,6 +263,21 @@ function QnaPage({ isLogin, handleQnaInfo }) {
       text: "회원이 아니시면 회원가입 해주세요",
     });
   };
+  // 카테고리 필터하기
+  const filterHandler = (e) => {
+    const filter = e.target.value;
+    // console.log(filter);
+    axios
+      .post(
+        "http://localhost:80/qna/info",
+        { filter: filter },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        // console.log("filter : ", res.data.qnaInfo);
+        setqnaInfo(res.data.qnaInfo);
+      });
+  };
 
   return (
     <>
@@ -273,7 +288,11 @@ function QnaPage({ isLogin, handleQnaInfo }) {
         <CategoryWrap>
           {category.map((category, i) => {
             return (
-              <Category key={i} value={category}>
+              <Category
+                key={i}
+                value={category}
+                onClick={(e) => filterHandler(e)}
+              >
                 {category}
               </Category>
             );
@@ -313,6 +332,9 @@ function QnaPage({ isLogin, handleQnaInfo }) {
                       title={qna.title}
                       content={qna.content}
                       nickname={qna.user ? qna.user.nickname : "Kakao"}
+                      profile_img={
+                        qna.user ? qna.user.profile_img : "kakao.png"
+                      }
                     />
                   </Linked>
                 );

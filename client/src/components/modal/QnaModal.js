@@ -182,7 +182,7 @@ export const TagsInput = styled.div`
 
 function QnaModal({ open, close }) {
   const navigate = useNavigate();
-  const [tags, setTags] = useState(["아파요", "안아파요", "덜아파요"]);
+  const [tags, setTags] = useState([]);
 
   const removeTags = (indexToRemove) => {
     setTags(tags.filter((el, index) => index !== indexToRemove));
@@ -213,33 +213,6 @@ function QnaModal({ open, close }) {
   };
 
   const handleUpload = () => {
-    // const bodyFormData = new FormData();
-    // tags.forEach((tag) => {
-    //   bodyFormData.append("tags", tag);
-    // });
-    // axios.all(
-    //   [
-    //     axios.post(
-    //       "http://localhost:80/qna/upload",
-    //       { ...qnaInfo, kakao_userid: localStorage.getItem("userid") },
-    //       {
-    //         withCredentials: true,
-    //       }
-    //     ),
-    //     axios.post(
-    //       "http://localhost:80/hashtag/upload",
-    //       { bodyFormData },
-    //       {
-    //         withCredentials: true,
-    //       }
-    //     ),
-    //   ].then(
-    //     axios.spread((res1, res2) => {
-    //       close();
-    //       uploadSuccess();
-    //     })
-    //   )
-    // );
     axios
       .post(
         "http://localhost:80/qna/upload",

@@ -6,7 +6,7 @@ const commentsModify = require("../controllers/comments/modify");
 const commentsDelete = require("../controllers/comments/delete");
 
 router.post("/upload", commentsUpload);
-router.get("/info", commentsInfo);
+router.post("/info", commentsInfo);
 router.put("/modify", commentsModify);
 router.delete("/", commentsDelete);
 
