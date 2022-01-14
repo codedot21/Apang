@@ -44,9 +44,19 @@ export const ContentTitle = styled.div`
 `;
 
 export const ContentText = styled.div`
-  display: flex;
+  // display: flex;
   height: 2.2rem;
   font-size: 0.8rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    line-height: 1rem;
+    height: 2rem;
+  }
 `;
 
 export const Tag = styled.div`
@@ -55,7 +65,7 @@ export const Tag = styled.div`
   margin-bottom: 0.5rem;
   .tag {
     margin-right: 0.5rem;
-    margin-top: 0.5rem;
+    // margin-top: 0.3rem;
     width: auto;
     height: 1.3rem;
     display: flex;
@@ -67,6 +77,9 @@ export const Tag = styled.div`
     list-style: none;
     border-radius: 10px;
     background: ${({ theme }) => theme.color.button};
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-top: 0.7rem;
+    }
   }
 `;
 
@@ -78,7 +91,7 @@ export const ContentComment = styled.div`
   }
 `;
 
-function Qna({ qnaInfo, handleQnaInfo }) {
+function Qna({ qnaInfo, handleQnaInfo, userInfo }) {
   console.log("qnaInfo 안들어오나?", qnaInfo);
   return (
     <>

@@ -14,6 +14,7 @@ import QnaDetail from "./pages/QnaDetail.js";
 import ScrollTop from "./components/Scroll.js";
 import Medical from "./pages/Medical.js";
 import MedicalDetail from "./pages/MedicalDetail.js";
+import Swal from "sweetalert2";
 
 import axios from "axios";
 
@@ -25,25 +26,6 @@ function App() {
   const [qnaInfo, setqnaInfo] = useState(""); //qna 전부 가져오는것
   const [auth, setAuth] = useState("");
   const [qnaDetail, setqnaDetail] = useState("");
-
-  // map 상태
-  const [medical, setMedical] = useState("");
-
-  //map 함수
-
-  const medicalhandling = (value) => {
-    setMedical(value);
-    console.log(medical);
-  };
-
-  // 병원 정보
-  const [medicalInfo, setMedicalInfo] = useState("");
-
-  // 정보 가져오기
-  const medicalInfoHandling = (value) => {
-    setMedicalInfo(value);
-    console.log(medicalInfo);
-  };
 
   // useEffect(() => {
   //   setUserInfo(localStorage.getItem("userInfo"));
@@ -137,9 +119,9 @@ function App() {
   }, []);
   //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
 
-  // useEffect(() => {
-  //   uploadSuccess();
-  // }, []);
+  useEffect(() => {
+    uploadSuccess();
+  }, []);
 
   const LoginHandler = () => {
     isAuthenticated();
@@ -164,7 +146,12 @@ function App() {
         localStorage.removeItem("userid");
         localStorage.removeItem("auth");
         localStorage.removeItem("accessToken");
-        alert("로그아웃이 되었습니다.");
+        // alert("로그아웃이 되었습니다.");
+        Swal.fire({
+          icon: "success",
+          title: "또 만나요",
+          text: "로그아웃 되었습니다",
+        });
         navigate("/");
       });
   };
@@ -206,7 +193,7 @@ function App() {
         handleLogout={handleLogout}
       />
       <Routes>
-        <Route path="/" element={<Main medicalhandling={medicalhandling} />} />
+        <Route path="/" element={<Main />} />
         <Route path="/authpage" element={<AuthPage />} />
         <Route
           path="/mypage/publicprofile"
@@ -232,29 +219,26 @@ function App() {
               uploadSuccess={uploadSuccess}
               qnaInfo={qnaInfo}
               isLogin={isLogin}
+              userInfo={userInfo}
+              auth={parseInt(localStorage.getItem("auth"))}
             />
           }
         />
 
-        <Route path="/qnadetail" element={<QnaDetail isLogin={isLogin} />} />
-        <Route
-          path="/medicallist"
-          element={
-            <Medical
-              medical={medical}
-              medicalInfoHandling={medicalInfoHandling}
-            />
-          }
-        />
+        <Route path="/medicallist" element={<Medical />} />
         <Route
           path="/qna/detail/:id"
-          element={<QnaDetail isLogin={isLogin} qnaDetail={qnaDetail} />}
+          element={
+            <QnaDetail
+              isLogin={isLogin}
+              qnaDetail={qnaDetail}
+              userInfo={userInfo}
+              auth={parseInt(localStorage.getItem("auth"))}
+            />
+          }
         />
 
-        <Route
-          path="/medicaldetail"
-          element={<MedicalDetail medicalInfo={medicalInfo} />}
-        />
+        <Route path="/medicaldetail" element={<MedicalDetail />} />
       </Routes>
 
       <Footer />

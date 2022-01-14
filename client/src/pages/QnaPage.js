@@ -6,7 +6,6 @@ import Qna from "../components/Qna";
 import Doc from "../images/doc.png";
 import QnaModal from "../components/modal/QnaModal.js";
 import Swal from "sweetalert2";
-import axios from "axios";
 
 export const QnaContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -44,9 +43,6 @@ export const QnaTextContainer = styled(Container)`
 `;
 
 export const QnaWrap = styled.div`
-  // display: block;
-  // margin-left: 0;
-  // margin-right: 0;
   width: 100%;
   @media ${({ theme }) => theme.device.ipad} {
     display: block;
@@ -230,7 +226,7 @@ export const ContentComment = styled.div`
   }
 `;
 
-function QnaPage({ isLogin, uploadSuccess, qnaInfo, handleQnaInfo }) {
+function QnaPage({ isLogin, uploadSuccess, qnaInfo, handleQnaInfo, auth }) {
   const [QuestionOpen, setQuestionOpen] = useState(false);
 
   const openQuestionModal = () => {
@@ -243,6 +239,14 @@ function QnaPage({ isLogin, uploadSuccess, qnaInfo, handleQnaInfo }) {
       icon: "error",
       title: "로그인이 필요해요",
       text: "회원이 아니시면 회원가입 해주세요",
+    });
+  };
+
+  const handleDocClick = () => {
+    Swal.fire({
+      icon: "error",
+      title: "의사선생님이신가요?",
+      text: "선생님은 댓글만 작성하실 수 있어요",
     });
   };
 
@@ -286,8 +290,10 @@ function QnaPage({ isLogin, uploadSuccess, qnaInfo, handleQnaInfo }) {
       <QnaListContainer>
         <QnaWrap>
           <QnaWrap>
-            {isLogin ? (
+            {isLogin & (auth === 2) ? (
               <Button onClick={openQuestionModal}>질문하기</Button>
+            ) : isLogin & (auth === 1) ? (
+              <Button onClick={handleDocClick}>질문하기</Button>
             ) : (
               <Button onClick={handleClick}>질문하기</Button>
             )}

@@ -28,7 +28,7 @@ module.exports = (req, res) => {
           password: userInfo.password,
           nickname: userInfo.nickname,
           profile_img: "publicprofile.jpeg",
-          auth: 0,
+          auth: 2,
         },
       })
       .then(([users, created]) => {

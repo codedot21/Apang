@@ -54,6 +54,7 @@ const ProfileEditing = styled.label`
   padding: 0.5vw;
   color: #fff;
   border-radius: 30px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }
@@ -98,6 +99,7 @@ const Edting = styled.button`
   border-radius: 30px;
   color: #fff;
   padding: 10px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }
@@ -169,6 +171,7 @@ const EditPasswordDeleted = styled.button`
   color: #fff;
   padding: 10px;
   margin: 20px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }

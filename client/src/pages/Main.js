@@ -53,7 +53,6 @@ export const Title = styled.h1`
     font-size: 2.9rem;
     text-align: center;
     margin-bottom: 1.3rem;
-    margin-left: 2rem;
   }
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
@@ -72,7 +71,7 @@ export const Text = styled.p`
     font-size: 1.7rem;
     text-align: center;
     margin-bottom: 1.3rem;
-    margin-left: 5rem;
+    margin-left: 2rem;
   }
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 0.8rem;
@@ -89,6 +88,7 @@ export const Img = styled.img`
     max-width: 40rem;
   }
   @media ${({ theme }) => theme.device.mobile} {
+    margin-right: 0.7rem;
     width: 60rem;
     max-width: 20rem;
   }
@@ -98,10 +98,18 @@ export const Search = styled.div`
   & form {
     position: relative;
     text-align: center;
-    width: 20rem;
+    width: 21rem;
     margin: 0 auto;
     margin-top: 3rem;
     margin-left: 0;
+    @media ${({ theme }) => theme.device.ipad} {
+      width: 25rem;
+      margin: 1rem auto;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+      width: 15rem;
+      margin: 1rem auto;
+    }
     & input {
       outline: none;
       border: none;
@@ -111,6 +119,12 @@ export const Search = styled.div`
       padding-left: 0.5rem;
       border: 0.2rem solid #63b5f6;
       border-radius: 10px;
+      @media ${({ theme }) => theme.device.ipad} {
+        margin: 1rem auto;
+      }
+      @media ${({ theme }) => theme.device.mobile} {
+        margin: 1rem auto;
+      }
     }
     & button {
       position: absolute;
@@ -120,16 +134,22 @@ export const Search = styled.div`
       background-color: transparent;
       top: 0;
       right: 0;
+      @media ${({ theme }) => theme.device.ipad} {
+        margin-right: 4rem;
+      }
+      @media ${({ theme }) => theme.device.mobile} {
+        margin-right: 2.7rem;
+      }
     }
     & img {
-      width: 2.8rem;
+      width: 2rem;
+      @media ${({ theme }) => theme.device.ipad} {
+        width: 2.3rem;
+      }
+      @media ${({ theme }) => theme.device.mobile} {
+        width: 2rem;
+      }
     }
-  }
-  @media ${({ theme }) => theme.device.ipad} {
-    display: none;
-  }
-  @media ${({ theme }) => theme.device.mobile} {
-    display: none;
   }
 `;
 
@@ -142,8 +162,8 @@ export const MainWrapQna = styled.div`
 
   @media ${({ theme }) => theme.device.mobile} {
     display: block;
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: 1.5rem;
+    margin-bottom: 5rem;
   }
 `;
 
@@ -186,8 +206,6 @@ export const BoxWrapQna = styled.div`
 
 export const BoxWrapFind = styled.div`
   text-align: center;
-  // margin-top: 1em;
-  // margin-bottom: 0.1rem;
   @media ${({ theme }) => theme.device.mobile} {
     align-items: center;
   }
@@ -200,7 +218,6 @@ export const ContentTitle = styled.p`
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
     text-align: center;
-    margin-bottom: 1rem;
   }
 `;
 
@@ -218,11 +235,11 @@ export const ContentText = styled.p`
 export const ImgThree = styled.img`
   width: 26rem;
   margin-bottom: 2rem;
-  // border: 1px solid #63b5f6;
   @media ${({ theme }) => theme.device.mobile} {
     width: 15rem;
     max-width: 20rem;
     align-items: center;
+    margin: auto;
   }
 `;
 
@@ -235,7 +252,7 @@ export const Button = styled(Link)`
   outline: none;
   border: none;
   cursor: pointer;
-  border-radius: 30px;
+  border-radius: 10px;
   font-size: 1.5rem;
   text-decoration: none;
   &:hover {
@@ -244,22 +261,12 @@ export const Button = styled(Link)`
   }
   @media ${({ theme }) => theme.device.ipad} {
     font-size: 1.5rem;
-    width: 10rem;
-    max-width: 20rem;
-    margin-left: 6.5rem;
-    margin-top: 1rem;
-    margin-bottom: 1.3rem;
-    padding: 0.3rem;
+    margin: 2rem auto;
   }
 
   @media ${({ theme }) => theme.device.mobile} {
-    // font-size: 1rem;
-    // width: 10rem;
-    // max-width: 20rem;
-    // margin-left: 6.5rem;
-    // margin-top: 1rem;
-    // padding: 0.3rem;
-    display: none;
+    font-size: 0.8rem;
+    margin-left: 4rem;
   }
 `;
 
@@ -273,18 +280,15 @@ export const SubTitle = styled.h1`
   margin-top: 8rem;
 
   @media ${({ theme }) => theme.device.ipad} {
-    // font-size: 2.9rem;
-    // text-align: center;
-    // margin-bottom: 1.3rem;
-    // margin-left: 2rem;
-    display: none;
+    font-size: 2.9rem;
+    text-align: center;
+    margin: auto;
   }
   @media ${({ theme }) => theme.device.mobile} {
-    // font-size: 1.5rem;
-    // text-align: center;
-    // margin-left: 1.5rem
-    // margin-bottom: 1rem;
-    display: none;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-right: 2.2rem;
+    margin-bottom: 1rem;
   }
 `;
 
@@ -319,7 +323,7 @@ const Options = styled.option`
 const SerchButton = styled.button``;
 
 // map을 위한 테스트
-function Main({ medicalhandling }) {
+function Main() {
   const navigate = useNavigate();
   const serch = [
     { key: 1, value: "치과" },
@@ -334,7 +338,6 @@ function Main({ medicalhandling }) {
     setSelect(e.target.value);
   };
   console.log(select);
-  medicalhandling(select);
 
   return (
     <>

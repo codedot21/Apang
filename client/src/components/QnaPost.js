@@ -1,24 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import doctor from "../images/doctor.png";
 
 export const QnaDocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
   display: flex;
-  padding: 1rem 2rem;
-  padding-right: 30rem;
+  padding: 0 1rem 1rem;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+
   z-index: 1;
   background: #9bbbd4;
-  width: 60%;
+  width: 71.5rem;
+  @media ${({ theme }) => theme.device.ipad} {
+    width: 45.8rem;
+  }
   @media ${({ theme }) => theme.device.mobile} {
-    width: 6rem;
-    // height: 70%;
+    width: 21.4rem;
   }
 `;
 
@@ -80,7 +81,7 @@ export const Button = styled.button`
   border: none;
   width: 5rem;
   height: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: auto;
   margin-left: 69.5rem;
   &:hover {
     background-color: ${({ theme }) => theme.color.hover};
@@ -91,7 +92,7 @@ export const Button = styled.button`
   }
   @media ${({ theme }) => theme.device.mobile} {
     width: 4rem;
-    margin-left: 15rem;
+    margin-left: 16rem;
   }
 `;
 
@@ -115,19 +116,18 @@ export const EmptyBox = styled.div`
 `;
 
 export const QnaDocBox = styled.div`
-  // border: 0.1rem solid #63b5f6;
+  margin-top: 1rem;
+
   color: black;
   border-radius: 10px;
-  max-width: 1300px;
-  // width: 55%;
-  // height: 50%;
-  width: 25rem;
-  height: 70%;
-  // margin-bottom: 2rem;
+
   background: #ffffff;
+  margin-right: 30rem;
+  @media ${({ theme }) => theme.device.ipad} {
+    margin-right: 20rem;
+  }
   @media ${({ theme }) => theme.device.mobile} {
-    margin-left: 15rem;
-    // height: 70%;
+    margin-right: 6rem;
   }
 `;
 
@@ -174,8 +174,21 @@ export const ContentText = styled.div`
 
 export const ContentDocText = styled.div`
   display: flex;
-  // height: 2.2rem;
   font-size: 0.8rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 26rem;
+  @media ${({ theme }) => theme.device.ipad} {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 12rem;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 12rem;
+  }
 `;
 
 export const TagsInput = styled.div`
@@ -195,6 +208,7 @@ export const TagsInput = styled.div`
   }
 
   > textarea {
+    whitespace: pre-line;
     resize: none;
     display: block;
     outline: none;
@@ -226,6 +240,29 @@ function QnaPost({ isLogin, userInfo, auth }) {
       event.target.value = "";
     }
   };
+  // 임시 만드는거
+  const inputRef = useRef(null);
+  // const inputUpdateRef = useRef(null);
+  // const [commentId, setCommentId] = useState(null);
+  function handleFocus() {
+    inputRef.current.disabled = false;
+    inputRef.current.focus();
+  }
+  function handleReset() {
+    inputRef.current.disabled = true;
+  }
+
+  // 댓글 요청
+  // const commentPost = () => {
+  //   if (islogin && auth === 1 && inputRef.current.value !== "") {
+  //   axios.post('http://localhost:80/comment', {
+  //   qna_id: id,
+  //   content: inputRef.current.value,
+  //   })
+  //   .then((res) => {
+  //  setComment([...res.data.data]);
+  //   })
+
   return (
     <>
       {comment.map((comment, index) => (
@@ -236,6 +273,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
                 <img
                   src={require(`../../public/uploads/${userInfo.profile_img}`)}
                   width="20rem"
+                  alt="profile"
                 />
                 {auth === 1 ? (
                   <div className="Id">{userInfo.name}</div>
@@ -243,26 +281,27 @@ function QnaPost({ isLogin, userInfo, auth }) {
                   <div className="Id">{userInfo.nickname}</div>
                 )}
               </ProfileDoc>
-              <ContentDocText>{comment}</ContentDocText>
+              {isLogin & (auth === 1) ? (
+                <ContentDocText>{comment}</ContentDocText>
+              ) : (
+                <input
+                  disabled
+                  type="text"
+                  ref={inputRef}
+                  defaultValue={comment}
+                />
+              )}
             </ContentWrap>
+            {isLogin & (auth === 1)
+              ? null
+              : // <div>
+                //   <button onClick={handleFocus}>수정</button>
+                //   <button onClick={handleReset}>확인</button>
+                // </div>
+                null}
           </QnaDocBox>
         </QnaDocContainer>
       ))}
-
-      {/* <QnaDocContainer>
-        <QnaDocBox>
-          <ContentWrap>
-            <ProfileDoc>
-              <img src={doctor} width="20rem" alt="doctor" />
-              <div className="Id">김코딩 선생님</div>
-            </ProfileDoc>
-            <ContentDocText>
-              많이 불편하시겠어요! 평소 음식을 드실때 너무 급하게 먹거나 밀가루
-              음식을 많이 드시나요? 평소 식습관이 중요합니다
-            </ContentDocText>
-          </ContentWrap>
-        </QnaDocBox>
-      </QnaDocContainer> */}
 
       {isLogin & (auth === 1) ? (
         <QnaPostContainer>
@@ -276,9 +315,6 @@ function QnaPost({ isLogin, userInfo, auth }) {
           </TagsInput>
         </QnaPostContainer>
       ) : (
-        // <QnaEmptyContainer>
-        //   <EmptyBox></EmptyBox>
-        // </QnaEmptyContainer>
         <QnaPostContainer>
           <TagsInput>
             <textarea
@@ -290,7 +326,6 @@ function QnaPost({ isLogin, userInfo, auth }) {
           </TagsInput>
         </QnaPostContainer>
       )}
-
       <QnaListContainer>
         <QnaWrap>
           <QnaWrap>

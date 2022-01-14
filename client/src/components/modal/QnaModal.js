@@ -179,6 +179,36 @@ export const TagsInput = styled.div`
   }
 `;
 
+export const TextArea = styled.div`
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 30em;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1rem;
+    margin-left: 0;
+    width: 21.5rem;
+  }
+
+  > textarea {
+    overflow: hidden;
+    resize: none;
+    display: block;
+    outline: none;
+    border: none;
+    width: 100%;
+    height: 10rem;
+    font-size: 0.8rem;
+    border: 0.1rem solid #dee2e6;
+    border-radius: 10px;
+    &:focus {
+      outline: 0.1rem solid #63b5f6;
+    }
+  }
+`;
+
 function QnaModal({ open, close, uploadSuccess }) {
   const initialTags = ["아파요", "안아파요", "덜아파요"];
 
@@ -291,12 +321,14 @@ function QnaModal({ open, close, uploadSuccess }) {
           </TagsInput>
 
           <div>
-            <input
-              className="textarea"
-              type="textarea"
-              placeholder="내용을 입력해주세요"
-              onChange={qnaChange("content")}
-            />
+            <TextArea>
+              <textarea
+                className="textarea"
+                type="textarea"
+                placeholder="내용을 입력해주세요"
+                onChange={qnaChange("content")}
+              />
+            </TextArea>
           </div>
         </QnaBody>
         <QnaFooter>

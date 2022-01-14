@@ -55,13 +55,13 @@ export const NavMenu = styled.div`
     background: white;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.9s ease-in;
+    transition: all 0.7s ease-in;
     list-style: none;
     border: 1px solid #8ac8ff;
     border-radius: 0.1rem;
     @media ${({ theme }) => theme.device.mobile} {
-      width: 20rem;
-      margin-top: 5rem;
+      width: 8.95rem;
+      margin-top: 1rem;
     }
   }
   #sub-menu > li {
@@ -128,8 +128,10 @@ export const DropDownButton = styled.button`
   }
 
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 1.9rem;
-    width: 19.8rem;
+    font-size: 1rem;
+    // width: 19.8rem;
+    width: 8.8rem;
+    height: 3rem;
     :hover {
       background-color: ${({ theme }) => theme.color.button};
     }
