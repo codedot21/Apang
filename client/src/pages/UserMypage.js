@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
@@ -197,18 +197,34 @@ const MyreviewTitle = styled.h2`
 
 // 상현 수정
 function UserMypage(props) {
+  // const [myQnaInfo, setmyQnaInfo] = useState("");
   // axios
-  //     .post(
-  //       "http://localhost:80/qna/info",
-  //       { kakao_userid: localStorage.getItem("userid") },
-  //       {
-  //         withCredentials: true,
-  //       }
-  //     )
-  //     .then((res) => {
-  //       console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
-  //       setqnaInfo(res.data.qnaInfo);
-  //     });
+  //   .post(
+  //     "http://localhost:80/qna/info",
+  //     { kakao_userid: localStorage.getItem("userid"), page: "usermypage" },
+  //     {
+  //       withCredentials: true,
+  //     }
+  //   )
+  //   .then((res) => {
+  //     console.log("myqnainfo?", res.data.myQnaInfo);
+  //     setmyQnaInfo(res.data.myQnaInfo);
+  //   });
+
+  useEffect(() => {
+    axios
+      .post(
+        "http://localhost:80/qna/info",
+        { kakao_userid: localStorage.getItem("userid"), page: "usermypage" },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        console.log("myqnainfo?", res.data.myQnaInfo);
+        // setmyQnaInfo(res.data.myQnaInfo);
+      });
+  }, []);
 
   console.log(props.userInfo);
   const [imgInfo, setImgInfo] = useState({
@@ -391,7 +407,7 @@ function UserMypage(props) {
           <hr />
           {/*MY Q&A 시작  */}
           <MyreviewTitle>My Q&A</MyreviewTitle>
-          {/* props.userInfo.id === props.qnaInfo.users_id 필터함수쓰기*/}
+          {/* myQnaInfo 사용*/}
 
           {/*MY Q&A 끝  */}
         </UserContainer>

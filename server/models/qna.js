@@ -9,6 +9,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.qna.belongsTo(models.users, { foreignKey: "users_id" }); //N
+      models.qna.hasMany(models.comments, { foreignKey: "qna_id" }); //1
+      models.qna.belongsToMany(models.hashtag, {
+        through: "qna_hashtag",
+        foreignKey: "qna_id",
+      }); //
     }
   }
   qna.init(

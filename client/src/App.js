@@ -22,16 +22,11 @@ function App() {
   console.log("App.js랜더링");
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
-  const [qnaInfo, setqnaInfo] = useState(""); //qna 전부 가져오는것
+  const [userInfo, setUserInfo] = useState(null); //사용자 정보 :
   const [auth, setAuth] = useState("");
-  const [qnaDetail, setqnaDetail] = useState("");
+  const [qnaDetail, setqnaDetail] = useState({});
 
-  // useEffect(() => {
-  //   setUserInfo(localStorage.getItem("userInfo"));
-  // }, []);
   const isAuthenticated = () => {
-    //쿠키에 jwt가 있는지 없는지 랜더링될떄마다 확인하는 함수..?
     const authnumber = parseInt(localStorage.getItem("auth"));
     console.log(authnumber);
     if (authnumber === 2 || authnumber === 0) {
@@ -45,7 +40,6 @@ function App() {
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth); //nav에 내려주기 위해
           setIsLogin(true);
-          uploadSuccess();
           // navigate("/");
         });
     } else if (authnumber === 1) {
@@ -58,7 +52,6 @@ function App() {
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth);
           setIsLogin(true);
-          uploadSuccess();
           // navigate("/");
         });
     } else if (isNaN(authnumber)) {
@@ -83,14 +76,12 @@ function App() {
             console.log(userInfo);
             setUserInfo(userInfo);
             setIsLogin(true);
-            uploadSuccess();
             navigate("/");
           } else {
             window.alert("로그인에 실패하였습니다.");
           }
         });
     }
-    uploadSuccess();
   };
 
   const handleResponseSuccess = (authnumber) => {
@@ -98,29 +89,8 @@ function App() {
     isAuthenticated();
   };
 
-  const uploadSuccess = () => {
-    console.log("uploadsuccess실행됨?");
-    axios
-      .post(
-        "http://localhost:80/qna/info",
-        { kakao_userid: localStorage.getItem("userid") },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
-        setqnaInfo(res.data.qnaInfo);
-      });
-  };
-
   useEffect(() => {
     isAuthenticated();
-  }, []);
-  //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
-
-  useEffect(() => {
-    uploadSuccess();
   }, []);
 
   const LoginHandler = () => {
@@ -216,8 +186,6 @@ function App() {
           element={
             <QnaPage
               handleQnaInfo={handleQnaInfo}
-              uploadSuccess={uploadSuccess}
-              qnaInfo={qnaInfo}
               isLogin={isLogin}
               userInfo={userInfo}
               auth={parseInt(localStorage.getItem("auth"))}
