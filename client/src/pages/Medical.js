@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { Container } from "../styles";
-import Sample from "../images/sample.png";
+import MedicalDetail from "../components/MedicalDetail";
 
 // import cn from "classnames";
 
@@ -62,45 +62,29 @@ const ListDivBox = styled.div`
   }
 `;
 
-const DivBox = styled.div``;
-
-const DetailLine = styled.div`
-  border: 1px solid #63b5f6;
-  height: 100%;
-  width: 69%;
-  float: right;
-
-  & h3 {
-    text-align: left;
-    margin: 1vw;
-    color: #63b5f6;
-  }
-
-  & div {
-    text-align: left;
-    margin: 1vw;
-  }
-`;
-
-const Img = styled.img`
-  width: 80%;
-  margin: 1vw;
-`;
-
 const Medical = ({ medical, medicalInfoHandling }) => {
-  const [nowLocation, setNowLocation] = useState({ latitude: 0, longitude: 0 });
-  const [defaultPosition, setDefaultPostion] = useState({
+  const [medicalInfo, setMedicalInfo] = useState({
+    place_name: "",
+    address_name: "",
+    phone: "",
+  });
+
+  const [nowLocation, setNowLocation] = useState({
     latitude: 0,
     longitude: 0,
   });
-  const [address, setAddress] = useState({ area: "", sigg: "", addr: "" });
+  // const [defaultPosition, setDefaultPostion] = useState({
+  //   latitude: 0,
+  //   longitude: 0,
+  // });
+  // const [address, setAddress] = useState({ area: "", sigg: "", addr: "" });
   const getPosition = () => {
     navigator.geolocation.watchPosition(
       (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         setNowLocation({ latitude: latitude, longitude: longitude });
-        setDefaultPostion({ latitude: latitude, longitude: longitude });
+        // setDefaultPostion({ latitude: latitude, longitude: longitude });
         axios({
           method: "get",
           url: "https://dapi.kakao.com/v2/local/geo/coord2address",
@@ -110,20 +94,21 @@ const Medical = ({ medical, medicalInfoHandling }) => {
           params: {
             x: longitude,
             y: latitude,
+            query: keyword,
           },
         })
           .then((res) => {
             // console.log(latitude);
             // console.log(longitude);
-            console.log("위치기반 : ", JSON.stringify(res.data));
+            // console.log("위치기반 : ", JSON.stringify(res.data));
             return res.data.documents[0].address;
           })
           .then((address) => {
-            setAddress({
-              area: address.region_1depth_name,
-              sigg: address.region_2depth_name,
-              addr: address.address_name,
-            });
+            // setAddress({
+            //   area: address.region_1depth_name,
+            //   sigg: address.region_2depth_name,
+            //   addr: address.address_name,
+            // });
           })
           .catch((err) => {
             console.log(err);
@@ -156,6 +141,10 @@ const Medical = ({ medical, medicalInfoHandling }) => {
     const container = document.getElementById("myMap");
     const options = {
       center: new kakao.maps.LatLng(33.450701, 126.570667),
+      // center: new kakao.maps.LatLng(
+      //   nowLocation.longitude,
+      //   nowLocation.latitude
+      // ),
       level: 3,
     };
     const map = new kakao.maps.Map(container, options);
@@ -234,17 +223,19 @@ const Medical = ({ medical, medicalInfoHandling }) => {
   // console.log("Place : ", Places);
   // 병원 상세 페이지
   const detailPage = (item, e) => {
-    console.log("클릭");
-    medicalInfoHandling(item);
-    e.preventDefault();
-    navigate("/medicaldetail");
+    setMedicalInfo({
+      place_name: item.place_name,
+      address_name: item.address_name,
+      phone: item.phone,
+    });
   };
+  // console.log("medicalInfo : ", medicalInfo);
 
   return (
     <MedicalContainer>
       <MedicalTitle>병원목록</MedicalTitle>
       <Selector onChange={handler}>
-        <Options disabled selected>
+        <Options disabled defaultValue>
           진료과목선택
         </Options>
         {search.map((el, i) => {
@@ -302,21 +293,7 @@ const Medical = ({ medical, medicalInfoHandling }) => {
           <div id="pagination" style={{ textAlign: "center" }}></div>
         </div>
       </ListDivBox>
-      {/* 병원 리스트 end */}
-      <DivBox>
-        <DetailLine>
-          <h3>아산바른내과 의원</h3>
-          <Img src={Sample}></Img>
-          <h3 style={{ margin: "1vw", color: "black" }}>병원주소</h3>
-          <div>서울시 종로구 186 </div>
-          <h3 style={{ margin: "1vw", color: "black" }}>전화</h3>
-          <div>02-6925-0042 </div>
-
-          <hr></hr>
-
-          <h2 style={{ margin: "1vw" }}>리뷰</h2>
-        </DetailLine>
-      </DivBox>
+      <MedicalDetail medicalInfo={medicalInfo} />
       <div style={{ clear: "both" }}></div>
     </MedicalContainer>
   );

@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
   });
 
   if (userInfo) {
-    console.log("ria");
+    // console.log("ria");
     delete userInfo.dataValues.password;
     const accessToken = generateAccessToken(userInfo.dataValues);
     sendAccessToken(res, accessToken, userInfo.dataValues.auth);

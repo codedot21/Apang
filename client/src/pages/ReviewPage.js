@@ -144,7 +144,7 @@ const Edting = styled.button`
 `;
 
 const HospitalMapTitle = styled.h2`
-  pddding: 1vw;
+  padding: 1vw;
   margin: 1vw;
 `;
 

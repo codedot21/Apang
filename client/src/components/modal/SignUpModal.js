@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { valid } from "../../modules/validator";
+import { message } from "../../modules/message";
 
 // axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -23,7 +25,7 @@ export const ModalBox = styled.div`
   width: 100%;
   height: 100%;
   max-width: 23rem;
-  max-height: 30rem;
+  max-height: 40rem;
   border-radius: 1rem;
   background-color: #fbf3ed;
   overflow: hidden;
@@ -85,6 +87,11 @@ export const LoginBody = styled.div`
     &:focus {
       outline: 0.1rem solid #63b5f6;
     }
+    ::-webkit-outer-spin-button,
+    ::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   }
 `;
 
@@ -124,46 +131,83 @@ export const BtnMenu = styled.button`
   border: none;
 `;
 
-export const ErrMsg = styled.div`
+export const Msg = styled.div`
   color: red;
+<<<<<<< HEAD
   text-align: center;
+=======
+  font-size: 13px;
+>>>>>>> 2fda1a5c2f3dd652768ddfb99ba9a00cef688d84
 `;
 
-function SignUpModal({ open, close }) {
+function SignUpModal({ open, close, handleResponseSuccess }) {
   const [isSelect, setIsSelect] = useState("public");
-  const [errorMessage, setErrorMessage] = useState("");
-  // 유효성 검사
-  // const check = (email, password) => {
-  //   let emailRegExp =
-  //     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-  //   let pwdRegExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
 
-  //   if (!emailRegExp.test(email)) {
-  //     return false;
-  //   }
-  //   if (!pwdRegExp.test(password)) {
-  //     return false;
-  //   }
-  // };
+  // input값, 에러메세지 초기화
+  const reset = () => {
+    setPublicInfo({
+      nickname: "",
+      email: "",
+      password: "",
+    });
+    setDoctorInfo({
+      email: "",
+      name: "",
+      password: "",
+      hospital: "",
+      license: "",
+    });
+    setErrorMessage({
+      nickname: "",
+      email: "",
+      password: "",
+      confirm: "",
+      name: "",
+      hospital: "",
+      license: "",
+    });
+  };
 
-  // 닉네임 2글자 이상 8글자 이하
-  // const isMoreThan4Length = (nickname) => {
-  //   return 2 <= nickname.length <= 8;
-  // };
-
-  const [publicInfo, setPublicInfo] = useState({
-    email: "",
+  // 유효성검사에 띄워줄 메세지
+  const [errorMessage, setErrorMessage] = useState({
     nickname: "",
+    email: "",
+    password: "",
+    confirm: "",
+    name: "",
+    hospital: "",
+    license: "",
+  });
+
+  // 일반회원 정보
+  const [publicInfo, setPublicInfo] = useState({
+    nickname: "",
+    email: "",
     password: "",
   });
 
+  // 일반회원 onChange 함수
   const publicChange = (key) => (e) => {
     setPublicInfo({
       ...publicInfo,
       [key]: e.target.value,
     });
+    const id = e.target.id;
+    const value = e.target.value;
+    if (valid[id](value)) {
+      setErrorMessage((prev) => {
+        prev[id] = "";
+        return prev;
+      });
+    } else {
+      setErrorMessage((prev) => {
+        prev[id] = message[id];
+        return prev;
+      });
+    }
   };
 
+  // 의사회원 정보
   const [doctorInfo, setDoctorInfo] = useState({
     email: "",
     name: "",
@@ -172,111 +216,147 @@ function SignUpModal({ open, close }) {
     license: "",
   });
 
+  // 의사회원 onChange 함수
   const doctorChange = (key) => (e) => {
     setDoctorInfo({
       ...doctorInfo,
       [key]: e.target.value,
     });
+    const id = e.target.id;
+    const value = e.target.value;
+    if (valid[id](value)) {
+      setErrorMessage((prev) => {
+        prev[id] = "";
+        return prev;
+      });
+    } else {
+      setErrorMessage((prev) => {
+        prev[id] = message[id];
+        return prev;
+      });
+    }
   };
 
+  // 일반, 의사 회원가입 폼양식 바꾸기
   const handleClick = (e) => {
+    reset();
     setIsSelect(e.target.value);
   };
 
+  // 일반회원가입
   const publicSignUp = () => {
-    // if (check(publicInfo.email, publicInfo.password) === false) {
-    //   setErrorMessage("이메일 형식과 비밀번호를 확인해 주세요");
-    //   return;
-    // }
-    // else if (isMoreThan4Length(publicInfo.nickname)) {
-    //   setErrorMessage("닉네임은 2~8글자 입니다.");
-    // }
-    // else {
-    setErrorMessage("사용가능한 형식 입니다.");
-    axios
-      .post("http://localhost:80/public/signup", publicInfo, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        // console.log("회원가입 완료");
-        if (res.data.error === 1) {
-          Swal.fire({
-            icon: "warning",
-            title: "Apang 회원가입",
-            text: "모든항목을 입력해 주세요.",
-          });
-        } else if (res.data.error === 2) {
-          Swal.fire({
-            icon: "warning",
-            title: "Apang 회원가입",
-            text: "이미 존재하는 이메일입니다.",
-          });
-        } else if (res.data.error === 3) {
-          Swal.fire({
-            icon: "warning",
-            title: "Apang 회원가입",
-            text: "이미 존재하는 닉네임 입니다.",
-          });
-        } else if (res.status === 201) {
-          Swal.fire({
-            icon: "success",
-            title: "Apang 회원가입",
-            text: "회원가입 완료 되었습니다.",
-          });
-          close();
-          delete publicInfo.nickname;
-          axios
-            .post("http://localhost:80/common/signin", publicInfo, {
-              withCredentials: true,
-            })
-            .then((res) => {
-              console.log("회원가입 후 로그인 완료");
-            });
-        }
-        // navigate("/");
+    const { nickname, email, password } = publicInfo;
+    if (nickname === "" || email === "" || password === "") {
+      setErrorMessage({
+        ...errorMessage,
+        confirm: message.emptyMessage,
       });
-    // }
+      return;
+    } else if (
+      errorMessage.nickname ||
+      errorMessage.password ||
+      errorMessage.email
+    ) {
+      setErrorMessage({
+        ...errorMessage,
+        confirm: message.rightStyle,
+      });
+    } else {
+      axios
+        .post("http://localhost:80/public/signup", publicInfo, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          // console.log("회원가입 완료");
+          if (res.data.error === 2) {
+            Swal.fire({
+              icon: "warning",
+              title: "Apang 회원가입",
+              text: message.existEmail,
+            });
+          } else if (res.data.error === 3) {
+            Swal.fire({
+              icon: "warning",
+              title: "Apang 회원가입",
+              text: message.existNickname,
+            });
+          } else if (res.status === 201) {
+            Swal.fire({
+              icon: "success",
+              title: "Apang 회원가입",
+              text: message.signupSuccess,
+            });
+            delete publicInfo.nickname;
+            axios
+              .post("http://localhost:80/common/signin", publicInfo, {
+                withCredentials: true,
+              })
+              .then((res) => {
+                console.log("여기로 오지않음?");
+                handleResponseSuccess(res.data.data.auth);
+              });
+            close();
+          }
+          // navigate("/");
+        });
+    }
   };
 
   const doctorSignUp = () => {
-    // if (check(publicInfo.email, publicInfo.password) === false) {
-    //   setErrorMessage("이메일 형식과 비밀번호를 확인해 주세요");
-    //   return;
-    // } else {
-    axios
-      .post("http://localhost:80/doctor/signup", doctorInfo, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        // console.log(res);
-        if (res.data.error === 1) {
-          Swal.fire({
-            icon: "warning",
-            title: "Apang 회원가입",
-            text: "모든항목을 입력해 주세요.",
-          });
-        } else if (res.data.error === 2) {
-          Swal.fire({
-            icon: "warning",
-            title: "Apang 회원가입",
-            text: "이메일이 존재합니다.",
-          });
-        } else if (res.status === 201) {
-          Swal.fire({
-            icon: "success",
-            title: "Apang 회원가입",
-            text: "회원가입 신청이 완료되었습니다.",
-          });
-          close();
-        }
+    const { email, name, password, hospital, license } = doctorInfo;
+    if (
+      name === "" ||
+      email === "" ||
+      password === "" ||
+      hospital === "" ||
+      license === ""
+    ) {
+      setErrorMessage({
+        ...errorMessage,
+        confirm: message.emptyMessage,
       });
-    // }
+      return;
+    } else if (
+      errorMessage.name ||
+      errorMessage.password ||
+      errorMessage.email ||
+      errorMessage.hospital ||
+      errorMessage.license
+    ) {
+      setErrorMessage({
+        ...errorMessage,
+        confirm: message.rightSignup,
+      });
+    } else {
+      axios
+        .post("http://localhost:80/doctor/signup", doctorInfo, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res.status);
+          if (res.data.error === 2) {
+            Swal.fire({
+              icon: "warning",
+              title: "Apang 회원가입",
+              text: message.existEmail,
+            });
+          } else if (res.status === 201) {
+            Swal.fire({
+              icon: "success",
+              title: "Apang 회원가입",
+              text: message.doctorSignupSuccess,
+            });
+            close();
+          }
+        });
+    }
   };
 
   return open ? (
     <ModalBackGround
       onClick={() => {
         setIsSelect("public");
+        reset();
         close();
       }}
     >
@@ -286,6 +366,7 @@ function SignUpModal({ open, close }) {
           <button
             onClick={() => {
               setIsSelect("public");
+              reset();
               close();
             }}
           >
@@ -293,90 +374,105 @@ function SignUpModal({ open, close }) {
             &times;{" "}
           </button>
         </LoginHeader>
-        <SelectHeader>
-          <input
-            className="ID"
-            type="radio"
-            name="user"
-            value="doctor"
-            onClick={handleClick}
-            defaultChecked={false}
-          />
-          <BtnMenu>의사</BtnMenu>
-          <input
-            className="ID"
-            type="radio"
-            name="user"
-            value="public"
-            onChange={handleClick}
-            defaultChecked={true}
-          />
-          <BtnMenu>일반</BtnMenu>
-        </SelectHeader>
-        <ErrMsg>{errorMessage}</ErrMsg>
+        <input
+          type="radio"
+          name="user"
+          value="doctor"
+          onClick={handleClick}
+          defaultChecked={false}
+        />
+        <BtnMenu>의사</BtnMenu>
+        <input
+          type="radio"
+          name="user"
+          value="public"
+          onChange={handleClick}
+          defaultChecked={true}
+        />
+        <BtnMenu>일반</BtnMenu>
         {isSelect === "public" ? (
           <LoginBody>
             <div>
               <input
+                id="email"
                 type="email"
-                placeholder="이메일 형식을 지켜주세요."
+                placeholder="이메일"
                 onChange={publicChange("email")}
+                value={publicInfo.email}
               />
             </div>
+            <Msg>{errorMessage.email}</Msg>
             <div>
               <input
+                id="password"
                 type="password"
-                placeholder="숫자와 문자를 포함한 8~12자리입니다."
+                placeholder="비밀번호"
                 onChange={publicChange("password")}
+                value={publicInfo.password}
               />
             </div>
+            <Msg>{errorMessage.password}</Msg>
             <div>
               <input
+                id="nickname"
                 type="text"
                 placeholder="닉네임"
                 onChange={publicChange("nickname")}
+                value={publicInfo.nickname}
               />
             </div>
-
+            <Msg>{errorMessage.nickname}</Msg>
+            <Msg>{errorMessage.confirm}</Msg>
             <Button onClick={publicSignUp}>가입하기</Button>
           </LoginBody>
         ) : (
           <LoginBody>
             <div>
               <input
+                id="email"
                 type="email"
-                placeholder="이메일 형식을 지켜주세요."
+                placeholder="이메일"
                 onChange={doctorChange("email")}
               />
             </div>
+            <Msg>{errorMessage.email}</Msg>
             <div>
               <input
+                id="password"
                 type="password"
-                placeholder="숫자와 문자를 포함한 8~12자리입니다."
+                placeholder="비밀번호"
                 onChange={doctorChange("password")}
               />
             </div>
+            <Msg>{errorMessage.password}</Msg>
             <div>
               <input
+                id="name"
                 type="text"
                 placeholder="이름"
                 onChange={doctorChange("name")}
               />
             </div>
+            <Msg>{errorMessage.name}</Msg>
             <div>
               <input
+                id="license"
                 type="number"
-                placeholder="의사 번호"
+                placeholder="면허 번호"
                 onChange={doctorChange("license")}
               />
             </div>
+            <Msg>{errorMessage.license}</Msg>
             <div>
               <input
+                id="hospital"
                 type="text"
                 placeholder="병원 이름"
                 onChange={doctorChange("hospital")}
               />
             </div>
+            <Msg>{errorMessage.hospital}</Msg>
+            <Msg>{errorMessage.confirm}</Msg>
             <Button onClick={doctorSignUp}>신청하기</Button>
           </LoginBody>
         )}
@@ -387,3 +483,7 @@ function SignUpModal({ open, close }) {
 }
 
 export default SignUpModal;
+
+{
+  /* <SelectHeader></SelectHeader> */
+}

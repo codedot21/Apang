@@ -304,6 +304,7 @@ const Selector = styled.select`
   border-radius: 10px;
   background-color: white;
   -webkit-appearance: none;
+  cursor: pointer;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
   }
@@ -320,7 +321,9 @@ const Options = styled.option`
   }
 `;
 
-const SerchButton = styled.button``;
+const SerchButton = styled.button`
+  cursor: pointer;
+`;
 
 // map을 위한 테스트
 function Main() {
@@ -337,7 +340,7 @@ function Main() {
   const hadleInputvalue = (e) => {
     setSelect(e.target.value);
   };
-  console.log(select);
+  // console.log(select);
 
   return (
     <>
@@ -359,7 +362,6 @@ function Main() {
                   );
                 })}
               </Selector>
-
               <SerchButton onClick={() => navigate("/medicallist")}>
                 <img src={SearchIcon} alt="SearchIcon" />
               </SerchButton>

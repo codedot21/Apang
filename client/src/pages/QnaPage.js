@@ -1,12 +1,13 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import { Link } from "react-router-dom";
-import Qna from "../components/Qna";
 import Doc from "../images/doc.png";
 import QnaModal from "../components/modal/QnaModal.js";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { category } from "../modules/category";
+import Qna from "../components/Qna";
 
 export const QnaContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -224,7 +225,6 @@ export const ContentComment = styled.div`
   height: 2.2rem;
   font-size: 0.8rem;
   margin-right: 1rem;
-  }
 `;
 
 function QnaPage({ isLogin, handleQnaInfo, auth }) {
@@ -276,26 +276,13 @@ function QnaPage({ isLogin, handleQnaInfo, auth }) {
           <Img src={Doc}></Img>
         </ImgWrap>
         <CategoryWrap>
-          <Category>치과</Category>
-          <Category>피부과</Category>
-          <Category>성형외과</Category>
-          <Category>안과</Category>
-          <Category>산부인과</Category>
-          <Category>정신건강의학과</Category>
-          <Category>비뇨기과</Category>
-          <Category>정형외과</Category>
-          <Category>마취통증의학과</Category>
-          <Category>신경외과</Category>
-          <Category>재활의학과</Category>
-          <Category>영상의학과</Category>
-          <Category>외과</Category>
-          <Category>신경과</Category>
-          <Category>소아과</Category>
-          <Category>내과</Category>
-          <Category>이비인후과</Category>
-          <Category>가정의학과</Category>
-          <Category>한의원</Category>
-          <Category>코로나19 예방접종</Category>
+          {category.map((category, i) => {
+            return (
+              <Category key={i} value={category}>
+                {category}
+              </Category>
+            );
+          })}
         </CategoryWrap>
       </QnaContainer>
 

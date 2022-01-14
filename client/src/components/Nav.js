@@ -129,7 +129,6 @@ export const DropDownButton = styled.button`
 
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 1rem;
-    // width: 19.8rem;
     width: 8.8rem;
     height: 3rem;
     :hover {

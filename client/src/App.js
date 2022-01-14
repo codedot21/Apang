@@ -13,8 +13,8 @@ import QnaPage from "./pages/QnaPage.js";
 import QnaDetail from "./pages/QnaDetail.js";
 import ScrollTop from "./components/Scroll.js";
 import Medical from "./pages/Medical.js";
-import MedicalDetail from "./pages/MedicalDetail.js";
 import Swal from "sweetalert2";
+import { message } from "./modules/message";
 
 import axios from "axios";
 
@@ -28,7 +28,7 @@ function App() {
 
   const isAuthenticated = () => {
     const authnumber = parseInt(localStorage.getItem("auth"));
-    console.log(authnumber);
+    // console.log(authnumber);
     if (authnumber === 2 || authnumber === 0) {
       axios
         .get("http://localhost:80/public/userinfo", {
@@ -36,7 +36,7 @@ function App() {
         })
         .then((res) => {
           //console.log(res);
-          console.log(res.data.userInfo);
+          // console.log(res.data.userInfo);
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth); //nav에 내려주기 위해
           setIsLogin(true);
@@ -78,7 +78,11 @@ function App() {
             setIsLogin(true);
             navigate("/");
           } else {
-            window.alert("로그인에 실패하였습니다.");
+            Swal.fire({
+              icon: "error",
+              title: "Apang 로그인",
+              text: message.loginFail,
+            });
           }
         });
     }
@@ -109,14 +113,13 @@ function App() {
         { withCredentials: true } //서버-클라이언트 쿠키연결.
       )
       .then((res) => {
-        console.log("록아웃되니?");
+        // console.log("록아웃되니?");
         setUserInfo(null);
         setIsLogin(false);
         // setAccessToken("");
         localStorage.removeItem("userid");
         localStorage.removeItem("auth");
         localStorage.removeItem("accessToken");
-        // alert("로그아웃이 되었습니다.");
         Swal.fire({
           icon: "success",
           title: "또 만나요",
@@ -130,9 +133,10 @@ function App() {
     console.log(qna);
     setqnaDetail(qna);
   };
+
   // const getGoogleToken = async (authorizationCode) => {
   //   await axios({
-  //     url: "http://localhost:4000/oauth/google",
+  //     url: "http://localhost:80/oauth/google",
   //     method: "post",
   //     data: { authorizationCode },
   //     withCredentials: true,
@@ -205,8 +209,6 @@ function App() {
             />
           }
         />
-
-        <Route path="/medicaldetail" element={<MedicalDetail />} />
       </Routes>
 
       <Footer />
