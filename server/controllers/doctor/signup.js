@@ -13,8 +13,7 @@ module.exports = async (req, res) => {
       doctorInfo.license === ""
     ) {
       // 항목이 비었을때 400코드에 bad request메세지를 보내주고 클라이언트에서는 항목이비었다는 메세지.
-
-      res.send({ error: 1, message: "Bad Request" });
+      res.stats(400).send({ message: "Bad Request" });
     } else {
       doctors
         .findOrCreate({
@@ -44,6 +43,6 @@ module.exports = async (req, res) => {
         });
     }
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 };
