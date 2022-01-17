@@ -7,16 +7,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
-      // models.hashtag.belongsToMany(models.qna, {
-      //   through: "qna_hashtag",
-      //   foreignKey: "hashtag_id",
-      // }); //
-      models.hashtag.hasMany(models.qna_hashtag, {
-        foreignKey: "hashtag_id",
-      }); //
-    }
+    static associate(models) {}
   }
   hashtag.init(
     {

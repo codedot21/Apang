@@ -20,4 +20,9 @@ export const message = {
   doctorFail: "회원가입 신청이 승낙되지 않았습니다",
   // 로그아웃
   logout: "로그아웃 하였습니다",
+  // 정보수정
+  errorPassword: "현재 비밀번호를 다시 확인해 주세요.",
+  changeSuccess: "정보수정이 완료되었습니다.",
+  passwordConfirm: "비밀번호가 일치하지 않습니다.",
+  newPassword: "비밀번호는 8자이상 입니다.",
 };

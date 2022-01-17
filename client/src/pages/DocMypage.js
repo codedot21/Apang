@@ -5,6 +5,8 @@ import { Container } from "../styles";
 import { BsTrash } from "react-icons/bs";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { message } from "../modules/message";
+import { valid } from "../modules/validator";
 
 export const DocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -297,6 +299,11 @@ function DocMypage(props) {
     hospital: "",
     password: "",
     newPassword: "",
+    passwordConfirm: "",
+  });
+  const [errorMessage, setErrorMessage] = useState({
+    newPassword: "",
+    passwordConfirm: "",
   });
 
   const [myCommentInfo, setmyCommentInfo] = useState([]);
@@ -327,21 +334,72 @@ function DocMypage(props) {
       ...userInfo,
       [key]: e.target.value,
     });
+    const id = e.target.id;
+    const value = e.target.value;
+    if (id === "passwordConfirm") {
+      if (userInfo.newPassword === e.target.value) {
+        setErrorMessage({ ...errorMessage, passwordConfirm: "" });
+      } else {
+        setErrorMessage({
+          ...errorMessage,
+          passwordConfirm: message.passwordConfirm,
+        });
+      }
+      return;
+    }
+    if (valid[id](value)) {
+      setErrorMessage((prev) => {
+        prev[id] = "";
+        return prev;
+      });
+    } else {
+      setErrorMessage((prev) => {
+        prev[id] = message[id];
+        return prev;
+      });
+    }
   };
 
   // 수정
   // const [isSucces, setSuccess] = useState(null);
   const submit = () => {
-    // console.log("저장");
-    const formdata = new FormData();
-    formdata.append("apang", imgInfo.file);
-    formdata.append("name", userInfo.name);
-    formdata.append("hospital", userInfo.hospital);
-    // formdata.append("hospital", userInfo.hospital);
-    axios.post("http://localhost:80/doctor/profile", formdata, {
-      headers: { "Content-type": "multipart/form-data" },
-      withCredentials: true,
-    });
+    if (!imgInfo.filepreview) {
+      delete userInfo.password;
+      delete userInfo.newPassword;
+      axios
+        .post(
+          "http://localhost:80/doctor/profile",
+          { onlyName: userInfo },
+          {
+            withCredentials: true,
+          }
+        )
+        .then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 정보수정",
+            text: message.changeSuccess,
+          });
+        });
+    } else {
+      const formdata = new FormData();
+      formdata.append("apang", imgInfo.file);
+      formdata.append("name", userInfo.name);
+      formdata.append("hospital", userInfo.hospital);
+      // formdata.append("hospital", userInfo.hospital);
+      axios
+        .post("http://localhost:80/doctor/profile", formdata, {
+          headers: { "Content-type": "multipart/form-data" },
+          withCredentials: true,
+        })
+        .then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 정보수정",
+            text: message.changeSuccess,
+          });
+        });
+    }
   };
 
   // 비밀번호 변경
@@ -349,9 +407,26 @@ function DocMypage(props) {
     delete userInfo.name;
     delete userInfo.hospital;
     // console.log(userInfo);
-    axios.post("http://localhost:80/doctor/profile", userInfo, {
-      withCredentials: true,
-    });
+    axios
+      .post("http://localhost:80/doctor/profile", userInfo, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.data.status === 401) {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 정보수정",
+            text: message.errorPassword,
+          });
+        } else {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 정보수정",
+            text: message.changeSuccess,
+          });
+          props.handleLogout();
+        }
+      });
   };
 
   // 회원탈퇴
@@ -463,6 +538,7 @@ function DocMypage(props) {
                 placeholder="병원명"
                 defaultValue={props.userInfo.hospital}
                 onChange={handleInputChange("hospital")}
+                defaultValue={props.userInfo.hospital}
               />
             </DocLine>
           </DocContainerLine>
@@ -480,15 +556,20 @@ function DocMypage(props) {
             ></PassWordInput>
             <PassWordTitle>새로운 비밀번호</PassWordTitle>
             <PassWordInput
+              id="newPassword"
               placeholder="New"
               type="password"
               onChange={handleInputChange("newPassword")}
             ></PassWordInput>
+            <div>{errorMessage.newPassword}</div>
             <PassWordTitle>비밀번호 확인</PassWordTitle>
             <PassWordInput
+              id="passwordConfirm"
               placeholder="New 한번 더"
               type="password"
+              onChange={handleInputChange("passwordConfirm")}
             ></PassWordInput>
+            <div>{errorMessage.passwordConfirm}</div>
           </PasswordLine>
           <Box>
             <EditPasswordDeleted onClick={passwordChange}>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -52,6 +53,7 @@ const AgreeBtn = styled.button`
 
 function AuthPage() {
   const [doctors, setDoctors] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -85,6 +87,8 @@ function AuthPage() {
             email: `${params.email}`, // ${c.email}
           },
         });
+        navigate("/");
+        navigate("/authpage");
       });
   };
 

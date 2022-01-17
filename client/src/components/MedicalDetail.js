@@ -58,7 +58,7 @@ const ImgReview = styled.img`
   width: 100%;
   height: 147px;
   border-radius: 20px;
-  objectfit: scale-down;
+  /* objectfit: scale-down; */
   background: #fff;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
@@ -121,7 +121,8 @@ const ProfileEditing2 = styled.label`
   height: 100%;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
-    font-size:13px;
+    font-size: 13px;
+  }
 `;
 
 const Box = styled.div`

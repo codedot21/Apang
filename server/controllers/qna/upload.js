@@ -21,16 +21,14 @@ module.exports = async (req, res) => {
       res.status(400).send({ message: "Bad Request" });
     } else {
       //항목이 다 적혀있을때
-      await qna
-        .create({
-          title: qnaInfo.title,
-          content: qnaInfo.content,
-          users_id: kakaoUserid, //kakao userid를 적는다. 한자리 숫자가 아니라 여러개라 섞이지 않을듯?
-          category: qnaInfo.category,
-        })
-        .then(() => {
-          res.status(201).send({ message: "QnA Upload Ok" });
-        });
+      const info = await qna.create({
+        title: qnaInfo.title,
+        content: qnaInfo.content,
+        users_id: kakaoUserid, //kakao userid를 적는다. 한자리 숫자가 아니라 여러개라 섞이지 않을듯?
+        category: qnaInfo.category,
+      });
+      console.log("qna찍히는지 본다. ", info);
+      res.status(201).send({ data: info, message: "QnA Upload Ok" });
     }
     //<---- 일반 로그인 시 ---->
   } else if (!kakaoUserid) {
@@ -47,16 +45,13 @@ module.exports = async (req, res) => {
       ) {
         res.status(400).send({ message: "Bad Request" });
       } else {
-        await qna
-          .create({
-            title: qnaInfo.title,
-            content: qnaInfo.content,
-            users_id: accessTokenData.id, //kakao userid를 적는다. 한자리 숫자가 아니라 여러개라 섞이지 않을듯?
-            category: qnaInfo.category,
-          })
-          .then(() => {
-            res.status(201).send({ message: "QnA Upload Ok" });
-          });
+        const info = await qna.create({
+          title: qnaInfo.title,
+          content: qnaInfo.content,
+          users_id: accessTokenData.id, //kakao userid를 적는다. 한자리 숫자가 아니라 여러개라 섞이지 않을듯?
+          category: qnaInfo.category,
+        });
+        res.status(201).send({ data: info, message: "QnA Upload Ok" });
       }
     }
   }
