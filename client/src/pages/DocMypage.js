@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
+import { BsTrash } from "react-icons/bs";
 
 export const DocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -18,6 +19,8 @@ const Title = styled.h1`
   padding: 1rem;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 20px;
+    padding: 1vw;
+    margin-bottom: 2vw;
   }
 `;
 
@@ -29,8 +32,8 @@ const DocContainerLine = styled.div`
   margin: 0 auto;
   margin-bottom: 10px;
   @media ${({ theme }) => theme.device.mobile} {
-    max-width: 100%;
-    height: 22rem;
+    width: 100%;
+    height: 30rem;
   }
 `;
 
@@ -41,8 +44,7 @@ const Profilecontainer = styled.div`
   height: 80%;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
-    max-width: 100%;
-    height: 50%;
+    height: 40%;
   }
 `;
 
@@ -54,6 +56,7 @@ const ProfileEditing = styled.label`
   padding: 0.5vw;
   color: #fff;
   border-radius: 30px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }
@@ -62,8 +65,7 @@ const ProfileEditing = styled.label`
   margin: auto;
 
   @media ${({ theme }) => theme.device.mobile} {
-    width: 50%;
-    max-width: 8rem;
+    width: 100%;
     font-size: 13px;
   }
 `;
@@ -74,7 +76,6 @@ const DocLine = styled.div`
   height: 13vw;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 13px;
-    float: left;
     width: 100%;
   }
 `;
@@ -86,9 +87,10 @@ const DocTitle = styled.div`
   width: 30%;
   height: 23%;
   @media ${({ theme }) => theme.device.mobile} {
-    float: center;
-    width: 40%;
-    font-size: 12px;
+    text-align: center;
+    width: 100%;
+    font-size: 15px;
+    padding: 1px;
   }
 `;
 
@@ -100,7 +102,9 @@ const DocInput = styled.input`
   width: 50%;
   margin-bottom: 10px;
   @media ${({ theme }) => theme.device.mobile} {
-    width: 60%;
+    width: 100%;
+    margin: 4vw;
+    display: block;
   }
 `;
 
@@ -110,6 +114,7 @@ const Edting = styled.button`
   border-radius: 30px;
   color: #fff;
   padding: 10px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }
@@ -140,7 +145,8 @@ const PasswordLine = styled.div`
   width: 80%;
   margin: 0 auto;
   @media ${({ theme }) => theme.device.mobile} {
-    height: 15rem;
+    height: 16rem;
+    width: 100%;
   }
 `;
 
@@ -150,9 +156,9 @@ const PassWordTitle = styled.span`
   float: left;
   font-weight: bold;
   @media ${({ theme }) => theme.device.mobile} {
-    float: left;
     font-size: 10px;
-    width: 50%;
+    width: 100%;
+    padding: 1px;
   }
 `;
 
@@ -165,8 +171,10 @@ const PassWordInput = styled.input`
   border-radius: 30px;
   padding: 20px;
   @media ${({ theme }) => theme.device.mobile} {
-    float: center;
-    width: 40%;
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
@@ -182,12 +190,14 @@ const EditPasswordDeleted = styled.button`
   color: #fff;
   padding: 10px;
   margin: 20px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 12px;
-    width: 30%;
+    width: 50%;
+    margin: 10px;
   }
 `;
 
@@ -198,6 +208,69 @@ const EditPasswordDeleted = styled.button`
 const MyreviewTitle = styled.h2`
   color: #095cd8;
   margin: 20px 10px 20px 0px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 20px;
+  }
+`;
+
+const MyreviewContainer = styled.div`
+  margin: 10px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    margin: 0;
+  }
+`;
+
+const MyreviewLine = styled.div`
+  border: 1px solid #b5afaf;
+  border-radius: 10px;
+  width: 20%;
+  height: 100px;
+  margin: 1vw;
+  float: left;
+  background-color: #f9f9f9;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    float: none;
+    margin-bottom: 3vw;
+  }
+`;
+
+const MyreviewTrash = styled.button`
+  text-align: right;
+  float: right;
+  margin: 0.5vw;
+  cursor: pointer;
+  border: none;
+  background-color: #f9f9f9;
+  &:hover {
+    background-color: #c7c7c7;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 3vw;
+  }
+`;
+
+const MyreviewNickname = styled.h3`
+  width: 40%;
+  margin: 1vw 1vw 1vw 0.5vw;
+  float: left;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 2vw 3vw 3vw 2vw;
+  }
+`;
+
+const MyreviewContent = styled.div`
+  margin: 0 1vw 1vw 0.5vw;
+  border: 1px solid #b5afaf;
+  width: 90%;
+  padding: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 0 1.5vw 1.5vw 1.5vw;
+  }
 `;
 
 // 대답 끝
@@ -321,17 +394,24 @@ function DocMypage(props) {
             </Profilecontainer>
             <DocLine>
               <DocTitle>이메일</DocTitle>
-              <DocInput type="text" name="val" disabled />
+              <DocInput
+                type="text"
+                value={props.userInfo.email}
+                name="val"
+                disabled
+              />
               <DocTitle>이름</DocTitle>
               <DocInput
                 type="text"
-                placeholder="이름"
+                value={props.userInfo.name}
                 onChange={handleInputChange("name")}
+                disabled
               />
               <DocTitle>병원명</DocTitle>
               <DocInput
                 type="text"
                 placeholder="병원명"
+                value={props.userInfo.hospital}
                 onChange={handleInputChange("hospital")}
               />
             </DocLine>
@@ -373,8 +453,22 @@ function DocMypage(props) {
           <hr />
           {/* MY Review 시작*/}
           <MyreviewTitle>MY Answer</MyreviewTitle>
+          <MyreviewContainer>
+            <MyreviewLine>
+              <MyreviewNickname>{props.userInfo.name}</MyreviewNickname>
+              <MyreviewTrash>
+                <BsTrash />
+              </MyreviewTrash>
+              <div style={{ clear: "both" }}></div>
+              <MyreviewContent>
+                댓글은 아무리 길게써도 이제는 다 보이지 않는다 점점점으로
+                바뀐다는!
+              </MyreviewContent>
+            </MyreviewLine>
+          </MyreviewContainer>
 
           {/* MY Review 끝*/}
+          <div style={{ clear: "both" }}></div>
         </DocContainer>
       ) : (
         ""

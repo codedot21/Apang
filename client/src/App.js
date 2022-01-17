@@ -19,7 +19,7 @@ import { message } from "./modules/message";
 import axios from "axios";
 
 function App() {
-  console.log("App.js랜더링");
+  // console.log("App.js랜더링");
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState(null); //사용자 정보 :
@@ -197,7 +197,7 @@ function App() {
           }
         />
 
-        <Route path="/medicallist" element={<Medical />} />
+        <Route path="/medicallist" element={<Medical userInfo={userInfo} />} />
         <Route
           path="/qna/detail/:id"
           element={
