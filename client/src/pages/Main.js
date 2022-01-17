@@ -8,7 +8,7 @@ import Find from "../images/searchdoc.png";
 import Doc from "../images/doc.jpg";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { HiCursorClick } from "react-icons/hi";
+import { GiClick } from "react-icons/gi";
 
 export const MainContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -130,12 +130,12 @@ export const Search = styled.div`
     }
     & button {
       background: #6ec5ff;
-      padding: 1rem 2.5rem;
+      padding: 0.7rem 2.5rem;
       color: white;
       outline: none;
       border: none;
       cursor: pointer;
-      border-radius: 30px;
+      border-radius: 10px;
       font-size: 1.5rem;
       text-decoration: none;
       &:hover {
@@ -194,6 +194,7 @@ export const ContentWrapFind = styled.div`
 
 export const BoxWrapReview = styled.div`
   text-align: center;
+  margin-bottom: 2rem;
   @media ${({ theme }) => theme.device.mobile} {
     align-items: center;
   }
@@ -225,7 +226,7 @@ export const ContentTitle = styled.p`
 
 export const ContentText = styled.p`
   font-size: 1.3rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.4rem;
   font-weight: 400;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 0.8rem;
@@ -312,8 +313,8 @@ function Main() {
             <form>
               <SerchButton onClick={() => navigate("/medicallist")}>
                 Click{" "}
-                <HiCursorClick
-                  style={{ verticalAlign: "middle", fontSize: "30px" }}
+                <GiClick
+                  style={{ verticalAlign: "middle", fontSize: "1.8rem" }}
                 />
               </SerchButton>
             </form>
