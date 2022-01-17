@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { Container } from "../styles";
+import Pp from "../images/pp.jpg";
 import MedicalDetail from "../components/MedicalDetail";
 
 // import cn from "classnames";
@@ -21,6 +22,9 @@ export const MedicalContainer = styled(Container)`
 const MedicalTitle = styled.h1`
   width: 100%;
   margin-bottom: 2vw;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 20px;
+  }
 `;
 
 const Selector = styled.select`
@@ -34,9 +38,15 @@ const Selector = styled.select`
   border: 0.2rem solid #63b5f6;
   border-radius: 10px;
   background-color: white;
-  -webkit-appearance: none;
+  cursor: pointer;
+  text-align: center;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
+    height: 80%;
+  }
+  &:hover {
+    color: #707070;
+    background-color: #eceff1;
   }
 `;
 
@@ -52,17 +62,37 @@ const Options = styled.option`
 `;
 
 const ListDivBox = styled.div`
-  padding: 1rem;
+  padding: 2rem;
   border: border-box;
-  border: 1px solid #63b5f6;
-  width: 30%;
+  border: 2px solid #63b5f6;
+  background: #fafafa;
+  width: 20%;
   float: left;
+  font-size: 12px;
   & div {
+    margin-bottom: 4px;
+  }
+  & h3 {
     margin-bottom: 1rem;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    font-size: 5px;
   }
 `;
 
-const Medical = ({ medical, medicalInfoHandling }) => {
+const HoverTag = styled.div`
+  cursor: pointer;
+  padding: 0.5vw;
+  &:hover {
+    color: ${({ theme }) => theme.color.white};
+    background-color: ${({ theme }) => theme.color.hover};
+    border-radius: 2px;
+    // padding: 1px;
+  }
+`;
+
+const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
   const [medicalInfo, setMedicalInfo] = useState({
     place_name: "",
     address_name: "",
@@ -73,6 +103,7 @@ const Medical = ({ medical, medicalInfoHandling }) => {
     latitude: 0,
     longitude: 0,
   });
+
   // const [defaultPosition, setDefaultPostion] = useState({
   //   latitude: 0,
   //   longitude: 0,
@@ -233,10 +264,10 @@ const Medical = ({ medical, medicalInfoHandling }) => {
 
   return (
     <MedicalContainer>
-      <MedicalTitle>병원목록</MedicalTitle>
+      <MedicalTitle>병원 목록 & 상세페이지</MedicalTitle>
       <Selector onChange={handler}>
-        <Options disabled defaultValue>
-          진료과목선택
+        <Options disabled selected>
+          진료과목을 선택해 주세요.
         </Options>
         {search.map((el, i) => {
           return (
@@ -248,16 +279,18 @@ const Medical = ({ medical, medicalInfoHandling }) => {
       </Selector>
 
       {/* 지도 start */}
-      <div
-        id="myMap"
-        style={{
-          width: "100%",
-          height: "30vw",
-          border: "2px solid #63b5f6",
-          borderRadius: "20px",
-          marginBottom: "20px",
-        }}
-      ></div>
+      <div>
+        <div
+          id="myMap"
+          style={{
+            width: "100%",
+            height: "25vw",
+            border: "2px solid #63b5f6",
+            borderRadius: "10px",
+            marginBottom: "20px",
+          }}
+        ></div>
+      </div>
       {/* 지도 end */}
 
       {/* 병원 리스트 start */}
@@ -267,33 +300,30 @@ const Medical = ({ medical, medicalInfoHandling }) => {
             <div
               key={i}
               style={{
-                borderBottom: "1px solid #63b5f6",
+                borderBottom: "2px solid #63b5f6",
               }}
             >
-              {/* <span style={{}}>{i + 1}</span> */}
-              <div>
-                <h3
-                  onClick={(e) => detailPage(item, e)}
-                  style={{ marginBottom: "1rem" }}
-                >
-                  {item.place_name}
-                </h3>
-                {item.road_address_name ? (
-                  <div>
-                    <span>{item.road_address_name}</span>
+              {/* <span style={{}}>{i + 1}</span> 각 병원의 순서 및 숫자*/}
+              <HoverTag>
+                <div onClick={(e) => detailPage(item, e)}>
+                  <h3>{item.place_name}</h3>
+                  {item.road_address_name ? (
+                    <div>
+                      <span>{item.road_address_name}</span>
+                      {/* <span>{item.address_name}</span> // 지번주소 */}
+                    </div>
+                  ) : (
                     <span>{item.address_name}</span>
-                  </div>
-                ) : (
-                  <span>{item.address_name}</span>
-                )}
-                <span>{item.phone}</span>
-              </div>
+                  )}
+                  {/* <span>{item.phone}</span> */}
+                </div>
+              </HoverTag>
             </div>
           ))}
           <div id="pagination" style={{ textAlign: "center" }}></div>
         </div>
       </ListDivBox>
-      <MedicalDetail medicalInfo={medicalInfo} />
+      <MedicalDetail medicalInfo={medicalInfo} userInfo={userInfo} />
       <div style={{ clear: "both" }}></div>
     </MedicalContainer>
   );
