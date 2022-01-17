@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Container } from "../styles";
+import { BsTrash } from "react-icons/bs";
+import Swal from "sweetalert2";
 import axios from "axios";
 
 export const DocContainer = styled(Container)`
@@ -200,10 +203,70 @@ const MyreviewTitle = styled.h2`
   margin: 20px 10px 20px 0px;
 `;
 
+const MyreviewContainer = styled.div`
+  margin: 10px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    margin: 0;
+  }
+`;
+
+const MyreviewLine = styled.div`
+  border: 1px solid #b5afaf;
+  border-radius: 10px;
+  width: 20%;
+  height: 100px;
+  margin: 1vw;
+  float: left;
+  background-color: #f9f9f9;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    float: none;
+    margin-bottom: 3vw;
+  }
+`;
+
+const MyreviewTrash = styled.button`
+  text-align: right;
+  float: right;
+  margin: 0.5vw;
+  cursor: pointer;
+  border: none;
+  background-color: #f9f9f9;
+  &:hover {
+    background-color: #c7c7c7;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 3vw;
+  }
+`;
+
+// const MyreviewNickname = styled.h3`
+//   width: 40%;
+//   margin: 1vw 1vw 1vw 0.5vw;
+//   float: left;
+//   @media ${({ theme }) => theme.device.mobile} {
+//     margin: 2vw 3vw 3vw 2vw;
+//   }
+// `;
+
+const MyreviewContent = styled.div`
+  margin: 0 1vw 1vw 0.5vw;
+  border: 1px solid #b5afaf;
+  width: 90%;
+  padding: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 0 1.5vw 1.5vw 1.5vw;
+  }
+`;
+
 // 대답 끝
 
 function DocMypage(props) {
-  console.log(props.useInfo);
+  const navigate = useNavigate();
   const [imgInfo, setImgInfo] = useState({
     file: [],
     filepreview: null,
@@ -214,6 +277,23 @@ function DocMypage(props) {
     password: "",
     newPassword: "",
   });
+
+  const [myCommentInfo, setmyCommentInfo] = useState([]);
+
+  useEffect(() => {
+    axios
+      .post(
+        "http://localhost:80/comments/info",
+        { page: "doctormypage" },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        setmyCommentInfo(res.data.myCommentInfo);
+      });
+  }, []);
+
   const handleImgChange = (e) => {
     setImgInfo({
       ...imgInfo,
@@ -263,6 +343,27 @@ function DocMypage(props) {
         // 서버에서 넘겨준 auth 잘 불러오는지 확인.
         // console.log(res.data.auth);
         // 로그아웃 상태로 메인페이지로 보내줘야됨
+      });
+  };
+
+  //내가 적은 댓글 삭제
+  const handleCommentDelete = (commentid) => {
+    axios
+      .delete("http://localhost:80/comments", {
+        data: {
+          comment_id: commentid,
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "댓글이 성공적으로 삭제되었습니다",
+        });
+      })
+      .then(() => {
+        navigate("/");
+        navigate(`/mypage/doctorprofile`);
       });
   };
 
@@ -321,17 +422,24 @@ function DocMypage(props) {
             </Profilecontainer>
             <DocLine>
               <DocTitle>이메일</DocTitle>
-              <DocInput type="text" name="val" disabled />
+              <DocInput
+                type="text"
+                name="val"
+                value={props.userInfo.email}
+                disabled
+              />
               <DocTitle>이름</DocTitle>
               <DocInput
                 type="text"
                 placeholder="이름"
+                defaultValue={props.userInfo.name}
                 onChange={handleInputChange("name")}
               />
               <DocTitle>병원명</DocTitle>
               <DocInput
                 type="text"
                 placeholder="병원명"
+                defaultValue={props.userInfo.hospital}
                 onChange={handleInputChange("hospital")}
               />
             </DocLine>
@@ -371,10 +479,23 @@ function DocMypage(props) {
           {/* 비밀번호 끝 */}
 
           <hr />
-          {/* MY Review 시작*/}
+          {/* MY Answer 시작*/}
           <MyreviewTitle>MY Answer</MyreviewTitle>
-
-          {/* MY Review 끝*/}
+          {myCommentInfo.map((comment) => {
+            return (
+              <MyreviewContainer key={comment.id}>
+                <MyreviewLine>
+                  {/* <MyreviewNickname>{qna.user.nickname}</MyreviewNickname> */}
+                  <MyreviewTrash>
+                    <BsTrash onClick={() => handleCommentDelete(comment.id)} />
+                  </MyreviewTrash>
+                  <div style={{ clear: "both" }}></div>
+                  <MyreviewContent>{comment.content}</MyreviewContent>
+                </MyreviewLine>
+              </MyreviewContainer>
+            );
+          })}
+          {/* MY Answer 끝*/}
         </DocContainer>
       ) : (
         ""

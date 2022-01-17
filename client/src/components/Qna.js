@@ -44,9 +44,27 @@ export const ContentTitle = styled.div`
 `;
 
 export const ContentText = styled.div`
-  display: flex;
+  // display: flex;
   height: 2.2rem;
   font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  line-height: 1rem;
+  height: 2rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    line-height: 1rem;
+    height: 2rem;
+  }
 `;
 
 export const Tag = styled.div`
@@ -55,7 +73,7 @@ export const Tag = styled.div`
   margin-bottom: 0.5rem;
   .tag {
     margin-right: 0.5rem;
-    margin-top: 0.5rem;
+    margin-top: 0.7rem;
     width: auto;
     height: 1.3rem;
     display: flex;
@@ -67,6 +85,9 @@ export const Tag = styled.div`
     list-style: none;
     border-radius: 10px;
     background: ${({ theme }) => theme.color.button};
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-top: 0.7rem;
+    }
   }
 `;
 
@@ -77,15 +98,11 @@ export const ContentComment = styled.div`
   margin-right: 1rem;
 `;
 
-function Qna({ title, nickname, content, handleQnaInfo, profile_img }) {
+function Qna({ title, nickname, content, profile_img }) {
   return (
     <>
       {title ? (
-        <QnaBox
-          onClick={() =>
-            handleQnaInfo({ title, nickname, content, profile_img })
-          }
-        >
+        <QnaBox>
           <ContentWrap>
             <Profile>
               <img
@@ -98,9 +115,9 @@ function Qna({ title, nickname, content, handleQnaInfo, profile_img }) {
             <ContentTitle>{title}</ContentTitle>
             <ContentText>{content}</ContentText>
             <Tag>
-              <div className="tag">#아파요</div>
-              <div className="tag">#안아파요</div>
-              <div className="tag">#덜아파요</div>
+              <div className="tag">아파요</div>
+              <div className="tag">안아파요</div>
+              <div className="tag">덜아파요</div>
             </Tag>
             <ContentComment>댓글 1</ContentComment>
           </ContentWrap>

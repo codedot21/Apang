@@ -22,30 +22,30 @@ function App() {
   console.log("App.js랜더링");
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
-  const [userInfo, setUserInfo] = useState(null); //사용자 정보 :
+  const [userInfo, setUserInfo] = useState(null); //사용자 정보
   const [auth, setAuth] = useState("");
-  const [qnaDetail, setqnaDetail] = useState({});
+  // const [qnaDetail, setqnaDetail] = useState(null);
 
   const isAuthenticated = () => {
     const authnumber = parseInt(localStorage.getItem("auth"));
-    // console.log(authnumber);
+    //< --일반인 로그인 -->
     if (authnumber === 2 || authnumber === 0) {
       axios
         .get("http://localhost:80/public/userinfo", {
           withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
         })
         .then((res) => {
-          //console.log(res);
-          // console.log(res.data.userInfo);
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth); //nav에 내려주기 위해
           setIsLogin(true);
           // navigate("/");
         });
+
+      //<-- 의사 로그인 -->
     } else if (authnumber === 1) {
       axios
         .get("http://localhost:80/doctor/userinfo", {
-          withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
+          withCredentials: true,
         })
         .then((res) => {
           console.log(res.data);
@@ -54,6 +54,8 @@ function App() {
           setIsLogin(true);
           // navigate("/");
         });
+
+      // <-- 카카오 로그인 -->
     } else if (isNaN(authnumber)) {
       //parseInt(null)이 들어가면 값이 NaN이 나오더라.
       axios
@@ -64,8 +66,6 @@ function App() {
         .then((res) => {
           if (res.status === 201 || res.status === 200) {
             const user = res.data;
-            console.log("user : ", user);
-            console.log(user.accessToken);
             localStorage.setItem("userid", user.data.id);
             console.log(localStorage.getItem("userid"));
             const userInfo = {
@@ -73,7 +73,6 @@ function App() {
               nickname: user.data.properties.nickname,
               email: user.data.kakao_account.email,
             };
-            console.log(userInfo);
             setUserInfo(userInfo);
             setIsLogin(true);
             navigate("/");
@@ -108,12 +107,10 @@ function App() {
         {
           auth: auth,
           userid: localStorage.getItem("userid"),
-          // credentials: "include",
         },
-        { withCredentials: true } //서버-클라이언트 쿠키연결.
+        { withCredentials: true }
       )
       .then((res) => {
-        // console.log("록아웃되니?");
         setUserInfo(null);
         setIsLogin(false);
         // setAccessToken("");
@@ -127,11 +124,6 @@ function App() {
         });
         navigate("/");
       });
-  };
-
-  const handleQnaInfo = (qna) => {
-    console.log(qna);
-    setqnaDetail(qna);
   };
 
   // const getGoogleToken = async (authorizationCode) => {
@@ -187,13 +179,26 @@ function App() {
         />
         <Route
           path="/qna"
-          element={<QnaPage handleQnaInfo={handleQnaInfo} isLogin={isLogin} />}
+          element={
+            <QnaPage
+              isLogin={isLogin}
+              // userInfo={userInfo}
+              auth={parseInt(localStorage.getItem("auth"))}
+            />
+          }
         />
 
         <Route path="/medicallist" element={<Medical />} />
         <Route
           path="/qna/detail/:id"
-          element={<QnaDetail isLogin={isLogin} qnaDetail={qnaDetail} />}
+          element={
+            <QnaDetail
+              isLogin={isLogin}
+              // qnaDetail={qnaDetail}
+              userInfo={userInfo}
+              auth={parseInt(localStorage.getItem("auth"))}
+            />
+          }
         />
       </Routes>
 

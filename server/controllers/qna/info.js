@@ -48,12 +48,18 @@ module.exports = async (req, res) => {
   const accessToken = isAuthorized(req);
   const kakaoUserid = req.body.kakao_userid;
   const page = req.body.page; //usermypage
+  console.log("req.body모야?", req.body.page);
   if (page === "usermypage") {
     if (kakaoUserid) {
       const qnaInfo = await qna.findAll({
         where: {
           users_id: kakaoUserid,
         },
+        include: [
+          {
+            model: users,
+          },
+        ],
       });
       console.log("qnaInfo는?", qnaInfo);
       res.status(200).send({ myQnaInfo: qnaInfo });
@@ -69,10 +75,28 @@ module.exports = async (req, res) => {
           where: {
             users_id: accessToken.id,
           },
+          include: [
+            {
+              model: users,
+            },
+          ],
         });
         res.status(200).send({ myQnaInfo: qnaInfo });
       }
     }
+  } else if (req.body.page === "qnaDetail") {
+    const qnaDetailInfo = await qna.findOne({
+      where: {
+        id: req.body.qna_id,
+      },
+      include: [
+        {
+          model: users,
+        },
+      ],
+    });
+    console.log("what is", qnaDetailInfo);
+    res.status(200).send({ qnaDetail: qnaDetailInfo });
   } else {
     if (!req.body.filter || req.body.filter === "전체") {
       const qnaInfo = await qna.findAll({
@@ -80,23 +104,7 @@ module.exports = async (req, res) => {
           {
             model: users,
           },
-          // {
-          //   model: qna_hashtag,
-          //   include: [{ model: hashtag}],
-          //   // attribute: ["id", "hashtag", "createdAt", "updatedAt"],
-          // },
         ],
-        // include: [
-        //   {
-        //     model: qna_hashtag,
-        //     include: [
-        //       {
-        //         model: hashtag,
-        //         attributes: ["id", "hashtag", "createdAt", "updatedAt"],
-        //       },
-        //     ],
-        //   },
-        // ],
         order: [["id", "DESC"]],
       });
       res.status(200).send({ qnaInfo: qnaInfo });

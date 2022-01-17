@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
+import { BsTrash } from "react-icons/bs";
+import Swal from "sweetalert2";
 
 export const UserContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -54,6 +58,7 @@ const ProfileEditing = styled.label`
   padding: 0.5vw;
   color: #fff;
   border-radius: 30px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }
@@ -98,6 +103,7 @@ const Edting = styled.button`
   border-radius: 30px;
   color: #fff;
   padding: 10px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }
@@ -169,6 +175,7 @@ const EditPasswordDeleted = styled.button`
   color: #fff;
   padding: 10px;
   margin: 20px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }
@@ -187,6 +194,66 @@ const MyreviewTitle = styled.h2`
   margin: 20px 10px 20px 0px;
 `;
 
+const MyreviewContainer = styled.div`
+  margin: 10px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    margin: 0;
+  }
+`;
+
+const MyreviewLine = styled.div`
+  border: 1px solid #b5afaf;
+  border-radius: 10px;
+  width: 20%;
+  height: 100px;
+  margin: 1vw;
+  float: left;
+  background-color: #f9f9f9;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    float: none;
+    margin-bottom: 3vw;
+  }
+`;
+
+const MyreviewTrash = styled.button`
+  text-align: right;
+  float: right;
+  margin: 0.5vw;
+  cursor: pointer;
+  border: none;
+  background-color: #f9f9f9;
+  &:hover {
+    background-color: #c7c7c7;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 3vw;
+  }
+`;
+
+// const MyreviewNickname = styled.h3`
+//   width: 40%;
+//   margin: 1vw 1vw 1vw 0.5vw;
+//   float: left;
+//   @media ${({ theme }) => theme.device.mobile} {
+//     margin: 2vw 3vw 3vw 2vw;
+//   }
+// `;
+
+const MyreviewContent = styled.div`
+  margin: 0 1vw 1vw 0.5vw;
+  border: 1px solid #b5afaf;
+  width: 90%;
+  padding: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 0 1.5vw 1.5vw 1.5vw;
+  }
+`;
+
 // 마이리뷰 끝
 
 // 마이 큐엔에이 시작
@@ -194,20 +261,11 @@ const MyreviewTitle = styled.h2`
 
 // 상현 수정
 function UserMypage(props) {
-  // const [myQnaInfo, setmyQnaInfo] = useState("");
-  // axios
-  //   .post(
-  //     "http://localhost:80/qna/info",
-  //     { kakao_userid: localStorage.getItem("userid"), page: "usermypage" },
-  //     {
-  //       withCredentials: true,
-  //     }
-  //   )
-  //   .then((res) => {
-  //     console.log("myqnainfo?", res.data.myQnaInfo);
-  //     setmyQnaInfo(res.data.myQnaInfo);
-  //   });
+  const navigate = useNavigate();
+  const [myQnaInfo, setmyQnaInfo] = useState([]);
+  const [myReviewInfo, setmyReviewInfo] = useState([]);
 
+  //나의 qna 전부 불러오기
   useEffect(() => {
     axios
       .post(
@@ -219,16 +277,34 @@ function UserMypage(props) {
       )
       .then((res) => {
         console.log("myqnainfo?", res.data.myQnaInfo);
-        // setmyQnaInfo(res.data.myQnaInfo);
+        setmyQnaInfo(res.data.myQnaInfo);
+      });
+  }, []);
+
+  //나의 review 전부 불러오기
+  useEffect(() => {
+    axios
+      .post(
+        "http://localhost:80/review/info",
+        { kakao_userid: localStorage.getItem("userid"), page: "usermypage" },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        setmyReviewInfo(res.data.myReviewInfo);
       });
   }, []);
 
   console.log(props.userInfo);
+  console.log(myQnaInfo);
   const [imgInfo, setImgInfo] = useState({
+    // 사진수정
     file: [],
     filepreview: null,
   });
   const [userInfo, setUserInfo] = useState({
+    //개인정보수정
     nickname: "",
     password: "",
     newPassword: "",
@@ -289,9 +365,53 @@ function UserMypage(props) {
       });
   };
 
+  //내가 쓴 qna 삭제코드
+  const handleQnaDelete = (qnaid) => {
+    axios
+      .delete("http://localhost:80/qna", {
+        data: {
+          qna_id: qnaid,
+          kakao_userid: localStorage.getItem("userid"),
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "질문이 성공적으로 삭제되었습니다",
+        });
+      })
+      .then(() => {
+        navigate("/");
+        navigate(`/mypage/publicprofile`);
+      });
+  };
+
+  //내가쓴 review 삭제코드
+  const handleReviewDelete = (reviewid) => {
+    axios
+      .delete("http://localhost:80/review", {
+        data: {
+          review_id: reviewid,
+          kakao_userid: localStorage.getItem("userid"),
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "질문이 성공적으로 삭제되었습니다",
+        });
+      })
+      .then(() => {
+        navigate("/");
+        navigate(`/mypage/publicprofile`);
+      });
+  };
+
   return (
     <>
-      {props.userInfo ? (
+      {props.userInfo && myQnaInfo ? (
         <UserContainer>
           {/* 회원정보 시작 */}
           <Title>회원정보</Title>
@@ -327,15 +447,13 @@ function UserMypage(props) {
                       />
                     ) : (
                       <img
-                        // src={require(`././uploads/${props.userInfo.profile_img}`)}
-                        //사진이름을 한글로 하면 에러뜬다....!
                         style={{
                           width: "100px",
                           height: "90px",
                           objectFit: "scale-down",
                         }}
                         src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
-                        // src={`../../public/uploads/${props.userInfo.profile_img}`}
+                        //사진이름 한글 --> 에러!
                         alt="publicimage"
                       />
                     )}
@@ -398,14 +516,39 @@ function UserMypage(props) {
           <hr />
           {/* MY Review 시작*/}
           <MyreviewTitle>My Review</MyreviewTitle>
-
+          {myReviewInfo.map((review) => {
+            return (
+              <MyreviewContainer key={review.id}>
+                <MyreviewLine>
+                  {/* <MyreviewNickname>{qna.user.nickname}</MyreviewNickname> */}
+                  <MyreviewTrash>
+                    <BsTrash onClick={() => handleReviewDelete(review.id)} />
+                  </MyreviewTrash>
+                  <div style={{ clear: "both" }}></div>
+                  <MyreviewContent>{review.content}</MyreviewContent>
+                </MyreviewLine>
+              </MyreviewContainer>
+            );
+          })}
           {/* MY Review 끝*/}
 
           <hr />
           {/*MY Q&A 시작  */}
           <MyreviewTitle>My Q&A</MyreviewTitle>
-          {/* myQnaInfo 사용*/}
-
+          {myQnaInfo.map((qna) => {
+            return (
+              <MyreviewContainer key={qna.id}>
+                <MyreviewLine>
+                  {/* <MyreviewNickname>{qna.user.nickname}</MyreviewNickname> */}
+                  <MyreviewTrash>
+                    <BsTrash onClick={() => handleQnaDelete(qna.id)} />
+                  </MyreviewTrash>
+                  <div style={{ clear: "both" }}></div>
+                  <MyreviewContent>{qna.content}</MyreviewContent>
+                </MyreviewLine>
+              </MyreviewContainer>
+            );
+          })}
           {/*MY Q&A 끝  */}
         </UserContainer>
       ) : (
