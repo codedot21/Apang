@@ -48,12 +48,18 @@ module.exports = async (req, res) => {
   const accessToken = isAuthorized(req);
   const kakaoUserid = req.body.kakao_userid;
   const page = req.body.page; //usermypage
+  console.log("req.body모야?", req.body.page);
   if (page === "usermypage") {
     if (kakaoUserid) {
       const qnaInfo = await qna.findAll({
         where: {
           users_id: kakaoUserid,
         },
+        include: [
+          {
+            model: users,
+          },
+        ],
       });
       console.log("qnaInfo는?", qnaInfo);
       res.status(200).send({ myQnaInfo: qnaInfo });
@@ -69,32 +75,46 @@ module.exports = async (req, res) => {
           where: {
             users_id: accessToken.id,
           },
+          include: [
+            {
+              model: users,
+            },
+          ],
         });
         res.status(200).send({ myQnaInfo: qnaInfo });
       }
     }
-  } else {
-    // const qnaInfo = await qna.findAll({ include: users });
-    const qnaInfo = await qna.findAll({
+  } else if (req.body.page === "qnaDetail") {
+    const qnaDetailInfo = await qna.findOne({
+      where: {
+        id: req.body.qna_id,
+      },
       include: [
         {
           model: users,
         },
       ],
-      // include: [
-      //   {
-      //     model: qna_hashtag,
-      //     include: [
-      //       {
-      //         model: hashtag,
-      //         attributes: ["id", "hashtag", "createdAt", "updatedAt"],
-      //       },
-      //     ],
-      //   },
-      // ],
-      order: [["id", "DESC"]],
     });
-    // console.log("qnaInfo는?", qnaInfo[1].user);
-    res.status(200).send({ qnaInfo: qnaInfo });
+    console.log("what is", qnaDetailInfo);
+    res.status(200).send({ qnaDetail: qnaDetailInfo });
+  } else {
+    if (!req.body.filter || req.body.filter === "전체") {
+      const qnaInfo = await qna.findAll({
+        include: [
+          {
+            model: users,
+          },
+        ],
+        order: [["id", "DESC"]],
+      });
+      res.status(200).send({ qnaInfo: qnaInfo });
+    } else {
+      // console.log("filter : ", req.body.filter);
+      const filterInfo = await qna.findAll({
+        where: { category: req.body.filter },
+        order: [["id", "DESC"]],
+      });
+      res.status(200).send({ qnaInfo: filterInfo });
+    }
   }
 };

@@ -227,12 +227,11 @@ export const ContentComment = styled.div`
   margin-right: 1rem;
 `;
 
-function QnaPage({ isLogin, handleQnaInfo, auth }) {
+function QnaPage({ isLogin, auth }) {
   const [QuestionOpen, setQuestionOpen] = useState(false);
   const [qnaInfo, setqnaInfo] = useState([]); //qna 전부 가져오는것
-  // const [, updateState] = useState();
-  // const forceUpdate = useCallback(() => updateState({}), []);
 
+  //qna 전부 불러오기
   useEffect(() => {
     axios
       .post(
@@ -260,6 +259,21 @@ function QnaPage({ isLogin, handleQnaInfo, auth }) {
       text: "회원이 아니시면 회원가입 해주세요",
     });
   };
+  // 카테고리 필터하기
+  const filterHandler = (e) => {
+    const filter = e.target.value;
+    // console.log(filter);
+    axios
+      .post(
+        "http://localhost:80/qna/info",
+        { filter: filter },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        // console.log("filter : ", res.data.qnaInfo);
+        setqnaInfo(res.data.qnaInfo);
+      });
+  };
 
   const handleDocClick = () => {
     Swal.fire({
@@ -278,7 +292,11 @@ function QnaPage({ isLogin, handleQnaInfo, auth }) {
         <CategoryWrap>
           {category.map((category, i) => {
             return (
-              <Category key={i} value={category}>
+              <Category
+                key={i}
+                value={category}
+                onClick={(e) => filterHandler(e)}
+              >
                 {category}
               </Category>
             );
@@ -298,12 +316,12 @@ function QnaPage({ isLogin, handleQnaInfo, auth }) {
           <>
             <QnaWrap>
               <QnaWrap>
-                {isLogin & (auth === 2) ? (
-                  <Button onClick={openQuestionModal}>질문하기</Button>
-                ) : isLogin & (auth === 1) ? (
+                {isLogin === false ? (
+                  <Button onClick={handleClick}>질문하기</Button>
+                ) : auth === 1 ? (
                   <Button onClick={handleDocClick}>질문하기</Button>
                 ) : (
-                  <Button onClick={handleClick}>질문하기</Button>
+                  <Button onClick={openQuestionModal}>질문하기</Button>
                 )}
                 <QnaModal
                   // forceUpdate={forceUpdate}
@@ -316,10 +334,13 @@ function QnaPage({ isLogin, handleQnaInfo, auth }) {
                 return (
                   <Linked to={`/qna/detail/${qna.id}`}>
                     <Qna
-                      handleQnaInfo={handleQnaInfo}
+                      // handleQnaInfo={handleQnaInfo}
                       title={qna.title}
                       content={qna.content}
                       nickname={qna.user ? qna.user.nickname : "Kakao"}
+                      profile_img={
+                        qna.user ? qna.user.profile_img : "kakao.png"
+                      }
                     />
                   </Linked>
                 );

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import question from "../images/question.png";
 import QnaUserPost from "../components/QnaUserPost.js";
 import Qna from "../components/Qna.js";
 import QnaPost from "../components/QnaPost.js";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const QnaContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -32,8 +34,7 @@ export const ImgWrap = styled.div`
   }
 `;
 
-function QnaDetail({ qnaDetail, isLogin, auth, userInfo }) {
-  console.log(qnaDetail);
+function QnaDetail({ isLogin, auth, userInfo }) {
   return (
     <>
       <QnaContainer>
@@ -41,7 +42,7 @@ function QnaDetail({ qnaDetail, isLogin, auth, userInfo }) {
           <Img src={question}></Img>
         </ImgWrap>
       </QnaContainer>
-      <QnaUserPost qnaDetail={qnaDetail} userInfo={userInfo} />
+      <QnaUserPost />
       <QnaPost isLogin={isLogin} userInfo={userInfo} auth={auth} />
     </>
   );
