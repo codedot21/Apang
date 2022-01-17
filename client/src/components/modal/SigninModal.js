@@ -134,6 +134,13 @@ function SigninModal({ open, close, handleResponseSuccess }) {
     password: "",
   });
 
+  const reset = () => {
+    setUserInfo({
+      email: "",
+      password: "",
+    });
+  };
+
   const handleInputChange = (key) => (e) => {
     setUserInfo({
       ...userInfo,
@@ -144,10 +151,18 @@ function SigninModal({ open, close, handleResponseSuccess }) {
   const handleSignIn = () => {
     const { email, password } = userInfo;
     if (email === "") {
-      Swal.fire({ icon: "error", title: "로그인 실패", text: "로그인 실패" });
+      Swal.fire({
+        icon: "error",
+        title: "로그인 실패",
+        text: message.emptyMessage,
+      });
       return;
     } else if (password === "") {
-      Swal.fire({ icon: "error", title: "로그인 실패", text: "로그인 실패" });
+      Swal.fire({
+        icon: "error",
+        title: "로그인 실패",
+        text: message.emptyMessage,
+      });
       return;
     } else {
       axios
@@ -183,7 +198,12 @@ function SigninModal({ open, close, handleResponseSuccess }) {
     }
   };
   return open ? (
-    <ModalBackGround onClick={close}>
+    <ModalBackGround
+      onClick={() => {
+        reset();
+        close();
+      }}
+    >
       <ModalBox onClick={(e) => e.stopPropagation()}>
         <LoginHeader>
           로그인

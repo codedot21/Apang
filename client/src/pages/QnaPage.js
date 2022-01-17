@@ -74,7 +74,6 @@ export const Title = styled.h1`
   font-size: 1.3rem;
   font-weight: 600;
   color: ${({ theme }) => theme.color.main};
-
   @media ${({ theme }) => theme.device.ipad} {
     font-size: 2.9rem;
     text-align: center;
@@ -91,7 +90,6 @@ export const Title = styled.h1`
 export const Text = styled.p`
   font-size: 1rem;
   color: ${({ theme }) => theme.color.main};
-
   @media ${({ theme }) => theme.device.ipad} {
     font-size: 1.7rem;
     text-align: center;
@@ -242,7 +240,7 @@ function QnaPage({ isLogin, auth }) {
         }
       )
       .then((res) => {
-        console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
+        // console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
         setqnaInfo(res.data.qnaInfo);
       });
   }, []);
@@ -259,21 +257,6 @@ function QnaPage({ isLogin, auth }) {
       text: "회원이 아니시면 회원가입 해주세요",
     });
   };
-  // 카테고리 필터하기
-  const filterHandler = (e) => {
-    const filter = e.target.value;
-    // console.log(filter);
-    axios
-      .post(
-        "http://localhost:80/qna/info",
-        { filter: filter },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        // console.log("filter : ", res.data.qnaInfo);
-        setqnaInfo(res.data.qnaInfo);
-      });
-  };
 
   const handleDocClick = () => {
     Swal.fire({
@@ -282,6 +265,24 @@ function QnaPage({ isLogin, auth }) {
       text: "선생님은 댓글만 작성하실 수 있어요",
     });
   };
+  // 카테고리 필터하기
+  const filterHandler = (e) => {
+    const filter = e.target.value;
+    // console.log(filter);
+    axios
+      .post(
+        "http://localhost:80/qna/info",
+        { filter: filter },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        // console.log("filter : ", res.data.qnaInfo);
+        setqnaInfo(res.data.qnaInfo);
+      });
+  };
+  console.log("큐엔에이페이지qnaInfo : ", qnaInfo);
 
   return (
     <>
@@ -341,6 +342,7 @@ function QnaPage({ isLogin, auth }) {
                       profile_img={
                         qna.user ? qna.user.profile_img : "kakao.png"
                       }
+                      tags={qna}
                     />
                   </Linked>
                 );
