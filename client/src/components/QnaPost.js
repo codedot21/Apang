@@ -1,8 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import doctor from "../images/doctor.png";
+import axios from "axios";
 
 export const QnaDocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -11,7 +13,6 @@ export const QnaDocContainer = styled(Container)`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-
   z-index: 1;
   background: #9bbbd4;
   width: 71.5rem;
@@ -117,10 +118,8 @@ export const EmptyBox = styled.div`
 
 export const QnaDocBox = styled.div`
   margin-top: 1rem;
-
   color: black;
   border-radius: 10px;
-
   background: #ffffff;
   margin-right: 30rem;
   @media ${({ theme }) => theme.device.ipad} {
@@ -157,8 +156,8 @@ export const ProfileDoc = styled.div`
     margin-left: 0.5rem;
   }
   .commentFront {
-    cursor:pointer;
-    margin-left:18rem;
+    cursor: pointer;
+    margin-left: 18rem;
     @media ${({ theme }) => theme.device.ipad} {
       margin-left: 1.2rem;
       font-size: 0.7rem;
@@ -169,7 +168,7 @@ export const ProfileDoc = styled.div`
     }
   }
   .commentMiddle {
-    cursor:pointer;
+    cursor: pointer;
     margin-left: 0.5rem;
     @media ${({ theme }) => theme.device.ipad} {
       margin-left: 0.8rem;
@@ -182,7 +181,7 @@ export const ProfileDoc = styled.div`
     }
   }
   .commentBack {
-    cursor:pointer;
+    cursor: pointer;
     margin-left: 0.5rem;
     @media ${({ theme }) => theme.device.ipad} {
       margin-left: 0.8rem;
@@ -192,6 +191,7 @@ export const ProfileDoc = styled.div`
       margin-left: 0;
       font-size: 0.5rem;
     }
+  }
 `;
 
 export const ContentTitle = styled.div`
@@ -219,7 +219,6 @@ export const ContentDocText = styled.div`
     overflow: hidden;
     width: 12rem;
   }
-
   @media ${({ theme }) => theme.device.mobile} {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -236,13 +235,11 @@ export const TagsInput = styled.div`
   width: 71.6rem;
   padding: 0 0.5rem;
   border: 0.2rem solid #63b5f6;
-
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 1rem;
     margin-left: 0;
     width: 21.5rem;
   }
-
   > textarea {
     whitespace: pre-line;
     resize: none;
@@ -282,165 +279,237 @@ export const Ren = styled.div`
 `;
 
 function QnaPost({ isLogin, userInfo, auth }) {
-  const [comment, setComment] = useState([]);
+  const navigate = useNavigate();
+  const [contentInfo, setContentInfo] = useState({
+    content: "",
+  });
 
-  const inputRef = useRef(null);
-  const addComment = (event) => {
-    const result = [];
-    for (let el of comment) {
-      if (el === event.target.value) result.push(event.target.value);
-    }
-    if (result.length === 0 && event.target.value !== "") {
-      setComment([...comment, event.target.value]);
-      event.target.value = "";
-    }
+  const [editContent, setEditContent] = useState({
+    edittingcontent: "",
+  });
+
+  const [comments, setComments] = useState([]);
+
+  const handleInputChange = (key) => (e) => {
+    setContentInfo({
+      ...contentInfo,
+      [key]: e.target.value,
+    });
   };
+
+  const handleInputContentChange = (key) => (e) => {
+    setEditContent({
+      ...editContent,
+      [key]: e.target.value,
+    });
+  };
+
+  let qna_id = document.location.href;
+  qna_id = qna_id.substring(qna_id.length - 1, qna_id.length);
+  console.log(qna_id);
+
+  useEffect(() => {
+    axios
+      .post(
+        "http://localhost:80/comments/info",
+        { qna_id: qna_id },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        console.log("whatwhat?", res.data);
+        setComments(res.data.comments);
+      });
+  }, []);
 
   const handleClick = () => {
-    Swal.fire({
-      icon: "error",
-      title: "의사 선생님이신가요?",
-      text: "선생님만 답변하실 수 있어요",
-    });
+    if (auth === 1) {
+      console.log("content몰까?", contentInfo);
+      let payload = { content: contentInfo.content, qna_id: qna_id };
+      axios
+        .post("http://localhost:80/comments/upload", payload, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          navigate("/qna");
+          navigate(`/qna/detail/${qna_id}`);
+        });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "의사 선생님이신가요?",
+        text: "선생님만 답변하실 수 있어요",
+      });
+    }
+  };
+  const inputRef = useRef(null);
+
+  const handleEdit = (doctorid) => {
+    if (doctorid !== userInfo.id) {
+      Swal.fire({
+        icon: "error",
+        // title: "의사 선생님이신가요?",
+        text: "작성자만 수정하실 수 있어요",
+      });
+      return;
+    } else if (doctorid === userInfo.id) {
+      inputRef.current.disabled = false;
+      inputRef.current.focus();
+    }
   };
 
-  const handleEdit = () => {
-    inputRef.current.disabled = false;
-    inputRef.current.focus();
+  const handleDelete = (commentid) => {
+    axios
+      .delete("http://localhost:80/comments", {
+        data: {
+          comment_id: commentid,
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "댓글이 성공적으로 삭제되었습니다",
+        });
+      })
+      .then(() => {
+        navigate("/qna");
+        navigate(`/qna/detail/${qna_id}`);
+      });
   };
 
-  const handleClear = () => {
+  const handleClear = (commentid, doctorid) => {
     inputRef.current.disabled = true;
-    Swal.fire({
-      icon: "success",
-      // title: "?",
-      text: "댓글이 성공적으로 수정되었습니다",
-    });
+    let payload = {
+      content: editContent.edittingcontent,
+      comment_id: commentid,
+      doctor_id: doctorid,
+    };
+    axios
+      .put("http://localhost:80/comments/modify", payload, {
+        withCredentials: true,
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "댓글이 성공적으로 수정되었습니다",
+        });
+      })
+      .then(() => {
+        navigate("/qna");
+        navigate(`/qna/detail/${qna_id}`);
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          // title: "의사 선생님이신가요?",
+          text: "작성자만 수정하실 수 있어요",
+        });
+      });
   };
-
-  const handleDelete = (event) => {
-    setComment([]);
-    Swal.fire({
-      icon: "success",
-      text: "댓글이 성공적으로 삭제되었습니다",
-    });
-  };
-
-  // 서버 요청 힘수 지우지 말 것
-  // 댓글 등록 요청
-  // const commentPost = () => {
-  //   if (islogin && auth === 1 && inputRef.current.value !== "") {
-  //   axios.post('http://localhost:80/comment', {
-  //   qna_id: id,
-  //   })
-  //   .then((res) => {
-  //  setComment([...res.data.data]);
-  //   })
-
-  // 댓글 수정 요청
-  // const commentUpdate = () => {
-  //   axios
-  //   .put(`http://localhost:80/comment/${comment_id}`, {
-  //   qna_id: id,
-  //   content: inputRef.current.value,
-  //         })
-  //         .then((res) => {
-  //           setComment([...res.data.data]);
-  //         });
-  //     };
-
-  // 댓글 삭제 요청
-  // const commentDelete = () => {
-  //   axios
-  //     .delete(`http://localhost:80/comment/${comment_id}`, {
-  //       data: { qna_id: id },
-  //     })
-  //     .then((res) => {
-  //       setComment([...res.data.data]);
-  //     });
-  // };
 
   return (
     <>
-      {comment.map((comment, index) => (
-        <QnaDocContainer key={index}>
-          <QnaDocBox>
-            <ContentWrap>
-              <ProfileDoc>
-                <img
-                  src={require(`../../public/uploads/${userInfo.profile_img}`)}
-                  width="20rem"
-                  alt="profile"
-                />
-                {isLogin & (auth === 1) ? (
-                  <div className="Id">
-                    {userInfo.name}
-                    <span className="commentFront" onClick={handleEdit}>
-                      수정
-                    </span>
-                    <span className="commentMiddle">|</span>
-                    <span className="commentBack" onClick={handleClear}>
-                      등록
-                    </span>
-                    <span className="commentMiddle">|</span>
-                    <span className="commentBack" onClick={handleDelete}>
-                      삭제
-                    </span>
-                  </div>
+      {/* 답변 시작 끝 */}
+      {comments.map((comment) => {
+        return (
+          <QnaDocContainer>
+            <QnaDocBox>
+              <ContentWrap>
+                {/* userInfo o, 로그인 o, 의사, 본인 작성했을시 */}
+                {userInfo &&
+                isLogin &&
+                auth === 1 &&
+                comment.doctors_id === userInfo.id ? (
+                  <>
+                    <ProfileDoc>
+                      <img
+                        src={require(`../../public/uploads/${comment.doctor.profile_img}`)}
+                        width="20rem"
+                        alt="doctor"
+                      />
+                      <div className="Id">
+                        {`${comment.doctor.name} 의사선생님`}
+                        <span
+                          className="commentFront"
+                          onClick={() => handleEdit(comment.doctors_id)}
+                        >
+                          수정
+                        </span>
+                        <span className="commentMiddle">|</span>
+                        <span
+                          className="commentBack"
+                          onClick={() =>
+                            handleClear(comment.id, comment.doctors_id)
+                          }
+                        >
+                          등록
+                        </span>
+                        <span className="commentMiddle">|</span>
+                        <span
+                          className="commentBack"
+                          onClick={() => handleDelete(comment.id)}
+                        >
+                          삭제
+                        </span>
+                      </div>
+                    </ProfileDoc>
+                    <Ren>
+                      <textarea
+                        disabled
+                        type="text"
+                        defaultValue={comment.content}
+                        ref={inputRef}
+                        onChange={handleInputContentChange("edittingcontent")}
+                        // value={editContent.edittingcontent}
+                      />
+                    </Ren>
+                  </>
                 ) : (
-                  <div className="Id">{userInfo.nickname}</div>
+                  //userInfo x || 로그인 x || 의사 x || 본인 작성 x
+                  <>
+                    <ProfileDoc>
+                      <img
+                        src={require(`../../public/uploads/${comment.doctor.profile_img}`)}
+                        width="20rem"
+                        alt="doctor"
+                      />
+                      <div className="Id">{`${comment.doctor.name} 의사선생님`}</div>
+                    </ProfileDoc>
+                    <ContentDocText>{comment.content}</ContentDocText>
+                  </>
                 )}
-              </ProfileDoc>
-              {isLogin & (auth === 1) ? (
-                <Ren>
-                  <textarea
-                    disabled
-                    type="text"
-                    defaultValue={comment}
-                    ref={inputRef}
-                  />
-                </Ren>
-              ) : (
-                <ContentDocText>{comment}</ContentDocText>
-              )}
-            </ContentWrap>
-          </QnaDocBox>
-        </QnaDocContainer>
-      ))}
-      {isLogin & (auth === 1) ? (
-        <QnaPostContainer>
-          <TagsInput>
-            <textarea
-              className="textarea"
-              type="textarea"
-              placeholder="선생님의 답변을 기다리고 있어요"
-              onKeyUp={(e) => (e.key === "Enter" ? addComment(e) : null)}
-            />
-          </TagsInput>
-        </QnaPostContainer>
-      ) : (
-        <QnaPostContainer>
-          <TagsInput>
-            <textarea
-              className="textarea"
-              type="textarea"
-              placeholder="선생님만 답변하실 수 있어요"
-              onClick={handleClick}
-            />
-          </TagsInput>
-        </QnaPostContainer>
-      )}
+              </ContentWrap>
+            </QnaDocBox>
+          </QnaDocContainer>
+        );
+      })}
+      {/* 답변 끝 */}
+      {/* 댓글창 시작 */}
+      <QnaPostContainer>
+        <TagsInput>
+          <textarea
+            className="textarea"
+            type="textarea"
+            placeholder={
+              isLogin && auth === 1
+                ? "선생님의 답변을 기다리고 있어요"
+                : "선생님만 답변하실 수 있어요"
+            }
+            onChange={handleInputChange("content")}
+            value={contentInfo.content}
+          />
+        </TagsInput>
+      </QnaPostContainer>
       <QnaListContainer>
         <QnaWrap>
           <QnaWrap>
-            {isLogin & (auth === 1) ? (
-              <Button>댓글달기</Button>
-            ) : (
-              <Button onClick={handleClick}>댓글달기</Button>
-            )}
+            <Button onClick={handleClick}>댓글달기</Button>
           </QnaWrap>
         </QnaWrap>
       </QnaListContainer>
+      {/* 댓글창 끝 */})
     </>
   );
 }

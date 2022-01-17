@@ -6,7 +6,6 @@ import { KAKAO_AUTH_URL } from "../OAuthKakao";
 import { GOOGLE_AUTHORIZE_URL } from "../OAuthGoogle";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { valid } from "../../modules/validator";
 import { message } from "../../modules/message";
 
 export const ModalBackGround = styled.div`
@@ -90,7 +89,7 @@ export const LoginFooter = styled.div`
 export const SocialLoginHeader = styled.div`
   font-size: 0.8rem;
   padding-top: 0.1rem;
-  padding-left: 1.2rem;
+  padding-left: 1.2rem; //추가된것
   padding-bottom: 1rem;
   background-color: #fbf3ed;
 `;

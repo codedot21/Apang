@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import user from "../images/user.png";
+import axios from "axios";
 
 export const QnaUserContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -86,21 +87,54 @@ export const ContentText = styled.div`
   }
 `;
 
-function QnaUserPost({ qnaDetail, userInfo }) {
+function QnaUserPost() {
+  let qna_id = document.location.href;
+  qna_id = qna_id.substring(qna_id.length - 1, qna_id.length);
+  console.log(qna_id);
+
+  const [qnaDetail, setqnaDetail] = useState("");
+
+  useEffect(() => {
+    axios
+      .post(
+        "http://localhost:80/qna/info",
+        { qna_id: qna_id, page: "qnaDetail" },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        console.log("whatwhat?", res);
+        setqnaDetail(res.data.qnaDetail);
+      });
+  }, []);
   console.log(qnaDetail);
+
   return (
-    <QnaUserContainer>
-      <QnaBox>
-        <ContentWrap>
-          <Profile>
-            <img src={user} width="20rem" alt="doctor" />
-            <div className="Id">{qnaDetail.nickname}</div>
-          </Profile>
-          <ContentTitle>{qnaDetail.title}</ContentTitle>
-          <ContentText>{qnaDetail.content}</ContentText>
-        </ContentWrap>
-      </QnaBox>
-    </QnaUserContainer>
+    <>
+      {qnaDetail ? (
+        <QnaUserContainer>
+          <QnaBox>
+            <ContentWrap>
+              <Profile>
+                <img
+                  src={require(`../../public/uploads/${
+                    qnaDetail.user ? qnaDetail.user.profile_img : "kakao.png"
+                  }`)}
+                  width="20rem"
+                  alt="doctor"
+                />
+                <div className="Id">
+                  {qnaDetail.user ? qnaDetail.user.nickname : "Kakao"}
+                </div>
+              </Profile>
+              <ContentTitle>{qnaDetail.title}</ContentTitle>
+              <ContentText>{qnaDetail.content}</ContentText>
+            </ContentWrap>
+          </QnaBox>
+        </QnaUserContainer>
+      ) : null}
+    </>
   );
 }
 

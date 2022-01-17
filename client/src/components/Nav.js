@@ -84,7 +84,7 @@ export const Hamburger = styled.div`
     justify-content: center;
     align-items: center;
     border: none;
-
+  } ;
 `;
 
 export const Btn = styled.button`
@@ -165,19 +165,19 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
             <li>
               <Btn>Menu</Btn>
               <ul id="sub-menu">
-                {auth === 1 ? (
+                {auth === 1 ? ( //의사 로그인이면
                   <li>
                     <NavLink to="/mypage/doctorprofile">
                       <DropDownButton>마이페이지</DropDownButton>
                     </NavLink>
                   </li>
-                ) : auth === 0 ? (
+                ) : auth === 0 ? ( // 관리자 로그인이면?
                   <li>
                     <NavLink to="/authpage">
                       <DropDownButton>관리자</DropDownButton>
                     </NavLink>
                   </li>
-                ) : (
+                ) : ( //일반(카카오 포함) 로그인이면?
                   <li>
                     <NavLink to="/mypage/publicprofile">
                       <DropDownButton>마이페이지</DropDownButton>
@@ -199,7 +199,7 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
             </li>
           </ul>
         </NavMenu>
-      ) : (
+      ) : ( //로그인 하지 않은 상태면?
         <NavMenu>
           <ul id="main-menu">
             <li>

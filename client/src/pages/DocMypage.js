@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Container } from "../styles";
-import axios from "axios";
 import { BsTrash } from "react-icons/bs";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 export const DocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -273,10 +275,19 @@ const MyreviewContent = styled.div`
   }
 `;
 
+// const MyreviewNickname = styled.h3`
+//   width: 40%;
+//   margin: 1vw 1vw 1vw 0.5vw;
+//   float: left;
+//   @media ${({ theme }) => theme.device.mobile} {
+//     margin: 2vw 3vw 3vw 2vw;
+//   }
+// `;
+
 // 대답 끝
 
 function DocMypage(props) {
-  console.log(props.useInfo);
+  const navigate = useNavigate();
   const [imgInfo, setImgInfo] = useState({
     file: [],
     filepreview: null,
@@ -287,6 +298,23 @@ function DocMypage(props) {
     password: "",
     newPassword: "",
   });
+
+  const [myCommentInfo, setmyCommentInfo] = useState([]);
+
+  useEffect(() => {
+    axios
+      .post(
+        "http://localhost:80/comments/info",
+        { page: "doctormypage" },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        setmyCommentInfo(res.data.myCommentInfo);
+      });
+  }, []);
+
   const handleImgChange = (e) => {
     setImgInfo({
       ...imgInfo,
@@ -336,6 +364,27 @@ function DocMypage(props) {
         // 서버에서 넘겨준 auth 잘 불러오는지 확인.
         // console.log(res.data.auth);
         // 로그아웃 상태로 메인페이지로 보내줘야됨
+      });
+  };
+
+  //내가 적은 댓글 삭제
+  const handleCommentDelete = (commentid) => {
+    axios
+      .delete("http://localhost:80/comments", {
+        data: {
+          comment_id: commentid,
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "댓글이 성공적으로 삭제되었습니다",
+        });
+      })
+      .then(() => {
+        navigate("/");
+        navigate(`/mypage/doctorprofile`);
       });
   };
 
@@ -396,14 +445,15 @@ function DocMypage(props) {
               <DocTitle>이메일</DocTitle>
               <DocInput
                 type="text"
-                value={props.userInfo.email}
                 name="val"
+                value={props.userInfo.email}
                 disabled
               />
               <DocTitle>이름</DocTitle>
               <DocInput
                 type="text"
-                value={props.userInfo.name}
+                placeholder="이름"
+                defaultValue={props.userInfo.name}
                 onChange={handleInputChange("name")}
                 disabled
               />
@@ -411,7 +461,7 @@ function DocMypage(props) {
               <DocInput
                 type="text"
                 placeholder="병원명"
-                value={props.userInfo.hospital}
+                defaultValue={props.userInfo.hospital}
                 onChange={handleInputChange("hospital")}
               />
             </DocLine>
@@ -451,24 +501,23 @@ function DocMypage(props) {
           {/* 비밀번호 끝 */}
 
           <hr />
-          {/* MY Review 시작*/}
+          {/* MY Answer 시작*/}
           <MyreviewTitle>MY Answer</MyreviewTitle>
-          <MyreviewContainer>
-            <MyreviewLine>
-              <MyreviewNickname>{props.userInfo.name}</MyreviewNickname>
-              <MyreviewTrash>
-                <BsTrash />
-              </MyreviewTrash>
-              <div style={{ clear: "both" }}></div>
-              <MyreviewContent>
-                댓글은 아무리 길게써도 이제는 다 보이지 않는다 점점점으로
-                바뀐다는!
-              </MyreviewContent>
-            </MyreviewLine>
-          </MyreviewContainer>
-
-          {/* MY Review 끝*/}
-          <div style={{ clear: "both" }}></div>
+          {myCommentInfo.map((comment) => {
+            return (
+              <MyreviewContainer key={comment.id}>
+                <MyreviewLine>
+                  {/* <MyreviewNickname>{qna.user.nickname}</MyreviewNickname> */}
+                  <MyreviewTrash>
+                    <BsTrash onClick={() => handleCommentDelete(comment.id)} />
+                  </MyreviewTrash>
+                  <div style={{ clear: "both" }}></div>
+                  <MyreviewContent>{comment.content}</MyreviewContent>
+                </MyreviewLine>
+              </MyreviewContainer>
+            );
+          })}
+          {/* MY Answer 끝*/}
         </DocContainer>
       ) : (
         ""
