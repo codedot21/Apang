@@ -88,8 +88,9 @@ export const ContentText = styled.div`
 `;
 
 function QnaUserPost() {
-  let qna_id = document.location.href;
-  qna_id = qna_id.substring(qna_id.length - 1, qna_id.length);
+  let url = document.location.href;
+  let qna_id = url.split("/");
+  qna_id = qna_id[qna_id.length - 1];
   console.log(qna_id);
 
   const [qnaDetail, setqnaDetail] = useState("");

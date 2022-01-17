@@ -6,6 +6,8 @@ import { Container } from "../styles";
 import axios from "axios";
 import { BsTrash } from "react-icons/bs";
 import Swal from "sweetalert2";
+import { message } from "../modules/message";
+import { valid } from "../modules/validator";
 
 export const UserContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -314,6 +316,11 @@ function UserMypage(props) {
     nickname: "",
     password: "",
     newPassword: "",
+    passwordConfirm: "",
+  });
+  const [errorMessage, setErrorMessage] = useState({
+    newPassword: "",
+    passwordConfirm: "",
   });
   const handleImgChange = (e) => {
     setImgInfo({
@@ -327,35 +334,98 @@ function UserMypage(props) {
       ...userInfo,
       [key]: e.target.value,
     });
+    const id = e.target.id;
+    const value = e.target.value;
+    if (id === "passwordConfirm") {
+      if (userInfo.newPassword === e.target.value) {
+        setErrorMessage({ ...errorMessage, passwordConfirm: "" });
+      } else {
+        setErrorMessage({
+          ...errorMessage,
+          passwordConfirm: message.passwordConfirm,
+        });
+      }
+      return;
+    }
+    if (valid[id](value)) {
+      setErrorMessage((prev) => {
+        prev[id] = "";
+        return prev;
+      });
+    } else {
+      setErrorMessage((prev) => {
+        prev[id] = message[id];
+        return prev;
+      });
+    }
   };
 
   // 수정
   // const [isSucces, setSuccess] = useState(null);
   const submit = () => {
     // console.log("저장");
-    const formdata = new FormData();
-    formdata.append("apang", imgInfo.file);
-    // console.log(formdata);
-    formdata.append("nickname", userInfo.nickname);
-    formdata.append("token", localStorage.getItem("accessToken"));
-    axios.post("http://localhost:80/public/profile", formdata, {
-      headers: { "Content-type": "multipart/form-data" },
-      withCredentials: true,
-    });
-    // .then((res) => {
-    //   console.warn(res);
-    //   if (res.data.success === 1) {
-    //     setSuccess("이미지가 성공적으로 업데이트 되었습니다");
-    //   }
-    // });
+    if (!imgInfo.filepreview) {
+      axios
+        .post(
+          "http://localhost:80/public/profile",
+          { onlyNickname: userInfo.nickname },
+          {
+            withCredentials: true,
+          }
+        )
+        .then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 정보수정",
+            text: message.changeSuccess,
+          });
+        });
+    } else {
+      const formdata = new FormData();
+      formdata.append("apang", imgInfo.file);
+      // console.log(formdata);
+      formdata.append("nickname", userInfo.nickname);
+      formdata.append("token", localStorage.getItem("accessToken"));
+      axios.post(
+        "http://localhost:80/public/profile",
+        formdata,
+        {
+          headers: { "Content-type": "multipart/form-data" },
+          withCredentials: true,
+        }.then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 정보수정",
+            text: message.changeSuccess,
+          });
+        })
+      );
+    }
   };
   // 비밀번호 변경
   const passwordChange = () => {
     delete userInfo.nickname;
     // console.log("비밀번호 변경 : ", userInfo);
-    axios.post("http://localhost:80/public/profile", userInfo, {
-      withCredentials: true,
-    });
+    axios
+      .post("http://localhost:80/public/profile", userInfo, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.data.status === 401) {
+          Swal.fire({
+            icon: "error",
+            title: "Apang 정보수정",
+            text: message.errorPassword,
+          });
+        } else {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 정보수정",
+            text: message.changeSuccess,
+          });
+          props.handleLogout();
+        }
+      });
   };
 
   // 회원탈퇴
@@ -496,15 +566,20 @@ function UserMypage(props) {
                 ></PassWordInput>
                 <PassWordTitle>새로운 비밀번호</PassWordTitle>
                 <PassWordInput
+                  id="newPassword"
                   placeholder="New"
                   type="password"
                   onChange={handleInputChange("newPassword")}
                 ></PassWordInput>
+                <span>{errorMessage.newPassword}</span>
                 <PassWordTitle>비밀번호 확인</PassWordTitle>
                 <PassWordInput
+                  id="passwordConfirm"
                   placeholder="New 한번 더"
                   type="password"
+                  onChange={handleInputChange("passwordConfirm")}
                 ></PassWordInput>
+                <span>{errorMessage.passwordConfirm}</span>
               </PasswordLine>
               <Box>
                 <EditPasswordDeleted onClick={passwordChange}>
