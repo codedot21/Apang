@@ -15,6 +15,7 @@ export const FooterContainer = styled.div`
   }
   @media ${({ theme }) => theme.device.mobile} {
     max-width: 900px;
+    width: 100%;
     font-size: 13px;
   }
 `;
@@ -27,6 +28,7 @@ const Title = styled.div`
   font-size: 18px;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 14px;
+    padding: 1vw;
   }
 `;
 
@@ -39,6 +41,10 @@ const Lines = styled.div`
   justify-content: space-around;
   @media ${({ theme }) => theme.device.mobile} {
     margin-bottom: 14vw;
+    padding-bottom: 10%;
+  }
+  @media ${({ theme }) => theme.device.ipad} {
+    margin-bottom: 5vw;
   }
 `;
 const Careeres = styled.div`

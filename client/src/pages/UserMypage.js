@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
+import { BsTrash } from "react-icons/bs";
 
 export const UserContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -18,6 +19,8 @@ const Title = styled.h1`
   padding: 1rem;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 20px;
+    padding: 1vw;
+    margin-bottom: 2vw;
   }
 `;
 
@@ -29,8 +32,8 @@ const UserContainerLine = styled.div`
   margin: 0 auto;
   margin-bottom: 15px;
   @media ${({ theme }) => theme.device.mobile} {
-    max-width: 100%;
-    height: 20rem;
+    width: 100%;
+    height: 22rem;
   }
 `;
 
@@ -41,7 +44,6 @@ const Profilecontainer = styled.div`
   height: 80%;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
-    max-width: 100%;
     height: 50%;
   }
 `;
@@ -63,7 +65,7 @@ const ProfileEditing = styled.label`
   margin: auto;
 
   @media ${({ theme }) => theme.device.mobile} {
-    width: 50%;
+    width: 100%;
     max-width: 8rem;
     font-size: 13px;
   }
@@ -75,9 +77,10 @@ const UserTitle = styled.div`
   font-weight: bold;
   width: 20%;
   @media ${({ theme }) => theme.device.mobile} {
-    float: center;
-    width: 40%;
-    font-size: 12px;
+    text-align: center;
+    width: 100%;
+    font-size: 15px;
+    padding: 1px;
   }
 `;
 
@@ -89,7 +92,7 @@ const UserInput = styled.input`
   width: 30%;
   margin-bottom: 20px;
   @media ${({ theme }) => theme.device.mobile} {
-    width: 60%;
+    width: 100%;
   }
 `;
 
@@ -111,7 +114,7 @@ const Edting = styled.button`
     width: 10%;
   }
   @media ${({ theme }) => theme.device.mobile} {
-    width: 5rem;
+    width: 60%;
     font-size: 12px;
   }
 `;
@@ -129,7 +132,8 @@ const PasswordLine = styled.div`
   margin: 0 auto;
   margin-top: 10px;
   @media ${({ theme }) => theme.device.mobile} {
-    height: 14rem;
+    height: 16rem;
+    width: 100%;
   }
 `;
 
@@ -139,9 +143,9 @@ const PassWordTitle = styled.span`
   float: left;
   font-weight: bold;
   @media ${({ theme }) => theme.device.mobile} {
-    float: left;
     font-size: 10px;
-    width: 50%;
+    width: 100%;
+    padding: 1px;
   }
 `;
 
@@ -154,8 +158,10 @@ const PassWordInput = styled.input`
   border-radius: 30px;
   padding: 20px;
   @media ${({ theme }) => theme.device.mobile} {
-    float: center;
-    width: 40%;
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
@@ -177,23 +183,84 @@ const EditPasswordDeleted = styled.button`
   }
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 12px;
-    width: 30%;
+    width: 50%;
+    margin: 10px;
   }
 `;
 
 // 비밀번호 끝
 
-// 마이리뷰 시작
+// 마이리뷰 qna 시작
 
 const MyreviewTitle = styled.h2`
   color: #095cd8;
   margin: 20px 10px 20px 0px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 20px;
+  }
 `;
 
-// 마이리뷰 끝
+const MyreviewContainer = styled.div`
+  margin: 10px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    margin: 0;
+  }
+`;
 
-// 마이 큐엔에이 시작
-// 마이 큐엔에이 끝
+const MyreviewLine = styled.div`
+  border: 1px solid #b5afaf;
+  border-radius: 10px;
+  width: 20%;
+  height: 100px;
+  margin: 1vw;
+  float: left;
+  background-color: #f9f9f9;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    float: none;
+    margin-bottom: 3vw;
+  }
+`;
+
+const MyreviewTrash = styled.button`
+  text-align: right;
+  float: right;
+  margin: 0.5vw;
+  cursor: pointer;
+  border: none;
+  background-color: #f9f9f9;
+  &:hover {
+    background-color: #c7c7c7;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 3vw;
+  }
+`;
+
+const MyreviewNickname = styled.h3`
+  width: 40%;
+  margin: 1vw 1vw 1vw 0.5vw;
+  float: left;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 2vw 3vw 3vw 2vw;
+  }
+`;
+
+const MyreviewContent = styled.div`
+  margin: 0 1vw 1vw 0.5vw;
+  border: 1px solid #b5afaf;
+  width: 90%;
+  padding: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 0 1.5vw 1.5vw 1.5vw;
+  }
+`;
+
+// 마이리뷰, qna 끝
 
 // 상현 수정
 function UserMypage(props) {
@@ -221,12 +288,12 @@ function UserMypage(props) {
         }
       )
       .then((res) => {
-        console.log("myqnainfo?", res.data.myQnaInfo);
+        // console.log("myqnainfo?", res.data.myQnaInfo);
         // setmyQnaInfo(res.data.myQnaInfo);
       });
   }, []);
 
-  console.log(props.userInfo);
+  // console.log(props.userInfo);
   const [imgInfo, setImgInfo] = useState({
     file: [],
     filepreview: null,
@@ -291,6 +358,8 @@ function UserMypage(props) {
         // 로그아웃 상태로 메인페이지로 보내줘야됨
       });
   };
+
+  const [reviews, setReviews] = useState([]);
 
   return (
     <>
@@ -402,14 +471,44 @@ function UserMypage(props) {
           {/* MY Review 시작*/}
           <MyreviewTitle>My Review</MyreviewTitle>
 
-          {/* MY Review 끝*/}
+          <MyreviewContainer>
+            <MyreviewLine>
+              <MyreviewNickname>{props.userInfo.nickname}</MyreviewNickname>
+              <MyreviewTrash>
+                <BsTrash />
+              </MyreviewTrash>
+              <div style={{ clear: "both" }}></div>
+              <MyreviewContent>
+                댓글은 아무리 길게써도 이제는 다 보이지 않는다 점점점으로
+                바뀐다는!
+              </MyreviewContent>
+            </MyreviewLine>
+          </MyreviewContainer>
 
+          {/* MY Review 끝*/}
+          <div style={{ clear: "both" }}></div>
+          <br></br>
           <hr />
+
           {/*MY Q&A 시작  */}
+
           <MyreviewTitle>My Q&A</MyreviewTitle>
-          {/* myQnaInfo 사용*/}
+          <MyreviewContainer>
+            <MyreviewLine>
+              <MyreviewNickname>{props.userInfo.nickname}</MyreviewNickname>
+              <MyreviewTrash>
+                <BsTrash />
+              </MyreviewTrash>
+              <div style={{ clear: "both" }}></div>
+              <MyreviewContent>
+                댓글은 아무리 길게써도 이제는 다 보이지 않는다 점점점으로
+                바뀐다는!
+              </MyreviewContent>
+            </MyreviewLine>
+          </MyreviewContainer>
 
           {/*MY Q&A 끝  */}
+          <div style={{ clear: "both" }}></div>
         </UserContainer>
       ) : (
         ""
