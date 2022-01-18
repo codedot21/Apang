@@ -39,8 +39,10 @@ function QnaDetail({ isLogin, auth, userInfo }) {
           <Img src={question}></Img>
         </ImgWrap>
       </QnaContainer>
-      <QnaUserPost />
-      <QnaPost isLogin={isLogin} userInfo={userInfo} auth={auth} />
+
+      <QnaUserPost qnaDetail={qnaDetail} />
+
+      <QnaPost isLogin={isLogin} />
     </>
   );
 }

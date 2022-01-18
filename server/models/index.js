@@ -43,8 +43,15 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-const { comments, doctors, hashtag, qna_hashtag, qna, reviews, users } =
-  sequelize.models;
+const {
+  comments,
+  doctors,
+  hashtag,
+  qna_hashtag,
+  qna,
+  reviews,
+  users,
+} = sequelize.models;
 
 users.hasMany(qna, { foreignKey: "users_id" });
 users.hasMany(reviews, { foreignKey: "users_id" });
@@ -63,5 +70,8 @@ hashtag.belongsToMany(qna, {
   through: "qna_hashtag",
   foreignKey: "hashtag_id",
 });
+
+qna.hasMany(comments, { foreignKey: "qna_id" });
+comments.belongsTo(qna, { foreignKey: "qna_id" });
 
 module.exports = db;

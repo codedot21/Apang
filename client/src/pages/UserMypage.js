@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
@@ -38,7 +37,7 @@ const UserContainerLine = styled.div`
   margin-bottom: 15px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
-    height: 22rem;
+    height: 25rem;
   }
 `;
 
@@ -131,19 +130,19 @@ const Edting = styled.button`
 const PasswordLine = styled.div`
   border: 1px solid #b5afaf;
   padding: 1rem;
-  height: 220px;
+  height: 240px;
   text-align: center;
   width: 80%;
   margin: 0 auto;
   margin-top: 10px;
   @media ${({ theme }) => theme.device.mobile} {
-    height: 16rem;
+    height: 18.5rem;
     width: 100%;
   }
 `;
 
 const PassWordTitle = styled.span`
-  width: 50%;
+  width: 45%;
   padding: 20px;
   float: left;
   font-weight: bold;
@@ -243,20 +242,11 @@ const MyreviewTrash = styled.button`
   }
 `;
 
-const MyreviewNickname = styled.h3`
-  width: 40%;
-  margin: 1vw 1vw 1vw 0.5vw;
-  float: left;
-  @media ${({ theme }) => theme.device.mobile} {
-    margin: 2vw 3vw 3vw 2vw;
-  }
-`;
-
 const MyreviewContent = styled.div`
-  margin: 0 1vw 1vw 0.5vw;
+  margin: 1vw 1vw 1vw 0.5vw;
   border: 1px solid #b5afaf;
   width: 90%;
-  padding: 3px;
+  padding: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -266,6 +256,26 @@ const MyreviewContent = styled.div`
 `;
 
 // 마이리뷰, qna 끝
+
+// 유효성 시작
+
+const Clear = styled.div`
+  clear: both;
+`;
+
+const Prosecutor = styled.div`
+  font-size: 10px;
+  color: #e91e63;
+  width: 90%;
+  margin-left: 100px;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 0vw;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+`;
+
+// 유효성 끝
 
 // 상현 수정
 function UserMypage(props) {
@@ -360,10 +370,7 @@ function UserMypage(props) {
     }
   };
 
-  // 수정
-  // const [isSucces, setSuccess] = useState(null);
   const submit = () => {
-    // console.log("저장");
     if (!imgInfo.filepreview) {
       axios
         .post(
@@ -569,15 +576,18 @@ function UserMypage(props) {
                   type="password"
                   onChange={handleInputChange("newPassword")}
                 ></PassWordInput>
-                <span>{errorMessage.newPassword}</span>
-                <PassWordTitle>비밀번호 확인</PassWordTitle>
+                <Clear />
+                <Prosecutor>{errorMessage.newPassword}</Prosecutor>
+
+                <PassWordTitle>비밀번호 확인 </PassWordTitle>
                 <PassWordInput
                   id="passwordConfirm"
                   placeholder="New 한번 더"
                   type="password"
                   onChange={handleInputChange("passwordConfirm")}
                 ></PassWordInput>
-                <span>{errorMessage.passwordConfirm}</span>
+                <Clear />
+                <Prosecutor>{errorMessage.passwordConfirm}</Prosecutor>
               </PasswordLine>
               <Box>
                 <EditPasswordDeleted onClick={passwordChange}>
@@ -603,7 +613,7 @@ function UserMypage(props) {
                   <MyreviewTrash>
                     <BsTrash onClick={() => handleReviewDelete(review.id)} />
                   </MyreviewTrash>
-                  <div style={{ clear: "both" }}></div>
+                  <Clear />
                   <MyreviewContent>{review.content}</MyreviewContent>
                 </MyreviewLine>
               </MyreviewContainer>
@@ -612,7 +622,7 @@ function UserMypage(props) {
           {/* MY Review 끝*/}
 
           {/* MY Review 끝*/}
-          <div style={{ clear: "both" }}></div>
+          <Clear />
           <br></br>
           <hr />
 
@@ -627,14 +637,14 @@ function UserMypage(props) {
                   <MyreviewTrash>
                     <BsTrash onClick={() => handleQnaDelete(qna.id)} />
                   </MyreviewTrash>
-                  <div style={{ clear: "both" }}></div>
+                  <Clear />
                   <MyreviewContent>{qna.content}</MyreviewContent>
                 </MyreviewLine>
               </MyreviewContainer>
             );
           })}
           {/*MY Q&A 끝  */}
-          <div style={{ clear: "both" }}></div>
+          <Clear />
         </UserContainer>
       ) : (
         ""
