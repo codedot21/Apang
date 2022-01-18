@@ -310,12 +310,20 @@ function Main() {
           <Text>진료과목 선택하러 가기</Text>
           <Search>
             <form>
-              <SerchButton onClick={() => navigate("/medicallist")}>
+              {/* <SerchButton onClick={() => navigate("/medicallist")}>
                 Click{" "}
                 <HiCursorClick
                   style={{ verticalAlign: "middle", fontSize: "30px" }}
                 />
-              </SerchButton>
+              </SerchButton> */}
+              <Link to="/medicallist">
+                <SerchButton>
+                  Click{" "}
+                  <HiCursorClick
+                    style={{ verticalAlign: "middle", fontSize: "30px" }}
+                  />
+                </SerchButton>
+              </Link>
             </form>
           </Search>
         </MainWrap>

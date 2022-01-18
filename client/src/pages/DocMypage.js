@@ -311,6 +311,7 @@ function DocMypage(props) {
         }
       )
       .then((res) => {
+        console.log(res.data.myCommentInfo);
         setmyCommentInfo(res.data.myCommentInfo);
       });
   }, []);
@@ -422,8 +423,6 @@ function DocMypage(props) {
                       height: "90px",
                       objectFit: "scale-down",
                     }}
-                    // src={require(`././uploads/${props.userInfo.profile_img}`)}
-                    //사진이름을 한글로 하면 에러뜬다....!
                     style={{
                       width: "100px",
                       height: "90px",
@@ -435,11 +434,6 @@ function DocMypage(props) {
                 )}
               </Box>
               <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
-              {/* <input
-              type="file"
-              id="upload_file"
-              onChange={handleImgChange}
-            ></input> */}
             </Profilecontainer>
             <DocLine>
               <DocTitle>이메일</DocTitle>
@@ -507,11 +501,13 @@ function DocMypage(props) {
             return (
               <MyreviewContainer key={comment.id}>
                 <MyreviewLine>
-                  {/* <MyreviewNickname>{qna.user.nickname}</MyreviewNickname> */}
                   <MyreviewTrash>
                     <BsTrash onClick={() => handleCommentDelete(comment.id)} />
                   </MyreviewTrash>
                   <div style={{ clear: "both" }}></div>
+                  <MyreviewContent>
+                    {comment.qna ? comment.qna.title : "삭제된질문"}
+                  </MyreviewContent>
                   <MyreviewContent>{comment.content}</MyreviewContent>
                 </MyreviewLine>
               </MyreviewContainer>

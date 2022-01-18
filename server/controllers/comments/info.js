@@ -1,4 +1,4 @@
-const { comments, doctors } = require("../../models");
+const { comments, doctors, qna } = require("../../models");
 const { isAuthorized } = require("../tokenFunctions");
 
 module.exports = async (req, res) => {
@@ -9,6 +9,11 @@ module.exports = async (req, res) => {
       where: {
         doctors_id: accessToken.id,
       },
+      include: [
+        {
+          model: qna,
+        },
+      ],
     });
     res.status(200).send({ myCommentInfo: doctorComments });
   } else {

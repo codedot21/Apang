@@ -92,7 +92,7 @@ const HoverTag = styled.div`
   }
 `;
 
-const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
+const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
   const [medicalInfo, setMedicalInfo] = useState({
     place_name: "",
     address_name: "",
@@ -120,7 +120,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
           method: "get",
           url: "https://dapi.kakao.com/v2/local/geo/coord2address",
           headers: {
-            Authorization: "KakaoAK 5af6de5262a6de0991283e152a2597c5",
+            Authorization: "KakaoAK f35d2a6cf85539865f624045e52c3944",
           },
           params: {
             x: longitude,
@@ -252,13 +252,27 @@ const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
     }
   }, [keyword]);
   // console.log("Place : ", Places);
+
   // 병원 상세 페이지
+  //const [reviews, setReviews] = useState([]); //해당 병원 review 가져오기
   const detailPage = (item, e) => {
     setMedicalInfo({
       place_name: item.place_name,
       address_name: item.address_name,
       phone: item.phone,
     });
+    // axios
+    //   .post(
+    //     "http://localhost:80/review/info",
+    //     { hospital_name: item.place_name },
+    //     {
+    //       withCredentials: true,
+    //     }
+    //   )
+    //   .then((res) => {
+    //     console.log("whatwhat?", res);
+    //     setReviews(res.data.reviewInfo);
+    //   });
   };
   // console.log("medicalInfo : ", medicalInfo);
 
@@ -323,7 +337,13 @@ const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
           <div id="pagination" style={{ textAlign: "center" }}></div>
         </div>
       </ListDivBox>
-      <MedicalDetail medicalInfo={medicalInfo} userInfo={userInfo} />
+      <MedicalDetail
+        medicalInfo={medicalInfo}
+        userInfo={userInfo}
+        isLogin={isLogin}
+        auth={auth}
+        // reviews={reviews}
+      />
       <div style={{ clear: "both" }}></div>
     </MedicalContainer>
   );
