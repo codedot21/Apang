@@ -262,7 +262,7 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
       });
     } else {
       axios
-        .post("http://localhost:80/public/signup", publicInfo, {
+        .post("https://localhost:80/public/signup", publicInfo, {
           withCredentials: true,
         })
         .then((res) => {
@@ -287,7 +287,7 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
             });
             delete publicInfo.nickname;
             axios
-              .post("http://localhost:80/common/signin", publicInfo, {
+              .post("https://localhost:80/common/signin", publicInfo, {
                 withCredentials: true,
               })
               .then((res) => {
@@ -328,7 +328,7 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
       });
     } else {
       axios
-        .post("http://localhost:80/doctor/signup", doctorInfo, {
+        .post("https://localhost:80/doctor/signup", doctorInfo, {
           withCredentials: true,
         })
         .then((res) => {

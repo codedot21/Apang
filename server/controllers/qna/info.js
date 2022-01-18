@@ -64,6 +64,9 @@ module.exports = async (req, res) => {
           {
             model: hashtag,
           },
+          {
+            model: comments,
+          },
         ],
         order: [["id", "DESC"]],
       });
@@ -77,6 +80,9 @@ module.exports = async (req, res) => {
           },
           {
             model: hashtag,
+          },
+          {
+            model: comments,
           },
         ],
         where: { category: req.body.filter },

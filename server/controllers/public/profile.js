@@ -2,11 +2,15 @@ const { users } = require("../../models");
 const { isAuthorized } = require("../tokenFunctions");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: path.join(__dirname, "../../../client/public/", "uploads"),
+  // destination: function (req, file, cb) {
+  //   cb(null, "../../../client/public/uploads");
+  // },
   filename: function (req, file, cb) {
-    fileName = file.originalname;
+    // fileName = file.originalname;
     console.log("들어왔나?", file);
     cb(null, Date.now() + "-" + file.originalname);
   },
@@ -33,6 +37,25 @@ module.exports = async (req, res) => {
       res.status(200).send({ message: "닉네임만 수정 완료" });
     } else {
       try {
+        // console.log("여기는 찍히나? : ", userInfo);
+        const user = await users.findOne({
+          where: {
+            id: userInfo.id,
+          },
+        });
+        console.log("user : ", user);
+        if (user.dataValues.profile_img !== "publicprofile.jpeg") {
+          const img = user.dataValues.profile_img;
+          // console.log("이거찍히나? : ", img);
+          fs.unlink(
+            path.join(__dirname, "../../../client/public/uploads/", img),
+            (err) => {
+              if (err) {
+                console.log(err);
+              }
+            }
+          );
+        }
         let upload = multer({
           storage: storage,
         }).single("apang");
@@ -44,9 +67,9 @@ module.exports = async (req, res) => {
           // console.log("nickname : ", nickname);
           // console.log(userInfo.id);
           // console.log("req : ", req);
-          // console.log("req.file : ", req.file);
+          console.log("req.file : ", req.file);
           let filename = req.file.filename;
-          console.log("filename은?", filename);
+          // console.log("filename은?", filename);
           if (!req.file) {
             // console.log("이거?", req.file);
             return res.send("이미지를 올려주세요");
