@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -340,12 +340,14 @@ function QnaModal({ open, close, tagHandler }) {
           </TagsInput>
 
           <div>
-            <input
-              className="textarea"
-              type="textarea"
-              placeholder="내용을 입력해주세요"
-              onChange={qnaChange("content")}
-            />
+            <TextArea>
+              <textarea
+                className="textarea"
+                type="textarea"
+                placeholder="내용을 입력해주세요"
+                onChange={qnaChange("content")}
+              />
+            </TextArea>
           </div>
         </QnaBody>
         <QnaFooter>

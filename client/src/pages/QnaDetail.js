@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import question from "../images/question.png";
 import QnaUserPost from "../components/QnaUserPost.js";
-import Qna from "../components/Qna.js";
 import QnaPost from "../components/QnaPost.js";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 export const QnaContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
