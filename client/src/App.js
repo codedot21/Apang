@@ -55,7 +55,8 @@ function App() {
         });
 
       // <-- 카카오 로그인 -->
-    } else if (isNaN(authnumber)) {
+      // } else if (isNaN(authnumber)) {
+    } else if (authnumber === 4) {
       //parseInt(null)이 들어가면 값이 NaN이 나오더라.
       axios
         .post("http://localhost:80/oauth/kakao", {
@@ -72,7 +73,7 @@ function App() {
               nickname: user.data.properties.nickname,
               email: user.data.kakao_account.email,
             };
-            setUserInfo(userInfo);
+            setUserInfo(userInfo); //이것때문에 post 2번 간다.
             setIsLogin(true);
             navigate("/");
           } else {
@@ -187,13 +188,21 @@ function App() {
           }
         />
 
-        <Route path="/medicallist" element={<Medical userInfo={userInfo} />} />
+        <Route
+          path="/medicallist"
+          element={
+            <Medical
+              isLogin={isLogin}
+              userInfo={userInfo}
+              auth={parseInt(localStorage.getItem("auth"))}
+            />
+          }
+        />
         <Route
           path="/qna/detail/:id"
           element={
             <QnaDetail
               isLogin={isLogin}
-              // qnaDetail={qnaDetail}
               userInfo={userInfo}
               auth={parseInt(localStorage.getItem("auth"))}
             />

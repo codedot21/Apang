@@ -91,7 +91,7 @@ const HoverTag = styled.div`
   }
 `;
 
-const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
+const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
   const [medicalInfo, setMedicalInfo] = useState({
     place_name: "",
     address_name: "",
@@ -334,7 +334,12 @@ const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
           <div id="pagination" style={{ textAlign: "center" }}></div>
         </div>
       </ListDivBox>
-      <MedicalDetail medicalInfo={medicalInfo} userInfo={userInfo} />
+      <MedicalDetail
+        medicalInfo={medicalInfo}
+        userInfo={userInfo}
+        isLogin={isLogin}
+        auth={auth}
+      />
       <div style={{ clear: "both" }}></div>
     </MedicalContainer>
   );

@@ -1,8 +1,6 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const Kakao = ({ LoginHandler }) => {
-  const navigate = useNavigate();
   const code = new URL(window.location.href).searchParams.get("code"); //인가코드 받음.
 
   const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
@@ -32,28 +30,8 @@ const Kakao = ({ LoginHandler }) => {
   }).then((res) => {
     const ACCESS_TOKEN = res.data.access_token;
     localStorage.setItem("accessToken", ACCESS_TOKEN);
+    localStorage.setItem("auth", 4);
     LoginHandler();
-    // axios
-    //   .post("http://localhost:80/oauth/kakao", { //서버로부터 사용자 정보 받아오기
-    //     access_token: ACCESS_TOKEN,
-    //   })
-    //   .then((res) => {
-    //     if (res.status === 201 || res.status === 200) {
-    //       const user = res.data;
-    //       console.log("user : ", user);
-    //       console.log(user.accessToken);
-    //       localStorage.setItem("userid", user.data.id);
-    //       const userInfo = {
-    //         id: user.data.id,
-    //         nickname: user.data.properties.nickname,
-    //         email: user.data.kakao_account.email,
-    //       };
-    //       LoginHandler(userInfo); //이게 있으면 POST 400 bad request 요청이 2번이나 더 보내진다.
-    //       navigate("/");
-    //     } else {
-    //       window.alert("로그인에 실패하였습니다.");
-    //     }
-    //   });
   });
   return <></>;
 };
