@@ -386,20 +386,18 @@ function UserMypage(props) {
       // console.log(formdata);
       formdata.append("nickname", userInfo.nickname);
       formdata.append("token", localStorage.getItem("accessToken"));
-      axios.post(
-        "http://localhost:80/public/profile",
-        formdata,
-        {
+      axios
+        .post("http://localhost:80/public/profile", formdata, {
           headers: { "Content-type": "multipart/form-data" },
           withCredentials: true,
-        }.then(() => {
+        })
+        .then(() => {
           Swal.fire({
             icon: "success",
             title: "Apang 정보수정",
             text: message.changeSuccess,
           });
-        })
-      );
+        });
     }
   };
   // 비밀번호 변경
