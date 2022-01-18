@@ -2,6 +2,7 @@ const { doctors } = require("../../models");
 const { isAuthorized } = require("../tokenFunctions");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: path.join(__dirname, "../../../client/public/", "uploads"),
@@ -12,13 +13,13 @@ const storage = multer.diskStorage({
   },
 });
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   const userInfo = isAuthorized(req);
   console.log(userInfo);
   if (userInfo.auth === 0) {
     const id = Object.keys(req.body).toString();
     console.log(id);
-    doctors.update(
+    await doctors.update(
       {
         agree: "true",
       },
@@ -30,21 +31,72 @@ module.exports = (req, res) => {
     );
     res.status(200).send({ message: "의사 신청 완료" });
   } else {
+    console.log("이름이랑 병원명 어째뜸? : ", req.body);
+    const user = await doctors.findOne({
+      where: {
+        id: userInfo.id,
+      },
+    });
+    console.log("user : ", user);
     if (req.body.password === undefined) {
       if (req.body.onlyName) {
-        doctors.update(
-          {
-            name: req.body.onlyName.name,
-            hospital: req.body.onlyName.hospital,
-          },
-          {
-            where: {
-              id: userInfo.id,
+        if (req.body.onlyName.name === "") {
+          await doctors.update(
+            {
+              name: user.dataValues.name,
+              hospital: req.body.onlyName.hospital,
             },
-          }
-        );
+            {
+              where: {
+                id: userInfo.id,
+              },
+            }
+          );
+        } else if (req.body.onlyName.hospital === "") {
+          await doctors.update(
+            {
+              name: req.body.onlyName.name,
+              hospital: user.dataValues.hospital,
+            },
+            {
+              where: {
+                id: userInfo.id,
+              },
+            }
+          );
+        } else {
+          await doctors.update(
+            {
+              name: req.body.onlyName.name,
+              hospital: req.body.onlyName.hospital,
+            },
+            {
+              where: {
+                id: userInfo.id,
+              },
+            }
+          );
+        }
         res.status(200).send({ message: "이름, 병원명 수정완료" });
       } else {
+        const user = await doctors.findOne({
+          where: {
+            id: userInfo.id,
+          },
+        });
+        console.log("user : ", user);
+        if (user.dataValues.profile_img !== "doctorprofile.png") {
+          const img = user.dataValues.profile_img;
+          // console.log(img);
+          fs.unlink(
+            path.join(__dirname, "../../../client/public/uploads/", img),
+            (err) => {
+              if (err) {
+                console.log(err);
+              }
+            }
+          );
+        }
         try {
           let upload = multer({
             storage: storage,

@@ -120,7 +120,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
           method: "get",
           url: "https://dapi.kakao.com/v2/local/geo/coord2address",
           headers: {
-            Authorization: "KakaoAK 5af6de5262a6de0991283e152a2597c5",
+            Authorization: "KakaoAK f35d2a6cf85539865f624045e52c3944",
           },
           params: {
             x: longitude,
@@ -156,7 +156,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
   const [Places, setPlaces] = useState([]);
 
   // 검색 키워드 담는 변수
-  const [keyword, setKeyword] = useState(medical);
+  const [keyword, setKeyword] = useState("병원");
 
   // 키워드 바꿔주는 함수 onChange함수
   const handler = (e) => {
@@ -186,6 +186,16 @@ const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
       x: nowLocation.longitude,
       y: nowLocation.latitude,
     });
+
+    //맵 컨트롤러
+    const control = new kakao.maps.ZoomControl();
+    map.addControl(control, kakao.maps.ControlPosition.TOPRIGHT);
+
+    //마우스 휠을 이용한 확대, 축소 막는 기능
+    map.setZoomable(false);
+
+    //지도에 커서를 오리면 커서 스타일 변경
+    map.setCursor("move");
 
     function placesSearchCB(data, status, pagination) {
       if (status === kakao.maps.services.Status.OK) {
@@ -246,6 +256,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
             "</div>"
           // 지도안의 마커 네임
         );
+
         infowindow.open(map, marker);
       });
     }
@@ -287,6 +298,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
             border: "2px solid #63b5f6",
             borderRadius: "10px",
             marginBottom: "20px",
+            zIndex: "0",
           }}
         ></div>
       </div>
