@@ -24,14 +24,8 @@ module.exports = async (req, res) => {
       include: [
         {
           model: doctors,
-          // where: { id: comments.doctors_id },
         },
       ],
-      // const qnaInfo = await qna.findAll({
-      //   include: [
-      //     {
-      //       model: users,
-      //     },
     });
     res.status(200).send({ comments: doctorComments });
   }
