@@ -14,27 +14,19 @@ const storage = multer.diskStorage({
 });
 
 module.exports = async (req, res) => {
-  console.log("qna req.body? : ", req.body);
   const accessTokenData = isAuthorized(req);
-
-  //카카오로 로그인 시, accesstoken, kakao_userid 같이 받아오기
-  //   const kakaoToken = req.body.access_token; //굳이 안보내줘도될것같긴한데..
   const kakaoUserid = req.body.kakao_userid;
 
   //<---- kakao로 로그인 했을 때!---->
   if (kakaoUserid) {
-    if (
-      req.body.receipts_img === "" ||
-      req.body.content === "" ||
-      req.body.hospital_name === ""
-    ) {
+    if (req.body.receipts_img === "" || req.body.content === "") {
       // 항목이 비었을때
       res.status(400).send({ message: "Bad Request" });
     } else {
       //항목이 다 적혀있을때
       let upload = multer({
         storage: storage,
-      }).single("receipt");
+      }).single("receipts_img");
 
       //여기가 시작
       upload(req, res, function (err) {
@@ -51,7 +43,6 @@ module.exports = async (req, res) => {
           .create({
             receipts_img: filename,
             content: req.body.content,
-            d_name: req.body.d_name, //없으면 NULL
             hospital_name: req.body.hospital_name,
             users_id: kakaoUserid,
           })
@@ -70,16 +61,12 @@ module.exports = async (req, res) => {
       res.status(401).send({ data: null, message: "Invalid Token" });
       //<--- 일반 로그인 시, 토큰은 유효, but 항목이 비었을 때 --->
     } else if (accessTokenData) {
-      if (
-        req.body.receipts_img === "" ||
-        req.body.content === "" ||
-        req.body.hospital_name === ""
-      ) {
+      if (req.body.receipts_img === "" || req.body.content === "") {
         res.status(400).send({ message: "Bad Request" });
       } else {
         let upload = multer({
           storage: storage,
-        }).single("apang");
+        }).single("receipts_img");
 
         upload(req, res, function (err) {
           let filename = req.file.filename;
@@ -95,7 +82,6 @@ module.exports = async (req, res) => {
             .create({
               receipts_img: filename,
               content: req.body.content,
-              d_name: req.body.d_name,
               hospital_name: req.body.hospital_name,
               users_id: accessTokenData.id,
             })

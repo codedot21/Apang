@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { Container } from "../styles";
-import Pp from "../images/pp.jpg";
 import MedicalDetail from "../components/MedicalDetail";
 
 // import cn from "classnames";
@@ -92,7 +91,7 @@ const HoverTag = styled.div`
   }
 `;
 
-const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
+const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
   const [medicalInfo, setMedicalInfo] = useState({
     place_name: "",
     address_name: "",
@@ -209,6 +208,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
         map.setBounds(bounds);
         // 페이지 목록 보여주는 displayPagination() 추가
         displayPagination(pagination);
+        setPlaces(data);
       }
     }
 
@@ -334,7 +334,12 @@ const Medical = ({ medical, medicalInfoHandling, userInfo }) => {
           <div id="pagination" style={{ textAlign: "center" }}></div>
         </div>
       </ListDivBox>
-      <MedicalDetail medicalInfo={medicalInfo} userInfo={userInfo} />
+      <MedicalDetail
+        medicalInfo={medicalInfo}
+        userInfo={userInfo}
+        isLogin={isLogin}
+        auth={auth}
+      />
       <div style={{ clear: "both" }}></div>
     </MedicalContainer>
   );

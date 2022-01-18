@@ -8,6 +8,7 @@ const reviewRouter = require("./review");
 const commonRouter = require("./common");
 const oauthRouter = require("./oauth");
 const hashtagRouter = require("./hashtag");
+const hospitalRouter = require("./hospital");
 
 router.use("/public", publicRouter);
 router.use("/comments", commentsRouter);
@@ -17,5 +18,6 @@ router.use("/review", reviewRouter);
 router.use("/common", commonRouter);
 router.use("/oauth", oauthRouter);
 router.use("/hashtag", hashtagRouter);
+router.use("/hospital", hospitalRouter);
 
 module.exports = router;

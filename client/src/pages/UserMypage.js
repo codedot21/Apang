@@ -321,6 +321,7 @@ function UserMypage(props) {
     file: [],
     filepreview: null,
   });
+
   const [userInfo, setUserInfo] = useState({
     //개인정보수정
     nickname: "",
@@ -370,6 +371,7 @@ function UserMypage(props) {
     }
   };
 
+  // 수정
   const submit = () => {
     if (!imgInfo.filepreview) {
       axios
@@ -457,6 +459,14 @@ function UserMypage(props) {
         withCredentials: true,
       })
       .then(() => {
+        axios.delete("http://localhost:80/comments", {
+          data: {
+            qna_id: qnaid,
+          },
+          withCredentials: true,
+        });
+      })
+      .then(() => {
         Swal.fire({
           icon: "success",
           text: "질문이 성공적으로 삭제되었습니다",
@@ -481,7 +491,7 @@ function UserMypage(props) {
       .then(() => {
         Swal.fire({
           icon: "success",
-          text: "질문이 성공적으로 삭제되었습니다",
+          text: "리뷰가 성공적으로 삭제되었습니다",
         });
       })
       .then(() => {
@@ -499,12 +509,6 @@ function UserMypage(props) {
           {props.userInfo.auth ? (
             <>
               <UserContainerLine>
-                {/* <Profile
-            type="file"
-            id="upload_file"
-            style={{ display: "none" }}
-            onChange={handleInputChange}
-          /> */}
                 <Profilecontainer>
                   <Profile
                     type="file"
@@ -609,11 +613,11 @@ function UserMypage(props) {
             return (
               <MyreviewContainer key={review.id}>
                 <MyreviewLine>
-                  {/* <MyreviewNickname>{qna.user.nickname}</MyreviewNickname> */}
                   <MyreviewTrash>
                     <BsTrash onClick={() => handleReviewDelete(review.id)} />
                   </MyreviewTrash>
-                  <Clear />
+                  <div style={{ clear: "both" }}></div>
+                  <MyreviewContent>{review.hospital_name}</MyreviewContent>
                   <MyreviewContent>{review.content}</MyreviewContent>
                 </MyreviewLine>
               </MyreviewContainer>
@@ -638,7 +642,8 @@ function UserMypage(props) {
                     <BsTrash onClick={() => handleQnaDelete(qna.id)} />
                   </MyreviewTrash>
                   <Clear />
-                  <MyreviewContent>{qna.content}</MyreviewContent>
+                  <MyreviewContent>{qna.category}</MyreviewContent>
+                  <MyreviewContent>{qna.title}</MyreviewContent>
                 </MyreviewLine>
               </MyreviewContainer>
             );

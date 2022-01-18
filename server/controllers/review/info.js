@@ -5,6 +5,7 @@ module.exports = async (req, res) => {
   const accessToken = isAuthorized(req);
   const kakaoUserid = req.body.kakao_userid;
   const page = req.body.page; //usermypage
+  console.log("req.body.page?", req.body.page);
   if (page === "usermypage") {
     if (kakaoUserid) {
       const reviewInfo = await reviews.findAll({
@@ -31,6 +32,9 @@ module.exports = async (req, res) => {
     }
   } else {
     const reviewInfo = await reviews.findAll({
+      where: {
+        hospital_name: req.body.hospital_name,
+      },
       include: [
         {
           model: users,

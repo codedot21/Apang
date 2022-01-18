@@ -9,7 +9,11 @@ module.exports = async (req, res) => {
       where: {
         doctors_id: accessToken.id,
       },
-      include: [{ model: qna }],
+      include: [
+        {
+          model: qna,
+        },
+      ],
     });
     res.status(200).send({ myCommentInfo: doctorComments });
   } else {
@@ -20,14 +24,8 @@ module.exports = async (req, res) => {
       include: [
         {
           model: doctors,
-          // where: { id: comments.doctors_id },
         },
       ],
-      // const qnaInfo = await qna.findAll({
-      //   include: [
-      //     {
-      //       model: users,
-      //     },
     });
     res.status(200).send({ comments: doctorComments });
   }

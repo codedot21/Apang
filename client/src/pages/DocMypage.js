@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Container } from "../styles";
-import { BsTrash } from "react-icons/bs";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { BsTrash } from "react-icons/bs";
+import { message } from "../modules/message";
+import { valid } from "../modules/validator";
 
 export const DocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -227,8 +228,8 @@ const MyreviewContainer = styled.div`
 const MyreviewLine = styled.div`
   border: 1px solid #b5afaf;
   border-radius: 10px;
-  width: 20%;
-  height: 100px;
+  width: 25%;
+  height: 50%;
   margin: 1vw;
   float: left;
   background-color: #f9f9f9;
@@ -513,13 +514,6 @@ function DocMypage(props) {
                   />
                 ) : (
                   <img
-                    style={{
-                      width: "100px",
-                      height: "90px",
-                      objectFit: "scale-down",
-                    }}
-                    // src={require(`././uploads/${props.userInfo.profile_img}`)}
-                    //사진이름을 한글로 하면 에러뜬다....!
                     style={{
                       width: "100px",
                       height: "90px",
