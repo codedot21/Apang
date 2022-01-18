@@ -25,6 +25,9 @@ module.exports = async (req, res) => {
         {
           model: doctors,
         },
+        {
+          model: qna,
+        },
       ],
     });
     res.status(200).send({ comments: doctorComments });

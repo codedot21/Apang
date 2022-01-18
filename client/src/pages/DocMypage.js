@@ -332,7 +332,7 @@ function DocMypage(props) {
   useEffect(() => {
     axios
       .post(
-        "http://localhost:80/comments/info",
+        "https://localhost:80/comments/info",
         { page: "doctormypage" },
         {
           withCredentials: true,
@@ -390,7 +390,7 @@ function DocMypage(props) {
       delete userInfo.passwordConfirm;
       axios
         .post(
-          "http://localhost:80/doctor/profile",
+          "https://localhost:80/doctor/profile",
           { onlyName: userInfo },
 
           {
@@ -410,7 +410,7 @@ function DocMypage(props) {
       formdata.append("name", userInfo.name);
       formdata.append("hospital", userInfo.hospital);
       axios
-        .post("http://localhost:80/doctor/profile", formdata, {
+        .post("https://localhost:80/doctor/profile", formdata, {
           headers: { "Content-type": "multipart/form-data" },
           withCredentials: true,
         })
@@ -430,7 +430,7 @@ function DocMypage(props) {
     delete userInfo.hospital;
     // console.log(userInfo);
     axios
-      .post("http://localhost:80/doctor/profile", userInfo, {
+      .post("https://localhost:80/doctor/profile", userInfo, {
         withCredentials: true,
       })
       .then((res) => {
@@ -454,7 +454,7 @@ function DocMypage(props) {
   // 회원탈퇴
   const deleteHandler = () => {
     axios
-      .delete("http://localhost:80/common/users", {
+      .delete("https://localhost:80/common/users", {
         withCredentials: true,
       })
       .then((res) => {
@@ -467,7 +467,7 @@ function DocMypage(props) {
   //내가 적은 댓글 삭제
   const handleCommentDelete = (commentid) => {
     axios
-      .delete("http://localhost:80/comments", {
+      .delete("https://localhost:80/comments", {
         data: {
           comment_id: commentid,
         },

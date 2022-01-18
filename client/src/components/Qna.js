@@ -97,7 +97,7 @@ export const ContentComment = styled.div`
   margin-right: 1rem;
 `;
 
-function Qna({ title, nickname, content, profile_img, tags }) {
+function Qna({ title, nickname, content, profile_img, tags, commentsCount }) {
   // console.log(tags.hashtags);
   return (
     <>
@@ -119,7 +119,7 @@ function Qna({ title, nickname, content, profile_img, tags }) {
                 return <div className="tag">{tag.hashtag}</div>;
               })}
             </Tag>
-            <ContentComment>댓글 1</ContentComment>
+            <ContentComment>댓글 {commentsCount}</ContentComment>
           </ContentWrap>
         </QnaBox>
       ) : null}

@@ -257,14 +257,14 @@ function QnaPage({ isLogin, auth }) {
     setIsLoading(true);
     axios
       .post(
-        "http://localhost:80/qna/info",
+        "https://localhost:80/qna/info",
         { kakao_userid: localStorage.getItem("userid") },
         {
           withCredentials: true,
         }
       )
       .then((res) => {
-        // console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
+        console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
         setqnaInfo(res.data.qnaInfo);
         setIsLoading(false);
       });
@@ -296,7 +296,7 @@ function QnaPage({ isLogin, auth }) {
     // console.log(filter);
     axios
       .post(
-        "http://localhost:80/qna/info",
+        "https://localhost:80/qna/info",
         { filter: filter },
         {
           withCredentials: true,
@@ -307,7 +307,7 @@ function QnaPage({ isLogin, auth }) {
         setqnaInfo(res.data.qnaInfo);
       });
   };
-  console.log("큐엔에이페이지qnaInfo : ", qnaInfo);
+  // console.log("큐엔에이페이지qnaInfo : ", qnaInfo);
 
   return (
     <>
@@ -368,6 +368,7 @@ function QnaPage({ isLogin, auth }) {
                             qna.user ? qna.user.profile_img : "kakao.png"
                           }
                           tags={qna}
+                          commentsCount={qna.comments.length}
                         />
                       </Linked>
                     );

@@ -30,7 +30,7 @@ function App() {
     //< --일반인 로그인 -->
     if (authnumber === 2 || authnumber === 0) {
       axios
-        .get("http://localhost:80/public/userinfo", {
+        .get("https://localhost:80/public/userinfo", {
           withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
         })
         .then((res) => {
@@ -43,7 +43,7 @@ function App() {
       //<-- 의사 로그인 -->
     } else if (authnumber === 1) {
       axios
-        .get("http://localhost:80/doctor/userinfo", {
+        .get("https://localhost:80/doctor/userinfo", {
           withCredentials: true,
         })
         .then((res) => {
@@ -59,7 +59,7 @@ function App() {
     } else if (authnumber === 4) {
       //parseInt(null)이 들어가면 값이 NaN이 나오더라.
       axios
-        .post("http://localhost:80/oauth/kakao", {
+        .post("https://localhost:80/oauth/kakao", {
           //서버로부터 사용자 정보 받아오기
           access_token: localStorage.getItem("accessToken"),
         })
@@ -103,7 +103,7 @@ function App() {
   const handleLogout = () => {
     axios
       .post(
-        "http://localhost:80/common/signout",
+        "https://localhost:80/common/signout",
         {
           auth: auth,
           userid: localStorage.getItem("userid"),
@@ -128,7 +128,7 @@ function App() {
 
   // const getGoogleToken = async (authorizationCode) => {
   //   await axios({
-  //     url: "http://localhost:80/oauth/google",
+  //     url: "https://localhost:80/oauth/google",
   //     method: "post",
   //     data: { authorizationCode },
   //     withCredentials: true,
