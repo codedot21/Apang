@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { Container } from "../styles";
-import Pp from "../images/pp.jpg";
 import MedicalDetail from "../components/MedicalDetail";
 
 // import cn from "classnames";
@@ -156,7 +155,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
   const [Places, setPlaces] = useState([]);
 
   // 검색 키워드 담는 변수
-  const [keyword, setKeyword] = useState(medical);
+  const [keyword, setKeyword] = useState("병원");
 
   // 키워드 바꿔주는 함수 onChange함수
   const handler = (e) => {
@@ -187,6 +186,16 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
       y: nowLocation.latitude,
     });
 
+    //맵 컨트롤러
+    const control = new kakao.maps.ZoomControl();
+    map.addControl(control, kakao.maps.ControlPosition.TOPRIGHT);
+
+    //마우스 휠을 이용한 확대, 축소 막는 기능
+    map.setZoomable(false);
+
+    //지도에 커서를 오리면 커서 스타일 변경
+    map.setCursor("move");
+
     function placesSearchCB(data, status, pagination) {
       if (status === kakao.maps.services.Status.OK) {
         let bounds = new kakao.maps.LatLngBounds();
@@ -199,6 +208,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
         map.setBounds(bounds);
         // 페이지 목록 보여주는 displayPagination() 추가
         displayPagination(pagination);
+        setPlaces(data);
       }
     }
 
@@ -246,32 +256,19 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
             "</div>"
           // 지도안의 마커 네임
         );
+
         infowindow.open(map, marker);
       });
     }
   }, [keyword]);
   // console.log("Place : ", Places);
-
   // 병원 상세 페이지
-  //const [reviews, setReviews] = useState([]); //해당 병원 review 가져오기
   const detailPage = (item, e) => {
     setMedicalInfo({
       place_name: item.place_name,
       address_name: item.address_name,
       phone: item.phone,
     });
-    // axios
-    //   .post(
-    //     "http://localhost:80/review/info",
-    //     { hospital_name: item.place_name },
-    //     {
-    //       withCredentials: true,
-    //     }
-    //   )
-    //   .then((res) => {
-    //     console.log("whatwhat?", res);
-    //     setReviews(res.data.reviewInfo);
-    //   });
   };
   // console.log("medicalInfo : ", medicalInfo);
 
@@ -301,6 +298,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
             border: "2px solid #63b5f6",
             borderRadius: "10px",
             marginBottom: "20px",
+            zIndex: "0",
           }}
         ></div>
       </div>
@@ -341,7 +339,6 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
         userInfo={userInfo}
         isLogin={isLogin}
         auth={auth}
-        // reviews={reviews}
       />
       <div style={{ clear: "both" }}></div>
     </MedicalContainer>

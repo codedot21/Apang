@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Container } from "../styles";
-import { BsTrash } from "react-icons/bs";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { BsTrash } from "react-icons/bs";
 import { message } from "../modules/message";
 import { valid } from "../modules/validator";
 
@@ -144,7 +144,7 @@ const Edting = styled.button`
 const PasswordLine = styled.div`
   border: 1px solid #b5afaf;
   padding: 1rem;
-  height: 220px;
+  height: 240px;
   text-align: center;
   width: 80%;
   margin: 0 auto;
@@ -155,7 +155,7 @@ const PasswordLine = styled.div`
 `;
 
 const PassWordTitle = styled.span`
-  width: 50%;
+  width: 45%;
   padding: 20px;
   float: left;
   font-weight: bold;
@@ -228,8 +228,8 @@ const MyreviewContainer = styled.div`
 const MyreviewLine = styled.div`
   border: 1px solid #b5afaf;
   border-radius: 10px;
-  width: 20%;
-  height: 100px;
+  width: 25%;
+  height: 50%;
   margin: 1vw;
   float: left;
   background-color: #f9f9f9;
@@ -255,20 +255,11 @@ const MyreviewTrash = styled.button`
   }
 `;
 
-const MyreviewNickname = styled.h3`
-  width: 40%;
-  margin: 1vw 1vw 1vw 0.5vw;
-  float: left;
-  @media ${({ theme }) => theme.device.mobile} {
-    margin: 2vw 3vw 3vw 2vw;
-  }
-`;
-
 const MyreviewContent = styled.div`
-  margin: 0 1vw 1vw 0.5vw;
-  border: 1px solid #b5afaf;
+  margin: 0.5vw 1vw 1vw 1vw;
+  border-bottom: 1px solid #b5afaf;
   width: 90%;
-  padding: 3px;
+  padding: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -277,16 +268,46 @@ const MyreviewContent = styled.div`
   }
 `;
 
-// const MyreviewNickname = styled.h3`
-//   width: 40%;
-//   margin: 1vw 1vw 1vw 0.5vw;
-//   float: left;
-//   @media ${({ theme }) => theme.device.mobile} {
-//     margin: 2vw 3vw 3vw 2vw;
-//   }
-// `;
+const UserTitle = styled.div`
+  margin: 0.5vw 1vw 1vw 1vw;
+  border-bottom: 1px solid #b5afaf;
+  padding: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 0vw 1.5vw 1.5vw 1.5vw;
+  }
+`;
+
+const TitleHeader = styled.h4`
+  margin: 1vw 0 0.5vw 1vw;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 2vw 1.5vw 1.5vw 2vw;
+  }
+`;
 
 // 대답 끝
+
+// 유효성 시작
+
+const Clear = styled.div`
+  clear: both;
+`;
+
+const Prosecutor = styled.div`
+  font-size: 10px;
+  color: #e91e63;
+  width: 90%;
+  margin-left: 100px;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 0vw;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+`;
+
+// 유효성 끝
 
 function DocMypage(props) {
   const navigate = useNavigate();
@@ -318,7 +339,6 @@ function DocMypage(props) {
         }
       )
       .then((res) => {
-        console.log(res.data.myCommentInfo);
         setmyCommentInfo(res.data.myCommentInfo);
       });
   }, []);
@@ -348,29 +368,31 @@ function DocMypage(props) {
       }
       return;
     }
-    if (valid[id](value)) {
-      setErrorMessage((prev) => {
-        prev[id] = "";
-        return prev;
-      });
-    } else {
-      setErrorMessage((prev) => {
-        prev[id] = message[id];
-        return prev;
-      });
+    if (id === "passwordConfirm" || id === "newPassword") {
+      if (valid[id](value)) {
+        setErrorMessage((prev) => {
+          prev[id] = "";
+          return prev;
+        });
+      } else {
+        setErrorMessage((prev) => {
+          prev[id] = message[id];
+          return prev;
+        });
+      }
     }
   };
 
-  // 수정
-  // const [isSucces, setSuccess] = useState(null);
   const submit = () => {
     if (!imgInfo.filepreview) {
       delete userInfo.password;
       delete userInfo.newPassword;
+      delete userInfo.passwordConfirm;
       axios
         .post(
           "http://localhost:80/doctor/profile",
           { onlyName: userInfo },
+
           {
             withCredentials: true,
           }
@@ -387,7 +409,6 @@ function DocMypage(props) {
       formdata.append("apang", imgInfo.file);
       formdata.append("name", userInfo.name);
       formdata.append("hospital", userInfo.hospital);
-      // formdata.append("hospital", userInfo.hospital);
       axios
         .post("http://localhost:80/doctor/profile", formdata, {
           headers: { "Content-type": "multipart/form-data" },
@@ -498,6 +519,8 @@ function DocMypage(props) {
                       height: "90px",
                       objectFit: "scale-down",
                     }}
+                    // src={require(`././uploads/${props.userInfo.profile_img}`)}
+                    //사진이름을 한글로 하면 에러뜬다....!
                     style={{
                       width: "100px",
                       height: "90px",
@@ -509,6 +532,11 @@ function DocMypage(props) {
                 )}
               </Box>
               <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
+              {/* <input
+              type="file"
+              id="upload_file"
+              onChange={handleImgChange}
+            ></input> */}
             </Profilecontainer>
             <DocLine>
               <DocTitle>이메일</DocTitle>
@@ -518,6 +546,7 @@ function DocMypage(props) {
                 value={props.userInfo.email}
                 disabled
               />
+
               <DocTitle>이름</DocTitle>
               <DocInput
                 type="text"
@@ -532,7 +561,6 @@ function DocMypage(props) {
                 placeholder="병원명"
                 defaultValue={props.userInfo.hospital}
                 onChange={handleInputChange("hospital")}
-                defaultValue={props.userInfo.hospital}
               />
             </DocLine>
           </DocContainerLine>
@@ -548,14 +576,19 @@ function DocMypage(props) {
               type="password"
               onChange={handleInputChange("password")}
             ></PassWordInput>
+
             <PassWordTitle>새로운 비밀번호</PassWordTitle>
+
             <PassWordInput
               id="newPassword"
               placeholder="New"
               type="password"
               onChange={handleInputChange("newPassword")}
             ></PassWordInput>
-            <div>{errorMessage.newPassword}</div>
+            <Clear />
+
+            <Prosecutor>{errorMessage.newPassword}</Prosecutor>
+
             <PassWordTitle>비밀번호 확인</PassWordTitle>
             <PassWordInput
               id="passwordConfirm"
@@ -563,7 +596,8 @@ function DocMypage(props) {
               type="password"
               onChange={handleInputChange("passwordConfirm")}
             ></PassWordInput>
-            <div>{errorMessage.passwordConfirm}</div>
+            <Clear />
+            <Prosecutor>{errorMessage.passwordConfirm}</Prosecutor>
           </PasswordLine>
           <Box>
             <EditPasswordDeleted onClick={passwordChange}>
@@ -582,19 +616,24 @@ function DocMypage(props) {
             return (
               <MyreviewContainer key={comment.id}>
                 <MyreviewLine>
+                  {/* <MyreviewNickname>{qna.user.nickname}</MyreviewNickname> */}
                   <MyreviewTrash>
                     <BsTrash onClick={() => handleCommentDelete(comment.id)} />
                   </MyreviewTrash>
-                  <div style={{ clear: "both" }}></div>
-                  <MyreviewContent>
+
+                  <TitleHeader>Q&A 질문</TitleHeader>
+                  <Clear />
+                  <UserTitle>
                     {comment.qna ? comment.qna.title : "삭제된질문"}
-                  </MyreviewContent>
+                  </UserTitle>
+                  <TitleHeader>Answer</TitleHeader>
                   <MyreviewContent>{comment.content}</MyreviewContent>
                 </MyreviewLine>
               </MyreviewContainer>
             );
           })}
           {/* MY Answer 끝*/}
+          <Clear />
         </DocContainer>
       ) : (
         ""

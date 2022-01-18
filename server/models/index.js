@@ -64,4 +64,7 @@ hashtag.belongsToMany(qna, {
   foreignKey: "hashtag_id",
 });
 
+qna.hasMany(comments, { foreignKey: "qna_id" });
+comments.belongsTo(qna, { foreignKey: "qna_id" });
+
 module.exports = db;
