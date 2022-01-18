@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
-import user from "../images/user.png";
 import axios from "axios";
 
 export const QnaUserContainer = styled(Container)`
@@ -98,7 +97,7 @@ function QnaUserPost() {
   useEffect(() => {
     axios
       .post(
-        "http://localhost:80/qna/info",
+        "https://localhost:80/qna/info",
         { qna_id: qna_id, page: "qnaDetail" },
         {
           withCredentials: true,

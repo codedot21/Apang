@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Container } from "../styles";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import doctor from "../images/doctor.png";
 import axios from "axios";
 
 export const QnaDocContainer = styled(Container)`
@@ -279,6 +278,7 @@ export const Ren = styled.div`
 `;
 
 function QnaPost({ isLogin, userInfo, auth }) {
+  let i = 0;
   const navigate = useNavigate();
   const [contentInfo, setContentInfo] = useState({
     content: "",
@@ -312,15 +312,15 @@ function QnaPost({ isLogin, userInfo, auth }) {
   useEffect(() => {
     axios
       .post(
-        "http://localhost:80/comments/info",
+        "https://localhost:80/comments/info",
         { qna_id: qna_id },
         {
           withCredentials: true,
         }
       )
       .then((res) => {
-        // console.log("whatwhat?", res.data);
         setComments(res.data.comments);
+        console.log("QnaPost : ", res.data.comments.length);
       });
   }, []);
 
@@ -329,7 +329,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
       // console.log("content몰까?", contentInfo);
       let payload = { content: contentInfo.content, qna_id: qna_id };
       axios
-        .post("http://localhost:80/comments/upload", payload, {
+        .post("https://localhost:80/comments/upload", payload, {
           withCredentials: true,
         })
         .then((res) => {
@@ -346,7 +346,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
   };
   const inputRef = useRef(null);
 
-  const handleEdit = (doctorid) => {
+  const handleEdit = (doctorid, i) => {
     if (doctorid !== userInfo.id) {
       Swal.fire({
         icon: "error",
@@ -356,13 +356,13 @@ function QnaPost({ isLogin, userInfo, auth }) {
       return;
     } else if (doctorid === userInfo.id) {
       inputRef.current.disabled = false;
-      inputRef.current.focus();
+      inputRef.current[i].focus();
     }
   };
 
   const handleDelete = (commentid) => {
     axios
-      .delete("http://localhost:80/comments", {
+      .delete("https://localhost:80/comments", {
         data: {
           comment_id: commentid,
         },
@@ -388,7 +388,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
       doctor_id: doctorid,
     };
     axios
-      .put("http://localhost:80/comments/modify", payload, {
+      .put("https://localhost:80/comments/modify", payload, {
         withCredentials: true,
       })
       .then(() => {
@@ -417,7 +417,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
         return (
           <QnaDocContainer>
             <QnaDocBox>
-              <ContentWrap>
+              <ContentWrap id={i}>
                 {/* userInfo o, 로그인 o, 의사, 본인 작성했을시 */}
                 {userInfo &&
                 isLogin &&
@@ -433,13 +433,15 @@ function QnaPost({ isLogin, userInfo, auth }) {
                       <div className="Id">
                         {`${comment.doctor.name} 의사선생님`}
                         <span
+                          value="수정"
                           className="commentFront"
-                          onClick={() => handleEdit(comment.doctors_id)}
+                          onClick={() => handleEdit(comment.doctors_id, i)}
                         >
                           수정
                         </span>
                         <span className="commentMiddle">|</span>
                         <span
+                          value="등록"
                           className="commentBack"
                           onClick={() =>
                             handleClear(comment.id, comment.doctors_id)
@@ -458,6 +460,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
                     </ProfileDoc>
                     <Ren>
                       <textarea
+                        id={i}
                         disabled
                         type="text"
                         defaultValue={comment.content}
@@ -466,6 +469,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
                         // value={editContent.edittingcontent}
                       />
                     </Ren>
+                    {(i += 1)}
                   </>
                 ) : (
                   //userInfo x || 로그인 x || 의사 x || 본인 작성 x

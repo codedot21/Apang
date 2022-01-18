@@ -287,7 +287,7 @@ function UserMypage(props) {
   useEffect(() => {
     axios
       .post(
-        "http://localhost:80/qna/info",
+        "https://localhost:80/qna/info",
         { kakao_userid: localStorage.getItem("userid"), page: "usermypage" },
         {
           withCredentials: true,
@@ -303,7 +303,7 @@ function UserMypage(props) {
   useEffect(() => {
     axios
       .post(
-        "http://localhost:80/review/info",
+        "https://localhost:80/review/info",
         { kakao_userid: localStorage.getItem("userid"), page: "usermypage" },
         {
           withCredentials: true,
@@ -358,16 +358,18 @@ function UserMypage(props) {
       }
       return;
     }
-    if (valid[id](value)) {
-      setErrorMessage((prev) => {
-        prev[id] = "";
-        return prev;
-      });
-    } else {
-      setErrorMessage((prev) => {
-        prev[id] = message[id];
-        return prev;
-      });
+    if (id === "passwordConfirm" || id === "newPassword") {
+      if (valid[id](value)) {
+        setErrorMessage((prev) => {
+          prev[id] = "";
+          return prev;
+        });
+      } else {
+        setErrorMessage((prev) => {
+          prev[id] = message[id];
+          return prev;
+        });
+      }
     }
   };
 
@@ -376,7 +378,7 @@ function UserMypage(props) {
     if (!imgInfo.filepreview) {
       axios
         .post(
-          "http://localhost:80/public/profile",
+          "https://localhost:80/public/profile",
           { onlyNickname: userInfo.nickname },
           {
             withCredentials: true,
@@ -396,7 +398,7 @@ function UserMypage(props) {
       formdata.append("nickname", userInfo.nickname);
       formdata.append("token", localStorage.getItem("accessToken"));
       axios
-        .post("http://localhost:80/public/profile", formdata, {
+        .post("https://localhost:80/public/profile", formdata, {
           headers: { "Content-type": "multipart/form-data" },
           withCredentials: true,
         })
@@ -408,13 +410,14 @@ function UserMypage(props) {
           });
         });
     }
+    window.location.reload(); //근데 페이지가 새로고침되어지면 안됌 원래는
   };
   // 비밀번호 변경
   const passwordChange = () => {
     delete userInfo.nickname;
     // console.log("비밀번호 변경 : ", userInfo);
     axios
-      .post("http://localhost:80/public/profile", userInfo, {
+      .post("https://localhost:80/public/profile", userInfo, {
         withCredentials: true,
       })
       .then((res) => {
@@ -437,21 +440,33 @@ function UserMypage(props) {
 
   // 회원탈퇴
   const deleteHandler = () => {
-    axios
-      .delete("http://localhost:80/common/users", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        // 서버에서 넘겨준 auth 잘 불러오는지 확인.
-        // console.log(res.data.auth);
-        // 로그아웃 상태로 메인페이지로 보내줘야됨
-      });
+    Swal.fire({
+      icon: "warning",
+      title: "회원탈퇴",
+      text: "정말로 탈퇴하시겠습니까?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "네, 탈퇴하겠습니다.",
+      cancelButtonText: "아니요.",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete("https://localhost:80/common/users", {
+            withCredentials: true,
+          })
+          .then(() => {
+            props.handleLogout();
+            navigate("/");
+          });
+      }
+    });
   };
 
   //내가 쓴 qna 삭제코드
   const handleQnaDelete = (qnaid) => {
     axios
-      .delete("http://localhost:80/qna", {
+      .delete("https://localhost:80/qna", {
         data: {
           qna_id: qnaid,
           kakao_userid: localStorage.getItem("userid"),
@@ -481,7 +496,7 @@ function UserMypage(props) {
   //내가쓴 review 삭제코드
   const handleReviewDelete = (reviewid) => {
     axios
-      .delete("http://localhost:80/review", {
+      .delete("https://localhost:80/review", {
         data: {
           review_id: reviewid,
           kakao_userid: localStorage.getItem("userid"),
@@ -555,6 +570,7 @@ function UserMypage(props) {
                 />
                 <UserTitle>닉네임</UserTitle>
                 <UserInput
+                  id="닉네임"
                   type="text"
                   defaultValue={props.userInfo.nickname}
                   onChange={handleInputChange("nickname")}

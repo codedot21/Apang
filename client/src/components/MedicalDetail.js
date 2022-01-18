@@ -59,7 +59,7 @@ const ImgReview = styled.img`
   width: 100%;
   height: 147px;
   border-radius: 20px;
-  objectfit: scale-down;
+  /* objectfit: scale-down; */
   background: #fff;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
@@ -221,7 +221,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
   useEffect(() => {
     axios
       .post(
-        "http://localhost:80/review/info",
+        "https://localhost:80/review/info",
         { hospital_name: medicalInfo.place_name },
         {
           withCredentials: true,
@@ -269,7 +269,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
     formdata.append("receipts_img", imgInfo.file);
     formdata.append("hospital_name", medicalInfo.place_name);
     axios
-      .post("http://localhost:80/review/upload", formdata, {
+      .post("https://localhost:80/review/upload", formdata, {
         headers: { "Content-type": "multipart/form-data" },
         withCredentials: true,
       })
@@ -310,7 +310,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
     formdata.append("hospital_name", medicalInfo.place_name);
     formdata.append("hospital_img", fileImage.file);
     axios
-      .post("http://localhost:80/hospital/upload", formdata, {
+      .post("https://localhost:80/hospital/upload", formdata, {
         headers: { "Content-type": "multipart/form-data" },
         withCredentials: true,
       })
@@ -351,7 +351,6 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
     <>
       <DetailLine>
         <h1>{medicalInfo.place_name}</h1>
-
         {/* 사진업로드 시작 */}
         {/* 내가적은것 시작 */}
         <DivBox>

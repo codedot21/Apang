@@ -127,7 +127,6 @@ export const Msg = styled.div`
 `;
 
 function SigninModal({ open, close, handleResponseSuccess }) {
-  const [errorMessage, setErrorMessage] = useState("");
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -165,7 +164,7 @@ function SigninModal({ open, close, handleResponseSuccess }) {
       return;
     } else {
       axios
-        .post("http://localhost:80/common/signin", userInfo, {
+        .post("https://localhost:80/common/signin", userInfo, {
           withCredentials: true,
         })
         .then((res) => {
@@ -218,7 +217,6 @@ function SigninModal({ open, close, handleResponseSuccess }) {
               value={userInfo.email}
             />
           </div>
-          <Msg>{errorMessage.loginEmail}</Msg>
           <div>
             <input
               id="loginPassword"
@@ -228,7 +226,6 @@ function SigninModal({ open, close, handleResponseSuccess }) {
               value={userInfo.password}
             />
           </div>
-          <Msg>{errorMessage}</Msg>
           <Button onClick={handleSignIn}>로그인</Button>
         </LoginBody>
         <LoginFooter>
