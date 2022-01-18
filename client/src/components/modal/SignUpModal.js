@@ -490,7 +490,3 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
 }
 
 export default SignUpModal;
-
-{
-  /* <SelectHeader></SelectHeader> */
-}

@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import user from "../images/user.png";
 import { Link } from "react-router-dom";
 
 export const Linked = styled(Link)`
@@ -98,7 +97,8 @@ export const ContentComment = styled.div`
   margin-right: 1rem;
 `;
 
-function Qna({ title, nickname, content, profile_img }) {
+function Qna({ title, nickname, content, profile_img, tags }) {
+  // console.log(tags.hashtags);
   return (
     <>
       {title ? (
@@ -115,9 +115,9 @@ function Qna({ title, nickname, content, profile_img }) {
             <ContentTitle>{title}</ContentTitle>
             <ContentText>{content}</ContentText>
             <Tag>
-              <div className="tag">아파요</div>
-              <div className="tag">안아파요</div>
-              <div className="tag">덜아파요</div>
+              {tags.hashtags.map((tag) => {
+                return <div className="tag">{tag.hashtag}</div>;
+              })}
             </Tag>
             <ContentComment>댓글 1</ContentComment>
           </ContentWrap>

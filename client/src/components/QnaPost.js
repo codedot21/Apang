@@ -241,7 +241,7 @@ export const TagsInput = styled.div`
     width: 21.5rem;
   }
   > textarea {
-    whitespace: pre-line;
+    /* whitespace: pre-line; */
     resize: none;
     display: block;
     outline: none;
@@ -254,7 +254,7 @@ export const TagsInput = styled.div`
 
 export const Ren = styled.div`
   > textarea {
-    whitespace: pre-line;
+    /* whitespace: pre-line; */
     resize: none;
     outline: none;
     border: hidden;
@@ -307,7 +307,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
   let url = document.location.href;
   let qna_id = url.split("/");
   qna_id = qna_id[qna_id.length - 1];
-  console.log(qna_id);
+  // console.log(qna_id);
 
   useEffect(() => {
     axios
@@ -319,14 +319,14 @@ function QnaPost({ isLogin, userInfo, auth }) {
         }
       )
       .then((res) => {
-        console.log("whatwhat?", res.data);
+        // console.log("whatwhat?", res.data);
         setComments(res.data.comments);
       });
   }, []);
 
   const handleClick = () => {
     if (auth === 1) {
-      console.log("content몰까?", contentInfo);
+      // console.log("content몰까?", contentInfo);
       let payload = { content: contentInfo.content, qna_id: qna_id };
       axios
         .post("http://localhost:80/comments/upload", payload, {

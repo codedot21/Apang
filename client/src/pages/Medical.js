@@ -199,7 +199,6 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
         map.setBounds(bounds);
         // 페이지 목록 보여주는 displayPagination() 추가
         displayPagination(pagination);
-        setPlaces(data);
       }
     }
 

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { category } from "../../modules/category";
 
 export const ModalBackGround = styled.div`
   position: fixed;
@@ -180,9 +181,42 @@ export const TagsInput = styled.div`
   }
 `;
 
-function QnaModal({ open, close }) {
+export const TextArea = styled.div`
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 30em;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 1rem;
+    margin-left: 0;
+    width: 21.5rem;
+  }
+
+  > textarea {
+    overflow: hidden;
+    resize: none;
+    display: block;
+    outline: none;
+    border: none;
+    width: 100%;
+    height: 10rem;
+    padding-left: 0.5rem;
+    font-size: 0.8rem;
+    border: 0.1rem solid #dee2e6;
+    border-radius: 10px;
+    &:focus {
+      outline: 0.1rem solid #63b5f6;
+    }
+  }
+`;
+
+function QnaModal({ open, close, tagHandler }) {
   const navigate = useNavigate();
   const [tags, setTags] = useState([]);
+  // 해시태그 띄워주기 위한거임 삭제하지마세요.
+  let qnaId;
 
   const removeTags = (indexToRemove) => {
     setTags(tags.filter((el, index) => index !== indexToRemove));
@@ -221,7 +255,9 @@ function QnaModal({ open, close }) {
           withCredentials: true,
         }
       )
-      .then(() => {
+      .then((res) => {
+        // console.log("질문등록후 res : ", res);
+        qnaId = res.data.data.id;
         let payload = { tags: tags };
         axios(
           {
@@ -232,12 +268,27 @@ function QnaModal({ open, close }) {
           {
             withCredentials: true,
           }
-        );
-      })
-      .then((res) => {
-        navigate("/");
-        navigate("/qna");
-        close();
+        ).then((res) => {
+          // console.log("qna_hashtag요청보낼거임 : ", qnaId);
+          // console.log("해시태그아이디들 : ", res.data.data);
+          // console.log("해시태그 : ", res.data.data);
+          axios
+            .post(
+              "http://localhost:80/hashtag/qnahashtag",
+              { qnaId: qnaId, hashtag: res.data.data },
+              {
+                withCredentials: true,
+              }
+            )
+            .then((res) => {
+              // console.log("성공?");
+            })
+            .then(() => {
+              close();
+              navigate("/");
+              navigate("/qna");
+            });
+        });
       });
   };
 
@@ -254,26 +305,9 @@ function QnaModal({ open, close }) {
               <option className="option" value="">
                 카테고리를 선택해주세요
               </option>
-              <option>치과</option>
-              <option>피부과</option>
-              <option>성형외과</option>
-              <option>안과</option>
-              <option>산부인과</option>
-              <option>정신건강의학과</option>
-              <option>비뇨기과</option>
-              <option>정형외과</option>
-              <option>마취통증의학과</option>
-              <option>신경외과</option>
-              <option>재활의학과</option>
-              <option>영상의학과</option>
-              <option>외과</option>
-              <option>신경과</option>
-              <option>소아과</option>
-              <option>내과</option>
-              <option>이비인후과</option>
-              <option>가정의학과</option>
-              <option>한의원</option>
-              <option>코로나19예방접종</option>
+              {category.map((category, i) => {
+                return <option key={i}>{category}</option>;
+              })}
             </select>
           </div>
           <div>
@@ -306,12 +340,14 @@ function QnaModal({ open, close }) {
           </TagsInput>
 
           <div>
-            <input
-              className="textarea"
-              type="textarea"
-              placeholder="내용을 입력해주세요"
-              onChange={qnaChange("content")}
-            />
+            <TextArea>
+              <textarea
+                className="textarea"
+                type="textarea"
+                placeholder="내용을 입력해주세요"
+                onChange={qnaChange("content")}
+              />
+            </TextArea>
           </div>
         </QnaBody>
         <QnaFooter>

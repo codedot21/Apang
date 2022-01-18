@@ -164,11 +164,15 @@ function App() {
         <Route path="/authpage" element={<AuthPage />} />
         <Route
           path="/mypage/publicprofile"
-          element={<UserMypage userInfo={userInfo} />}
+          element={
+            <UserMypage userInfo={userInfo} handleLogout={handleLogout} />
+          }
         />
         <Route
           path="/mypage/doctorprofile"
-          element={<DocMypage userInfo={userInfo} />}
+          element={
+            <DocMypage userInfo={userInfo} handleLogout={handleLogout} />
+          }
         />
         <Route
           path="/reviewpage"

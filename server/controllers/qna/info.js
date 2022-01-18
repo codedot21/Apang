@@ -1,4 +1,4 @@
-const { qna, users, hashtag, qna_hashtag } = require("../../models");
+const { qna, users, hashtag, comments } = require("../../models");
 const { isAuthorized } = require("../tokenFunctions");
 
 module.exports = async (req, res) => {
@@ -61,6 +61,9 @@ module.exports = async (req, res) => {
           {
             model: users,
           },
+          {
+            model: hashtag,
+          },
         ],
         order: [["id", "DESC"]],
       });
@@ -68,6 +71,14 @@ module.exports = async (req, res) => {
     } else {
       // console.log("filter : ", req.body.filter);
       const filterInfo = await qna.findAll({
+        include: [
+          {
+            model: users,
+          },
+          {
+            model: hashtag,
+          },
+        ],
         where: { category: req.body.filter },
         order: [["id", "DESC"]],
       });

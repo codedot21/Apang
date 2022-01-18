@@ -11,6 +11,9 @@ export const valid = {
   password: (password) => {
     return password.length >= 8;
   },
+  newPassword: (password) => {
+    return password.length >= 8;
+  },
   license: (license) => {
     return license.length >= 4 && license.length <= 6;
   },

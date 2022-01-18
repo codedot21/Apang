@@ -7,7 +7,10 @@ import QnaModal from "../components/modal/QnaModal.js";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { category } from "../modules/category";
-import Qna from "../components/Qna";
+import Qna from "../components/Qna.js";
+import Pagination from "../components/Pagination.js";
+import noData from "../images/no.png";
+import Loading from "../components/Loading.js";
 
 export const QnaContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -21,7 +24,7 @@ export const QnaContainer = styled(Container)`
 export const QnaListContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
   display: flex;
-  padding: 4rem 2rem;
+  padding: 0rem 2rem;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -74,7 +77,6 @@ export const Title = styled.h1`
   font-size: 1.3rem;
   font-weight: 600;
   color: ${({ theme }) => theme.color.main};
-
   @media ${({ theme }) => theme.device.ipad} {
     font-size: 2.9rem;
     text-align: center;
@@ -84,14 +86,13 @@ export const Title = styled.h1`
     font-size: 1.5rem;
     text-align: center;
     margin-left: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.4rem;
   }
 `;
 
 export const Text = styled.p`
   font-size: 1rem;
   color: ${({ theme }) => theme.color.main};
-
   @media ${({ theme }) => theme.device.ipad} {
     font-size: 1.7rem;
     text-align: center;
@@ -101,7 +102,7 @@ export const Text = styled.p`
     font-size: 0.8rem;
     text-align: center;
     margin-left: 2.8rem;
-    margin-bottom: 1.3rem;
+    margin-bottom: 0rem;
   }
 `;
 
@@ -227,12 +228,33 @@ export const ContentComment = styled.div`
   margin-right: 1rem;
 `;
 
+export const Nodata = styled(Container)`
+  background-color: ${({ theme }) => theme.color.white};
+  display: flex;
+  margin-top: 0;
+  padding: 0 2rem;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  .Img {
+    width: 65rem;
+    @media ${({ theme }) => theme.device.mobile} {
+      width: 23rem;
+    }
+  }
+`;
+
 function QnaPage({ isLogin, auth }) {
   const [QuestionOpen, setQuestionOpen] = useState(false);
   const [qnaInfo, setqnaInfo] = useState([]); //qna 전부 가져오는것
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const offset = (page - 1) * limit;
+  const [isLoading, setIsLoading] = useState(true);
 
   //qna 전부 불러오기
   useEffect(() => {
+    setIsLoading(true);
     axios
       .post(
         "http://localhost:80/qna/info",
@@ -242,8 +264,9 @@ function QnaPage({ isLogin, auth }) {
         }
       )
       .then((res) => {
-        console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
+        // console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
         setqnaInfo(res.data.qnaInfo);
+        setIsLoading(false);
       });
   }, []);
 
@@ -259,21 +282,6 @@ function QnaPage({ isLogin, auth }) {
       text: "회원이 아니시면 회원가입 해주세요",
     });
   };
-  // 카테고리 필터하기
-  const filterHandler = (e) => {
-    const filter = e.target.value;
-    // console.log(filter);
-    axios
-      .post(
-        "http://localhost:80/qna/info",
-        { filter: filter },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        // console.log("filter : ", res.data.qnaInfo);
-        setqnaInfo(res.data.qnaInfo);
-      });
-  };
 
   const handleDocClick = () => {
     Swal.fire({
@@ -282,6 +290,24 @@ function QnaPage({ isLogin, auth }) {
       text: "선생님은 댓글만 작성하실 수 있어요",
     });
   };
+  // 카테고리 필터하기
+  const filterHandler = (e) => {
+    const filter = e.target.value;
+    // console.log(filter);
+    axios
+      .post(
+        "http://localhost:80/qna/info",
+        { filter: filter },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        // console.log("filter : ", res.data.qnaInfo);
+        setqnaInfo(res.data.qnaInfo);
+      });
+  };
+  console.log("큐엔에이페이지qnaInfo : ", qnaInfo);
 
   return (
     <>
@@ -311,44 +337,69 @@ function QnaPage({ isLogin, auth }) {
         </QnaTextWrap>
       </QnaTextContainer>
 
-      <QnaListContainer>
-        {qnaInfo ? (
-          <>
-            <QnaWrap>
-              <QnaWrap>
-                {isLogin === false ? (
-                  <Button onClick={handleClick}>질문하기</Button>
-                ) : auth === 1 ? (
-                  <Button onClick={handleDocClick}>질문하기</Button>
-                ) : (
-                  <Button onClick={openQuestionModal}>질문하기</Button>
-                )}
-                <QnaModal
-                  // forceUpdate={forceUpdate}
-                  open={QuestionOpen}
-                  close={openQuestionModal}
-                />
-              </QnaWrap>
+      {isLoading ? (
+        <QnaContainer>
+          <Loading />
+        </QnaContainer>
+      ) : (
+        <>
+          <QnaListContainer>
+            {qnaInfo ? (
+              <>
+                <QnaWrap>
+                  <QnaWrap>
+                    {isLogin === false ? (
+                      <Button onClick={handleClick}>질문하기</Button>
+                    ) : auth === 1 ? (
+                      <Button onClick={handleDocClick}>질문하기</Button>
+                    ) : (
+                      <Button onClick={openQuestionModal}>질문하기</Button>
+                    )}
+                  </QnaWrap>
+                  {qnaInfo.slice(offset, offset + limit).map((qna) => {
+                    return (
+                      <Linked to={`/qna/detail/${qna.id}`}>
+                        <Qna
+                          // handleQnaInfo={handleQnaInfo}
+                          title={qna.title}
+                          content={qna.content}
+                          nickname={qna.user ? qna.user.nickname : "Kakao"}
+                          profile_img={
+                            qna.user ? qna.user.profile_img : "kakao.png"
+                          }
+                          tags={qna}
+                        />
+                      </Linked>
+                    );
+                  })}
+                </QnaWrap>
+              </>
+            ) : null}
+          </QnaListContainer>
 
-              {qnaInfo.map((qna) => {
-                return (
-                  <Linked to={`/qna/detail/${qna.id}`}>
-                    <Qna
-                      // handleQnaInfo={handleQnaInfo}
-                      title={qna.title}
-                      content={qna.content}
-                      nickname={qna.user ? qna.user.nickname : "Kakao"}
-                      profile_img={
-                        qna.user ? qna.user.profile_img : "kakao.png"
-                      }
-                    />
-                  </Linked>
-                );
-              })}
-            </QnaWrap>
-          </>
-        ) : null}
-      </QnaListContainer>
+          {qnaInfo.length >= 1 ? (
+            <Pagination
+              length={qnaInfo.length}
+              limit={limit}
+              page={page}
+              setPage={setPage}
+            />
+          ) : (
+            // <Nodata>
+            //   <Loading />
+            // </Nodata>
+            <Nodata>
+              <img className="Img" src={noData} alt="noData" />
+            </Nodata>
+          )}
+
+          <QnaModal
+            // forceUpdate={forceUpdate}
+            open={QuestionOpen}
+            close={openQuestionModal}
+          />
+        </>
+      )}
     </>
   );
 }
