@@ -31,7 +31,7 @@ export const ImgWrap = styled.div`
   }
 `;
 
-function QnaDetail({ isLogin, auth, userInfo }) {
+function QnaDetail({ isLogin, auth, userInfo, qnaDetail }) {
   return (
     <>
       <QnaContainer>
