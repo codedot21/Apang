@@ -87,7 +87,19 @@ const HoverTag = styled.div`
     color: ${({ theme }) => theme.color.white};
     background-color: ${({ theme }) => theme.color.hover};
     border-radius: 2px;
-    // padding: 1px;
+  }
+`;
+
+const HMap = styled.div`
+  with: 100%;
+  height: 25vw;
+  border: 2px solid #63b5f6;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  z-index: 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    height: 50vw;
+    font-size: 5px;
   }
 `;
 
@@ -175,7 +187,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
       //   nowLocation.longitude,
       //   nowLocation.latitude
       // ),
-      level: 3,
+      level: 2,
     };
     const map = new kakao.maps.Map(container, options);
 
@@ -270,7 +282,6 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
       phone: item.phone,
     });
   };
-  // console.log("medicalInfo : ", medicalInfo);
 
   return (
     <MedicalContainer>
@@ -290,17 +301,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
       {/* 지도 start */}
 
       <div>
-        <div
-          id="myMap"
-          style={{
-            width: "100%",
-            height: "25vw",
-            border: "2px solid #63b5f6",
-            borderRadius: "10px",
-            marginBottom: "20px",
-            zIndex: "0",
-          }}
-        ></div>
+        <HMap id="myMap"></HMap>
       </div>
       {/* 지도 end */}
       {/* 병원 리스트 start */}

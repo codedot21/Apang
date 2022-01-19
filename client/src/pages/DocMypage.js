@@ -34,7 +34,7 @@ const DocContainerLine = styled.div`
   height: 220px;
   width: 80%;
   margin: 0 auto;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
     height: 30rem;
@@ -70,6 +70,7 @@ const ProfileEditing = styled.label`
 
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
+    max-width: 8rem;
     font-size: 13px;
   }
 `;
@@ -79,8 +80,9 @@ const DocLine = styled.div`
   float: right;
   height: 13vw;
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 13px;
+    float: none;
     width: 100%;
+    height: 30%;
   }
 `;
 
@@ -107,8 +109,6 @@ const DocInput = styled.input`
   margin-bottom: 10px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
-    margin: 4vw;
-    display: block;
   }
 `;
 
@@ -129,10 +129,10 @@ const Edting = styled.button`
   clear: both;
 
   @media ${({ theme }) => theme.device.ipad} {
-    width: 10%;
+    width: 15%;
   }
   @media ${({ theme }) => theme.device.mobile} {
-    width: 5rem;
+    width: 10rem;
     font-size: 12px;
   }
 `;
@@ -149,7 +149,7 @@ const PasswordLine = styled.div`
   width: 80%;
   margin: 0 auto;
   @media ${({ theme }) => theme.device.mobile} {
-    height: 16rem;
+    height: 18.5rem;
     width: 100%;
   }
 `;
@@ -160,7 +160,7 @@ const PassWordTitle = styled.span`
   float: left;
   font-weight: bold;
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 10px;
+    font-size: 12px;
     width: 100%;
     padding: 1px;
   }
@@ -228,7 +228,7 @@ const MyreviewContainer = styled.div`
 const MyreviewLine = styled.div`
   border: 1px solid #b5afaf;
   border-radius: 10px;
-  width: 25%;
+  width: 21%;
   height: 50%;
   margin: 1vw;
   float: left;
@@ -256,7 +256,7 @@ const MyreviewTrash = styled.button`
 `;
 
 const MyreviewContent = styled.div`
-  margin: 0.5vw 1vw 1vw 1vw;
+  margin: 0.5vw 1vw 1vw 0.5vw;
   border-bottom: 1px solid #b5afaf;
   width: 90%;
   padding: 4px;
@@ -269,7 +269,7 @@ const MyreviewContent = styled.div`
 `;
 
 const UserTitle = styled.div`
-  margin: 0.5vw 1vw 1vw 1vw;
+  margin: 0.5vw 1vw 1vw 0.5vw;
   border-bottom: 1px solid #b5afaf;
   padding: 4px;
   overflow: hidden;
@@ -281,7 +281,7 @@ const UserTitle = styled.div`
 `;
 
 const TitleHeader = styled.h4`
-  margin: 1vw 0 0.5vw 1vw;
+  margin: 1vw 0 0.5vw 0.5vw;
   @media ${({ theme }) => theme.device.mobile} {
     margin: 2vw 1.5vw 1.5vw 2vw;
   }
@@ -546,7 +546,6 @@ function DocMypage(props) {
                 placeholder="이름"
                 defaultValue={props.userInfo.name}
                 onChange={handleInputChange("name")}
-                disabled
               />
               <DocTitle>병원명</DocTitle>
               <DocInput
