@@ -85,7 +85,7 @@ export const Title = styled.h1`
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 1.5rem;
     text-align: center;
-    margin-left: 1.5rem;
+    margin-left: 0.5rem;
     margin-bottom: 0.4rem;
   }
 `;
@@ -101,7 +101,7 @@ export const Text = styled.p`
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 0.8rem;
     text-align: center;
-    margin-left: 2.8rem;
+    margin-left: 1rem;
     margin-bottom: 0rem;
   }
 `;
@@ -338,9 +338,7 @@ function QnaPage({ isLogin, auth }) {
       </QnaTextContainer>
 
       {isLoading ? (
-        <QnaContainer>
-          <Loading />
-        </QnaContainer>
+        <Loading />
       ) : (
         <>
           <QnaListContainer>
@@ -386,11 +384,10 @@ function QnaPage({ isLogin, auth }) {
               setPage={setPage}
             />
           ) : (
-            // <Nodata>
-            //   <Loading />
-            // </Nodata>
             <Nodata>
-              <img className="Img" src={noData} alt="noData" />
+              <Nodata>
+                <img className="Img" src={noData} alt="noData" />
+              </Nodata>
             </Nodata>
           )}
 

@@ -287,8 +287,8 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
           );
         })}
       </Selector>
-
       {/* 지도 start */}
+
       <div>
         <div
           id="myMap"
@@ -303,7 +303,6 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
         ></div>
       </div>
       {/* 지도 end */}
-
       {/* 병원 리스트 start */}
       <ListDivBox>
         <div id="result-list">
@@ -334,6 +333,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
           <div id="pagination" style={{ textAlign: "center" }}></div>
         </div>
       </ListDivBox>
+
       <MedicalDetail
         medicalInfo={medicalInfo}
         userInfo={userInfo}
