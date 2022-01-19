@@ -194,6 +194,11 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
               </ul>
             </li>
             <li>
+              <NavLink to="/medicallist">
+                <Btn>Review</Btn>
+              </NavLink>
+            </li>
+            <li>
               <NavLink to="/qna">
                 <Btn>Q&A</Btn>
               </NavLink>
@@ -219,7 +224,11 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
                 </li>
               </ul>
             </li>
-
+            <li>
+              <NavLink to="/medicallist">
+                <Btn>Review</Btn>
+              </NavLink>
+            </li>
             <li>
               <NavLink to="/qna">
                 <Btn>Q&A</Btn>
@@ -267,6 +276,11 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
                     </li>
                   )}
                   <li>
+                    <NavLink to="/medicallist">
+                      <DropDownButton>Review</DropDownButton>
+                    </NavLink>
+                  </li>
+                  <li>
                     <NavLink to="/qna">
                       <DropDownButton>Q&A</DropDownButton>
                     </NavLink>
@@ -295,6 +309,11 @@ function Nav({ isLogin, handleResponseSuccess, handleLogout, auth }) {
                     <DropDownButton onClick={openSignupModal}>
                       회원가입
                     </DropDownButton>
+                  </li>
+                  <li>
+                    <NavLink to="/medicallist">
+                      <DropDownButton>Review</DropDownButton>
+                    </NavLink>
                   </li>
                   <li>
                     <NavLink to="/qna">

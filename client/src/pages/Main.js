@@ -142,6 +142,12 @@ export const Search = styled.div`
         background: #fff;
         background-color: #002171;
       }
+      @media ${({ theme }) => theme.device.ipad} {
+      }
+      @media ${({ theme }) => theme.device.mobile} {
+        font-size: 0.8rem;
+        padding: 0.4rem 1.7rem;
+      }
     }
     & img {
       width: 2rem;
@@ -312,10 +318,7 @@ function Main() {
           <Search>
             <form>
               <SerchButton onClick={() => navigate("/medicallist")}>
-                Click{" "}
-                <GiClick
-                  style={{ verticalAlign: "middle", fontSize: "1.8rem" }}
-                />
+                Click <GiClick style={{ verticalAlign: "middle" }} />
               </SerchButton>
             </form>
           </Search>
