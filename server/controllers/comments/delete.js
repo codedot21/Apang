@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
     });
     res.status(200).send({
       id: req.body.qna_id,
-      message: "related comment Delete Ok",
+      message: "답변 삭제 완료",
     });
   } else {
     await comments.destroy({
@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
     });
     res.status(200).send({
       id: req.body.comment_id,
-      message: "comment Delete Ok",
+      message: "답변 삭제 완료",
     });
   }
 };

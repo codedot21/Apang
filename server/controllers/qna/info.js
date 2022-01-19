@@ -19,12 +19,14 @@ module.exports = async (req, res) => {
         ],
       });
       console.log("qnaInfo는?", qnaInfo);
-      res.status(200).send({ myQnaInfo: qnaInfo });
+      res
+        .status(200)
+        .send({ myQnaInfo: qnaInfo, message: "QnA 정보 요청 성공" });
     } else {
       // <-- 일반 로그인 -->
       // 토큰이 유효하지 않을 때
       if (!accessToken) {
-        res.status(401).send({ message: "Invalid Token" });
+        res.status(401).send({ message: "토큰이 유효하지 않음" });
       }
       // 토큰이 유효할 때
       else {
@@ -38,7 +40,9 @@ module.exports = async (req, res) => {
             },
           ],
         });
-        res.status(200).send({ myQnaInfo: qnaInfo });
+        res
+          .status(200)
+          .send({ myQnaInfo: qnaInfo, message: "QnA 정보 요청 성공" });
       }
     }
   } else if (req.body.page === "qnaDetail") {
@@ -53,7 +57,9 @@ module.exports = async (req, res) => {
       ],
     });
     console.log("what is", qnaDetailInfo);
-    res.status(200).send({ qnaDetail: qnaDetailInfo });
+    res
+      .status(200)
+      .send({ qnaDetail: qnaDetailInfo, message: "QnA 정보 요청 성공" });
   } else {
     if (!req.body.filter || req.body.filter === "전체") {
       const qnaInfo = await qna.findAll({
@@ -70,7 +76,7 @@ module.exports = async (req, res) => {
         ],
         order: [["id", "DESC"]],
       });
-      res.status(200).send({ qnaInfo: qnaInfo });
+      res.status(200).send({ qnaInfo: qnaInfo, message: "QnA 정보 요청 성공" });
     } else {
       // console.log("filter : ", req.body.filter);
       const filterInfo = await qna.findAll({
@@ -88,7 +94,9 @@ module.exports = async (req, res) => {
         where: { category: req.body.filter },
         order: [["id", "DESC"]],
       });
-      res.status(200).send({ qnaInfo: filterInfo });
+      res
+        .status(200)
+        .send({ qnaInfo: filterInfo, message: "QnA 정보 요청 성공" });
     }
   }
 };

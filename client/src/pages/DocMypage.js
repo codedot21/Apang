@@ -453,15 +453,27 @@ function DocMypage(props) {
 
   // 회원탈퇴
   const deleteHandler = () => {
-    axios
-      .delete("https://localhost:80/common/users", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        // 서버에서 넘겨준 auth 잘 불러오는지 확인.
-        // console.log(res.data.auth);
-        // 로그아웃 상태로 메인페이지로 보내줘야됨
-      });
+    Swal.fire({
+      icon: "warning",
+      title: "회원탈퇴",
+      text: "정말로 탈퇴하시겠습니까?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "네, 탈퇴하겠습니다.",
+      cancelButtonText: "아니요.",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete("https://localhost:80/common/users", {
+            withCredentials: true,
+          })
+          .then((res) => {
+            props.handleLogout();
+            navigate("/");
+          });
+      }
+    });
   };
 
   //내가 적은 댓글 삭제

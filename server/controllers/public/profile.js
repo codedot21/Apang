@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
           },
         }
       );
-      res.status(200).send({ message: "닉네임만 수정 완료" });
+      res.status(200).send({ message: "닉네임 수정 완료" });
     } else {
       try {
         // console.log("여기는 찍히나? : ", userInfo);
@@ -138,7 +138,7 @@ module.exports = async (req, res) => {
     // 여기서 user가 false라는것은 비밀번호가 일치하지 않기때문에 비밀번호가 맞지않다는 에러를 띄워준다.
     // !user가 아니라 null로 해야됨. user를 선언해서 findOne함수한것을 담은 거라서 없으면 저 변수는 Null이 되기때문에
     if (user === null) {
-      res.send({ status: 401, message: "비밀번호가 맞지 않습니다." });
+      res.send({ status: 401, message: "비밀번호 일치하지 않음" });
       // 그게아니라면 비밀번호가 일치하고 해당 유저아이디가 있기때문에
     } else {
       // 비밀번호를 수정해준다.

@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
 
   // 토큰이 유효하지 않을 때
   if (!accessToken) {
-    res.status(401).send({ message: "Invalid Token" });
+    res.status(401).send({ message: "토큰이 유효하지 않음" });
   }
   // 토큰이 유효할 때
   else {
@@ -23,6 +23,8 @@ module.exports = async (req, res) => {
 
     // 토큰이 유효할 때 사용자가 존재하는 것이기 때문에 아이디값에 해당하는 유저정보를 찾고 보여줌
     console.log("userInfo : ", userInfo);
-    res.status(200).send({ userInfo: userInfo });
+    res
+      .status(200)
+      .send({ userInfo: userInfo, message: "일반유저 정보 요청 성공" });
   }
 };

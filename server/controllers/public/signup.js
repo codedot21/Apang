@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
     userInfo.password === ""
   ) {
     // 항목이 비었을때 400코드에 bad request메세지를 보내주고 클라이언트에서는 항목이비었다는 메세지.
-    res.status(400).send({ message: "Bad Request" });
+    res.status(400).send({ message: "잘못된 요청" });
   } else {
     // 같은 닉네임이 존재하는지 확인
     const isExist = await users.findOne({
@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
     });
     // console.log("같은닉네임 : ", isExist);
     if (isExist) {
-      res.send({ error: 3, message: "이미 닉네임이 존재합니다." });
+      res.send({ status: 409, error: 3, message: "동일한 닉네임 존재" });
     } else {
       users
         .findOrCreate({
@@ -38,11 +38,15 @@ module.exports = async (req, res) => {
 
           // 중복되는 이메일이 없을 때 201상태코드와 SignUp Ok메세지를 보내줌.
           if (created) {
-            res.status(201).send({ message: "SignUp Ok" });
+            res.status(201).send({ message: "일반유저 회원가입 완료" });
           }
           // 중복되는 이메일이 있을때 409상태코드와 Eamil Exist메세지를 보내줌.
           else {
-            res.send({ error: 2, message: "Email Exist" });
+            res.send({
+              status: 409,
+              error: 2,
+              message: "동일한 이메일 존재",
+            });
           }
         });
     }

@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
       // });
     }
     console.log("tagArr : ", tagArr);
-    res.send({ data: tagArr });
+    res.send({ data: tagArr, message: "해시태그 등록 성공" });
   } catch (err) {
     console.log(err);
   }
