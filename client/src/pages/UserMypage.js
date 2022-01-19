@@ -522,6 +522,7 @@ function UserMypage(props) {
         navigate(`/mypage/publicprofile`);
       });
   };
+  const kakao = "kakao.png";
 
   return (
     <>
@@ -561,7 +562,6 @@ function UserMypage(props) {
                           objectFit: "scale-down",
                         }}
                         src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
-                        //사진이름 한글 --> 에러!
                         alt="publicimage"
                       />
                     )}
@@ -628,7 +628,38 @@ function UserMypage(props) {
               {/* 비밀번호 끝 */}
             </>
           ) : (
-            ""
+            //<-- 내가쓴것 시작 --> 카카오 로그인 시
+            <UserContainerLine>
+              <Profilecontainer>
+                <Box>
+                  <img
+                    style={{
+                      width: "100px",
+                      height: "90px",
+                      objectFit: "scale-down",
+                    }}
+                    src={require(`../../public/uploads/${kakao}`)}
+                    alt="publicimage"
+                  />
+                </Box>
+              </Profilecontainer>
+
+              <UserTitle>이메일</UserTitle>
+              <UserInput
+                type="text"
+                value={props.userInfo.email}
+                name="val"
+                disabled
+              />
+              <UserTitle>닉네임</UserTitle>
+              <UserInput
+                id="닉네임"
+                type="text"
+                defaultValue={props.userInfo.nickname}
+                disabled
+              />
+            </UserContainerLine>
+            //<-- 내가쓴것 끝 -->
           )}
           <hr />
           {/* MY Review 시작*/}
