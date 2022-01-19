@@ -55,9 +55,7 @@ function App() {
         });
 
       // <-- 카카오 로그인 -->
-      // } else if (isNaN(authnumber)) {
     } else if (authnumber === 4) {
-      //parseInt(null)이 들어가면 값이 NaN이 나오더라.
       axios
         .post("https://localhost:80/oauth/kakao", {
           //서버로부터 사용자 정보 받아오기

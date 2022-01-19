@@ -265,7 +265,6 @@ const Clear = styled.div`
 `;
 
 const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
-  // console.log("userInfo whwat", userInfo);
   const [reviews, setReviews] = useState([]); //해당 병원 review 가져오기
   useEffect(() => {
     axios
@@ -280,11 +279,29 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
         console.log("whatwhat?", res);
         setReviews(res.data.reviewInfo);
       });
-  }, [medicalInfo]); //최초 렌더링 시 한번만 실행. componentDidmount
+  }, [medicalInfo]);
 
   const [medicalPhoto, setMedicalPhoto] = useState({
     hospital_img: "",
   });
+  useEffect(() => {
+    axios
+      .post(
+        "https://localhost:80/hospital/info",
+        { hospital_name: medicalInfo.place_name },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.data.status === 400) {
+          setMedicalPhoto({ hospital_img: "" });
+        } else {
+          setMedicalPhoto({ hospital_img: res.data.hospital_img });
+        }
+      });
+  }, [medicalInfo]); //최초 렌더링 시 한번만 실행. componentDidmount
+
   useEffect(() => {
     axios
       .post(
@@ -319,6 +336,13 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
       icon: "error",
       title: "로그인이 필요해요",
       text: "회원이 아니시면 회원가입 해주세요",
+    });
+    setImgInfo({
+      file: [],
+      filepreview: null,
+    });
+    setreviewInfo({
+      content: "",
     });
   };
 

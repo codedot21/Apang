@@ -251,7 +251,7 @@ function QnaPage({ isLogin, auth }) {
   const [limit, setLimit] = useState(5);
   const offset = (page - 1) * limit;
   const [isLoading, setIsLoading] = useState(true);
-
+  console.log(parseInt(localStorage.getItem("auth")));
   //qna 전부 불러오기
   useEffect(() => {
     setIsLoading(true);
@@ -363,9 +363,19 @@ function QnaPage({ isLogin, auth }) {
                           // handleQnaInfo={handleQnaInfo}
                           title={qna.title}
                           content={qna.content}
-                          nickname={qna.user ? qna.user.nickname : "Kakao"}
+                          nickname={
+                            qna.user
+                              ? qna.user.nickname
+                              : parseInt(localStorage.getItem("auth")) === 4
+                              ? "Kakao"
+                              : "탈퇴한 유저"
+                          }
                           profile_img={
-                            qna.user ? qna.user.profile_img : "kakao.png"
+                            qna.user
+                              ? qna.user.profile_img
+                              : parseInt(localStorage.getItem("auth")) === 4
+                              ? "kakao.png"
+                              : "publicprofile.jpeg"
                           }
                           tags={qna}
                           commentsCount={qna.comments.length}

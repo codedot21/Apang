@@ -340,6 +340,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
         userInfo={userInfo}
         isLogin={isLogin}
         auth={auth}
+        // medicalPhoto={medicalPhoto}
       />
       <div style={{ clear: "both" }}></div>
     </MedicalContainer>
