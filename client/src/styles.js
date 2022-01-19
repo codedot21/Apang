@@ -20,7 +20,7 @@ export const theme = {
   },
 
   device: {
-    mobile: `screen and (max-width: 767px)`,
+    mobile: `screen and (max-width:680px)`,
     ipad: `screen and (max-width: 1024px)`,
   },
 };
