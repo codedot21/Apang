@@ -191,6 +191,17 @@ export const ProfileDoc = styled.div`
       font-size: 0.5rem;
     }
   }
+  .commentNothing {
+    margin-left: 22.3rem;
+    @media ${({ theme }) => theme.device.ipad} {
+      margin-left: 3.3rem;
+      font-size: 0.7rem;
+    }
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-left: 5rem;
+      font-size: 0.5rem;
+    }
+  }
 `;
 
 export const ContentTitle = styled.div`
@@ -277,46 +288,38 @@ export const Ren = styled.div`
   }
 `;
 
+export const Shu = styled.div`
+  > textarea {
+    /* whitespace: pre-line; */
+    resize: none;
+    outline: none;
+    border: hidden;
+    width: 100%;
+    height: 5rem;
+    font-size: 0.8rem;
+    @media ${({ theme }) => theme.device.mobile} {
+      margin-: auto;
+    }
+    :enabled {
+      border: 0.1rem solid #dee2e6;
+      border-radius: 10px;
+      &:focus {
+        outline: 0.1rem solid #63b5f6;
+      }
+    }
+    :disabled {
+      background: none;
+      color: black;
+    }
+  }
+`;
+
 function QnaPost({ isLogin, userInfo, auth }) {
-  const [commentId, setCommentId] = useState(false);
-  const editInputRef = useRef(null);
   const navigate = useNavigate();
-  const inputRef = useRef(null);
-  const [contentInfo, setContentInfo] = useState({
-    content: "",
-  });
-
-  const [editContent, setEditContent] = useState({
-    edittingcontent: "",
-  });
-
   const [commentList, setCommentList] = useState([]);
-
-  // const handleInputChange = (key) => (e) => {
-  //   setContentInfo({
-  //     ...contentInfo,
-  //     [key]: e.target.value,
-  //   });
-  // };
-
-  // const handleInputChange = (e) => {
-  //   setContentInfo(e.target.value);
-  // };
-
-  // const handleInputChange = (e) => {
-  //   setContentInfo({ content: e.target.value });
-  // };
-
-  const handleInputChange = (key) => (e) => {
-    setContentInfo({ [key]: e.target.value });
-  };
-
-  const handleInputContentChange = (key) => (e) => {
-    setEditContent({
-      ...editContent,
-      [key]: e.target.value,
-    });
-  };
+  const [commentId, setCommentId] = useState(false);
+  const inputRef = useRef(null);
+  const editInputRef = useRef(null);
 
   let url = document.location.href;
   let qna_id = url.split("/");
@@ -338,11 +341,18 @@ function QnaPost({ isLogin, userInfo, auth }) {
       });
   }, []);
 
+  const handleKakuninClick = () => {
+    Swal.fire({
+      icon: "error",
+      title: "의사 선생님이신가요?",
+      text: "선생님만 답변하실 수 있어요",
+    });
+  };
+
   const handleClick = (e) => {
     e.preventDefault();
     if (auth === 1) {
       // console.log("content몰까?", contentInfo);
-      // let payload = { content: contentInfo.content, qna_id: qna_id };
       let payload = { content: inputRef.current.value, qna_id: qna_id };
       axios
         .post("https://localhost:80/comments/upload", payload, {
@@ -360,19 +370,6 @@ function QnaPost({ isLogin, userInfo, auth }) {
       });
     }
   };
-
-  // const handleEdit = (doctorid) => {
-  //   if (doctorid !== userInfo.id) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       text: "작성자만 수정하실 수 있어요",
-  //     });
-  //     return;
-  //   } else if (doctorid === userInfo.id) {
-  //     inputRef.current.disabled = false;
-  //     inputRef.current.focus();
-  //   }
-  // };
 
   const handleDelete = (commentid) => {
     axios
@@ -394,35 +391,6 @@ function QnaPost({ isLogin, userInfo, auth }) {
       });
   };
 
-  // const handleClear = (commentid, doctorid) => {
-  //   inputRef.current.disabled = true;
-  //   let payload = {
-  //     content: editContent.edittingcontent,
-  //     comment_id: commentid,
-  //     doctor_id: doctorid,
-  //   };
-  //   axios
-  //     .put("https://localhost:80/comments/modify", payload, {
-  //       withCredentials: true,
-  //     })
-  //     .then(() => {
-  //       Swal.fire({
-  //         icon: "success",
-  //         text: "댓글이 성공적으로 수정되었습니다",
-  //       });
-  //     })
-  //     .then(() => {
-  //       navigate("/qna");
-  //       navigate(`/qna/detail/${qna_id}`);
-  //     })
-  //     .catch(() => {
-  //       Swal.fire({
-  //         icon: "error",
-  //         text: "작성자만 수정하실 수 있어요",
-  //       });
-  //     });
-  // };
-
   useEffect(() => {
     if (commentId) {
       editInputRef.current.focus();
@@ -433,7 +401,33 @@ function QnaPost({ isLogin, userInfo, auth }) {
     setCommentId(commentid);
   };
 
-  const onClickSubmitButton = () => {
+  const onClickSubmitButton = (commentid, doctorid) => {
+    let payload = {
+      // content: editContent.edittingcontent,
+      content: editInputRef.current.value,
+      comment_id: commentid,
+      doctor_id: doctorid,
+    };
+    axios
+      .put("https://localhost:80/comments/modify", payload, {
+        withCredentials: true,
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "댓글이 성공적으로 수정되었습니다",
+        });
+      })
+      .then(() => {
+        navigate("/qna");
+        navigate(`/qna/detail/${qna_id}`);
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          text: "작성자만 수정하실 수 있어요",
+        });
+      });
     setCommentId(null);
   };
 
@@ -465,10 +459,12 @@ function QnaPost({ isLogin, userInfo, auth }) {
                             <span
                               value="등록"
                               className="commentFront"
-                              // onClick={() =>
-                              //   handleClear(comment.id, comment.doctors_id)
-                              // }
-                              onClick={onClickSubmitButton}
+                              onClick={() =>
+                                onClickSubmitButton(
+                                  comment.id,
+                                  comment.doctors_id
+                                )
+                              }
                             >
                               등록
                             </span>
@@ -477,7 +473,6 @@ function QnaPost({ isLogin, userInfo, auth }) {
                           <span
                             value="수정"
                             className="commentFront"
-                            // onClick={() => handleEdit(comment.doctors_id)}
                             onClick={() => onClickEditButton(comment.id)}
                           >
                             수정
@@ -495,12 +490,9 @@ function QnaPost({ isLogin, userInfo, auth }) {
                     {comment.id === commentId ? (
                       <Ren>
                         <textarea
-                          // disabled
                           type="text"
                           defaultValue={comment.content}
                           ref={editInputRef}
-                          onChange={handleInputContentChange("edittingcontent")}
-                          // value={editContent.edittingcontent}
                         />
                       </Ren>
                     ) : (
@@ -522,9 +514,18 @@ function QnaPost({ isLogin, userInfo, auth }) {
                         width="20rem"
                         alt="doctor"
                       />
-                      <div className="Id">{`${comment.doctor.name} 의사선생님`}</div>
+                      <div className="Id">
+                        {`${comment.doctor.name} 선생님`}
+                        <span className="commentNothing"></span>
+                      </div>
                     </ProfileDoc>
-                    <ContentDocText>{comment.content}</ContentDocText>
+                    <Shu>
+                      <textarea
+                        disabled
+                        type="text"
+                        defaultValue={comment.content}
+                      />
+                    </Shu>
                   </>
                 )}
               </ContentWrap>
@@ -534,22 +535,30 @@ function QnaPost({ isLogin, userInfo, auth }) {
       })}
       {/* 답변 끝 */}
       {/* 댓글창 시작 */}
-      <QnaPostContainer>
-        <TagsInput>
-          <textarea
-            className="textarea"
-            type="textarea"
-            placeholder={
-              isLogin && auth === 1
-                ? "선생님의 답변을 기다리고 있어요"
-                : "선생님만 답변하실 수 있어요"
-            }
-            onChange={handleInputChange("content")}
-            // value={contentInfo.content}
-            ref={inputRef}
-          />
-        </TagsInput>
-      </QnaPostContainer>
+      {isLogin && auth === 1 ? (
+        <QnaPostContainer>
+          <TagsInput>
+            <textarea
+              className="textarea"
+              type="textarea"
+              ref={inputRef}
+              placeholder={"선생님의 답변을 기다리고 있어요"}
+            />
+          </TagsInput>
+        </QnaPostContainer>
+      ) : (
+        <QnaPostContainer>
+          <TagsInput>
+            <textarea
+              className="textarea"
+              type="textarea"
+              ref={inputRef}
+              onClick={handleKakuninClick}
+              placeholder={"선생님만 답변하실 수 있어요"}
+            />
+          </TagsInput>
+        </QnaPostContainer>
+      )}
       <QnaListContainer>
         <QnaWrap>
           <QnaWrap>

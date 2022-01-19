@@ -119,7 +119,7 @@ function Qna({ title, nickname, content, profile_img, tags, commentsCount }) {
                 return <div className="tag">{tag.hashtag}</div>;
               })}
             </Tag>
-            <ContentComment>{commentsCount}</ContentComment>
+            <ContentComment>댓글 {commentsCount}</ContentComment>
           </ContentWrap>
         </QnaBox>
       ) : null}
