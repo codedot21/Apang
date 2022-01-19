@@ -223,16 +223,18 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
     });
     const id = e.target.id;
     const value = e.target.value;
-    if (valid[id](value)) {
-      setErrorMessage((prev) => {
-        prev[id] = "";
-        return prev;
-      });
-    } else {
-      setErrorMessage((prev) => {
-        prev[id] = message[id];
-        return prev;
-      });
+    if (id !== "hospital") {
+      if (valid[id](value)) {
+        setErrorMessage((prev) => {
+          prev[id] = "";
+          return prev;
+        });
+      } else {
+        setErrorMessage((prev) => {
+          prev[id] = message[id];
+          return prev;
+        });
+      }
     }
   };
 

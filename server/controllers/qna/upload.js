@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
       qnaInfo.category === ""
     ) {
       // 항목이 비었을때
-      res.status(400).send({ message: "Bad Request" });
+      res.status(400).send({ message: "잘못된 요청" });
     } else {
       //항목이 다 적혀있을때
       const info = await qna.create({
@@ -28,14 +28,14 @@ module.exports = async (req, res) => {
         category: qnaInfo.category,
       });
       console.log("qna찍히는지 본다. ", info);
-      res.status(201).send({ data: info, message: "QnA Upload Ok" });
+      res.status(201).send({ data: info, message: "질문 등록 성공" });
     }
     //<---- 일반 로그인 시 ---->
   } else if (!kakaoUserid) {
     //<---- 일반 로그인 시, 토큰이 유효하지 않을 때 ---->
 
     if (!accessTokenData) {
-      res.status(401).send({ data: null, message: "Invalid Token" });
+      res.status(401).send({ data: null, message: "토큰이 유효하지 않음" });
       //<--- 일반 로그인 시, 토큰은 유효, but 항목이 비었을 때 --->
     } else if (accessTokenData) {
       if (
@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
         qnaInfo.content === "" ||
         qnaInfo.category === ""
       ) {
-        res.status(400).send({ message: "Bad Request" });
+        res.status(400).send({ message: "잘못된 요청" });
       } else {
         const info = await qna.create({
           title: qnaInfo.title,
@@ -51,7 +51,7 @@ module.exports = async (req, res) => {
           users_id: accessTokenData.id, //kakao userid를 적는다. 한자리 숫자가 아니라 여러개라 섞이지 않을듯?
           category: qnaInfo.category,
         });
-        res.status(201).send({ data: info, message: "QnA Upload Ok" });
+        res.status(201).send({ data: info, message: "질문 등록 성공" });
       }
     }
   }

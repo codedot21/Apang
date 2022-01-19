@@ -20,5 +20,5 @@ module.exports = async (req, res) => {
       hashtag_id: hashtagId[i],
     });
   }
-  res.status(201).send({ message: "QnA_hashtag Ok" });
+  res.status(201).send({ message: "QnA 해시태그 등록 성공" });
 };

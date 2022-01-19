@@ -15,7 +15,9 @@ module.exports = async (req, res) => {
         },
       ],
     });
-    res.status(200).send({ myCommentInfo: doctorComments });
+    res
+      .status(200)
+      .send({ myCommentInfo: doctorComments, message: "답변 정보 요청 성공" });
   } else {
     const doctorComments = await comments.findAll({
       where: {
@@ -30,6 +32,8 @@ module.exports = async (req, res) => {
         },
       ],
     });
-    res.status(200).send({ comments: doctorComments });
+    res
+      .status(200)
+      .send({ comments: doctorComments, message: "답변 정보 요청 성공" });
   }
 };

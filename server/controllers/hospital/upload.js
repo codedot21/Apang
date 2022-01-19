@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
   const accessTokenData = isAuthorized(req);
   console.log("accesstoken모야", accessTokenData);
   if (!accessTokenData) {
-    res.status(401).send({ data: null, message: "Invalid Token" });
+    res.status(401).send({ data: null, message: "토큰이 유효하지 않음" });
   } else if (accessTokenData) {
     let upload = multer({
       storage: storage,
@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
           hospital_img: filename,
         })
         .then(() => {
-          res.status(201).send({ message: "hospital info Upload Ok" });
+          res.status(201).send({ message: "병원 정보 등록 성공" });
         });
     });
   }

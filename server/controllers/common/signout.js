@@ -7,7 +7,7 @@ module.exports = (req, res) => {
   // console.log("들어오니?", req.body);
   //이걸 그냥 if(req.body.auth)로 해버리니 0이나 없는거나 다 false로 받는다.
   if (req.body.auth === 0 || req.body.auth === 1 || req.body.auth === 2) {
-    res.clearCookie("jwt").status(200).send("SignOut Ok");
+    res.clearCookie("jwt").status(200).send({ message: "로그아웃 성공" });
   } else {
     console.log(req.body.userid);
     const userid = req.body.userid;
@@ -25,7 +25,7 @@ module.exports = (req, res) => {
       }
     );
     res.status(205).send({
-      message: "Kakao Logout Ok",
+      message: "카카오 로그아웃 성공",
     });
   }
 };
