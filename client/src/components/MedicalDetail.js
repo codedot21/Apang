@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Sample from "../images/sample.jpg";
+import Sample from "../images/sample.gif";
+import Receipt from "../images/receipt.jpg";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -277,7 +278,6 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
       .then((res) => {
         console.log("whatwhat?", res);
         setReviews(res.data.reviewInfo);
-        // return;
       });
   }, [medicalInfo]);
 
@@ -301,6 +301,24 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
         }
       });
   }, [medicalInfo]); //최초 렌더링 시 한번만 실행. componentDidmount
+
+  useEffect(() => {
+    axios
+      .post(
+        "https://localhost:80/hospital/info",
+        { hospital_name: medicalInfo.place_name },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.data.status === 400) {
+          setMedicalPhoto({ hospital_img: "" });
+        } else {
+          setMedicalPhoto({ hospital_img: res.data.hospital_img });
+        }
+      });
+  }, [medicalInfo]);
 
   const [reviewInfo, setreviewInfo] = useState({
     content: "",
@@ -545,7 +563,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
                 {imgInfo.filepreview !== null ? (
                   <Img2 src={imgInfo.filepreview} alt="uploadimage" />
                 ) : (
-                  <ImgReview src={Sample} alt="publicimage" />
+                  <ImgReview src={Receipt} alt="publicimage" />
                 )}
               </Box>
               <ProfileEditing2 htmlFor="upload-file" onChange={handleImgChange}>

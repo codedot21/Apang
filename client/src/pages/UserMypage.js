@@ -147,7 +147,7 @@ const PassWordTitle = styled.span`
   float: left;
   font-weight: bold;
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 10px;
+    font-size: 12px;
     width: 100%;
     padding: 1px;
   }
@@ -216,7 +216,7 @@ const MyreviewLine = styled.div`
   border: 1px solid #b5afaf;
   border-radius: 10px;
   width: 20%;
-  height: 100px;
+  height: 50%;
   margin: 1vw;
   float: left;
   background-color: #f9f9f9;
@@ -243,8 +243,8 @@ const MyreviewTrash = styled.button`
 `;
 
 const MyreviewContent = styled.div`
-  margin: 1vw 1vw 1vw 0.5vw;
-  border: 1px solid #b5afaf;
+  margin: 0.5vw 1vw 1vw 0.5vw;
+  border-bottom: 1px solid #b5afaf;
   width: 90%;
   padding: 4px;
   overflow: hidden;
@@ -252,6 +252,14 @@ const MyreviewContent = styled.div`
   white-space: nowrap;
   @media ${({ theme }) => theme.device.mobile} {
     margin: 0 1.5vw 1.5vw 1.5vw;
+  }
+`;
+
+const TitleHeader = styled.h4`
+  margin: 1vw 0 0.5vw 0.5vw;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 2vw 1.5vw 1.5vw 2vw;
   }
 `;
 
@@ -663,8 +671,10 @@ function UserMypage(props) {
                   <MyreviewTrash>
                     <BsTrash onClick={() => handleReviewDelete(review.id)} />
                   </MyreviewTrash>
-                  <div style={{ clear: "both" }}></div>
+                  <TitleHeader>병원명</TitleHeader>
+                  <Clear />
                   <MyreviewContent>{review.hospital_name}</MyreviewContent>
+                  <TitleHeader>Review</TitleHeader>
                   <MyreviewContent>{review.content}</MyreviewContent>
                 </MyreviewLine>
               </MyreviewContainer>
@@ -688,8 +698,10 @@ function UserMypage(props) {
                   <MyreviewTrash>
                     <BsTrash onClick={() => handleQnaDelete(qna.id)} />
                   </MyreviewTrash>
+                  <TitleHeader>진료과목</TitleHeader>
                   <Clear />
                   <MyreviewContent>{qna.category}</MyreviewContent>
+                  <TitleHeader>Q&A</TitleHeader>
                   <MyreviewContent>{qna.title}</MyreviewContent>
                 </MyreviewLine>
               </MyreviewContainer>
