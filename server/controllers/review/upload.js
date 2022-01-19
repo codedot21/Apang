@@ -61,14 +61,15 @@ module.exports = async (req, res) => {
       res.status(401).send({ data: null, message: "Invalid Token" });
       //<--- 일반 로그인 시, 토큰은 유효, but 항목이 비었을 때 --->
     } else if (accessTokenData) {
-      if (req.body.receipts_img === "" || req.body.content === "") {
-        res.status(400).send({ message: "Bad Request" });
-      } else {
-        let upload = multer({
-          storage: storage,
-        }).single("receipts_img");
+      let upload = multer({
+        storage: storage,
+      }).single("receipts_img");
 
-        upload(req, res, function (err) {
+      upload(req, res, function (err) {
+        console.log("req what?", req);
+        if (!req.file || !req.body.content) {
+          res.send({ status: 400, message: "Bad Request" });
+        } else {
           let filename = req.file.filename;
           console.log("filename은?", filename);
           if (!req.file) {
@@ -88,8 +89,8 @@ module.exports = async (req, res) => {
             .then(() => {
               res.status(201).send({ message: "Review Upload Ok" });
             });
-        });
-      }
+        }
+      });
     }
   }
 };

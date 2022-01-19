@@ -270,7 +270,6 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
       phone: item.phone,
     });
   };
-  // console.log("medicalInfo : ", medicalInfo);
 
   return (
     <MedicalContainer>
@@ -339,6 +338,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
         userInfo={userInfo}
         isLogin={isLogin}
         auth={auth}
+        // medicalPhoto={medicalPhoto}
       />
       <div style={{ clear: "both" }}></div>
     </MedicalContainer>
