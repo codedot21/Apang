@@ -6,5 +6,5 @@ module.exports = async (req, res) => {
     where: { id: req.params.id },
   });
   console.log("whatwhat: ", qnaInfo);
-  res.status(200).send({ data: qnaInfo, message: "qna Detail Ok" });
+  res.status(200).send({ data: qnaInfo, message: "QnA 상세정보 요청 성공" });
 };

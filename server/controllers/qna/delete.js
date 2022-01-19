@@ -11,13 +11,13 @@ module.exports = async (req, res) => {
     });
     res.status(200).send({
       id: req.body.qna_id,
-      message: "qna Delete Ok",
+      message: "QnA 삭제 성공",
     });
   } else {
     //<---- 일반유저 ---- >
     //   <-- 토큰 유효 x -->
     if (!auth) {
-      res.status(401).send({ data: null, message: "Invalid Token" });
+      res.status(401).send({ data: null, message: "토큰이 유효하지 않음" });
     } else {
       // <-- 토큰 유효 o, 사용자 id === 게시물 userId -->
       await qna.destroy({
@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
       });
       res.status(200).send({
         id: req.body.qna_id,
-        message: "qna Delete Ok",
+        message: "QnA 삭제 성공",
       });
       // <-- 토큰 유효 o , but 사용자 id !==게시물 userId -->
     }

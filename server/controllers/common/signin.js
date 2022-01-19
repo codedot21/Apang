@@ -21,11 +21,16 @@ module.exports = async (req, res) => {
         const accessToken = generateAccessToken(doctorInfo.dataValues);
         sendAccessToken(res, accessToken, doctorInfo.dataValues.auth);
       } else {
-        res.send({ error: 2, message: "회원가입 신청이 승낙되지 않았습니다." });
+        res.send({
+          status: 403,
+          error: 2,
+          message: "회원가입 신청이 승낙되지 않음",
+        });
       }
     } else if (!doctorInfo) {
       return res.send({
-        message: "Not authorized",
+        status: 401,
+        message: "아이디 또는 비밀번호가 유효하지 않음",
         error: 1,
       });
     }

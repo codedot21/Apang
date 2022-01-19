@@ -6,13 +6,13 @@ module.exports = async (req, res) => {
   const accessTokenData = isAuthorized(req);
   console.log("의사토큰있니?", accessTokenData);
   if (!accessTokenData) {
-    res.status(401).send({ data: null, message: "Invalid Token" });
+    res.status(401).send({ data: null, message: "토큰이 유효하지 않음" });
   } else if (accessTokenData) {
     if (accessTokenData.agree === "false") {
-      res.status(403).send({ message: "Only Doctor" });
+      res.status(403).send({ message: "권한이 없음" });
     } else if (accessTokenData.agree === "true") {
       if (req.body.content === "") {
-        res.status(400).send({ message: "Bad Request" });
+        res.status(400).send({ message: "잘못된 요청" });
       } else {
         await comments
           .create({
@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
             doctors_id: accessTokenData.id,
           })
           .then(() => {
-            res.status(201).send({ message: "Comments Upload Ok" });
+            res.status(201).send({ message: "답변 등록 성공" });
           });
       }
     }

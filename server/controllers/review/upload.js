@@ -14,22 +14,19 @@ const storage = multer.diskStorage({
 });
 
 module.exports = async (req, res) => {
-  const accessTokenData = isAuthorized(req);
-  const kakaoUserid = req.body.kakao_userid;
+  let upload = multer({
+    storage: storage,
+  }).single("receipts_img");
 
-  //<---- kakao로 로그인 했을 때!---->
-  if (kakaoUserid) {
-    if (req.body.receipts_img === "" || req.body.content === "") {
-      // 항목이 비었을때
-      res.status(400).send({ message: "Bad Request" });
-    } else {
-      //항목이 다 적혀있을때
-      let upload = multer({
-        storage: storage,
-      }).single("receipts_img");
-
-      //여기가 시작
-      upload(req, res, function (err) {
+  upload(req, res, function (err) {
+    // console.log("req.body : ", req.body);
+    // console.log("req.file : ", req.file);
+    // console.log("auth : ", isAuthorized(req));
+    // 카카오 유저
+    if (req.body.kakao_userid !== "null") {
+      if (req.body.receipts_img === "" || req.body.content === "") {
+        res.send({ status: 400, message: "잘못된 요청" });
+      } else {
         let filename = req.file.filename;
         console.log("filename은?", filename);
         if (!req.file) {
@@ -44,32 +41,19 @@ module.exports = async (req, res) => {
             receipts_img: filename,
             content: req.body.content,
             hospital_name: req.body.hospital_name,
-            users_id: kakaoUserid,
+            users_id: req.body.kakao_userid,
           })
           .then(() => {
-            res.status(201).send({ message: "Review Upload Ok" });
+            res.status(201).send({ message: "리뷰등록 성공" });
           });
-      });
-
-      // 여기가 끝
-    }
-    //<---- 일반 로그인 시 ---->
-  } else if (!kakaoUserid) {
-    //<---- 일반 로그인 시, 토큰이 유효하지 않을 때 ---->
-
-    if (!accessTokenData) {
-      res.status(401).send({ data: null, message: "Invalid Token" });
-      //<--- 일반 로그인 시, 토큰은 유효, but 항목이 비었을 때 --->
-    } else if (accessTokenData) {
-      let upload = multer({
-        storage: storage,
-      }).single("receipts_img");
-
-      upload(req, res, function (err) {
-        console.log("req what?", req);
-        if (!req.file || !req.body.content) {
-          res.send({ status: 400, message: "Bad Request" });
-        } else {
+      }
+    } else {
+      if (req.body.receipts_img === "" || req.body.content === "") {
+        res.send({ status: 400, message: "영수증과 내용을 작성해 주세요" });
+      } else {
+        const userInfo = isAuthorized(req);
+        // console.log(userInfo);
+        if (userInfo) {
           let filename = req.file.filename;
           console.log("filename은?", filename);
           if (!req.file) {
@@ -84,13 +68,15 @@ module.exports = async (req, res) => {
               receipts_img: filename,
               content: req.body.content,
               hospital_name: req.body.hospital_name,
-              users_id: accessTokenData.id,
+              users_id: userInfo.id,
             })
             .then(() => {
-              res.status(201).send({ message: "Review Upload Ok" });
+              res.status(201).send({ message: "리뷰등록 성공" });
             });
+        } else {
+          res.status(401).send({ message: "토큰이 유효하지 않음" });
         }
-      });
+      }
     }
-  }
+  });
 };

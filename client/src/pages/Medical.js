@@ -5,6 +5,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { Container } from "../styles";
 import MedicalDetail from "../components/MedicalDetail";
+import { category } from "../modules/category";
 
 // import cn from "classnames";
 
@@ -174,8 +175,6 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
     setKeyword(e.target.value);
     navigate("/medicallist");
   };
-  // 검색 키워드
-  const search = ["치과", "내과", "산부인과"];
 
   useEffect(() => {
     getPosition();
@@ -287,15 +286,15 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
     <MedicalContainer>
       <MedicalTitle>병원 목록 & 상세페이지</MedicalTitle>
       <Selector onChange={handler}>
-        <Options disabled selected>
-          진료과목을 선택해 주세요.
-        </Options>
-        {search.map((el, i) => {
-          return (
-            <Options value={el} key={i}>
-              {el}
-            </Options>
-          );
+        <Options disabled>진료과목을 선택해 주세요.</Options>
+        {category.map((el, i) => {
+          if (el !== "전체") {
+            return (
+              <Options value={el} key={i}>
+                {el}
+              </Options>
+            );
+          }
         })}
       </Selector>
       {/* 지도 start */}
