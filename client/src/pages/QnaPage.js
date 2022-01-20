@@ -358,20 +358,19 @@ function QnaPage({ isLogin, auth }) {
                     return (
                       <Linked to={`/qna/detail/${qna.id}`}>
                         <Qna
-                          // handleQnaInfo={handleQnaInfo}
                           title={qna.title}
                           content={qna.content}
                           nickname={
                             qna.user
                               ? qna.user.nickname
-                              : parseInt(localStorage.getItem("auth")) === 4
+                              : qna.users_id.toString().length >= 6
                               ? "Kakao"
                               : "탈퇴한 유저"
                           }
                           profile_img={
                             qna.user
                               ? qna.user.profile_img
-                              : parseInt(localStorage.getItem("auth")) === 4
+                              : qna.users_id.toString().length >= 6
                               ? "kakao.png"
                               : "publicprofile.jpeg"
                           }
