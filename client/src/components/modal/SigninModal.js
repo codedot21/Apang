@@ -6,6 +6,7 @@ import { KAKAO_AUTH_URL } from "../OAuthKakao";
 import { GOOGLE_AUTHORIZE_URL } from "../OAuthGoogle";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { message } from "../../modules/message";
 
 export const ModalBackGround = styled.div`
   position: fixed;
@@ -17,7 +18,7 @@ export const ModalBackGround = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 0;
+  z-index: 99;
 `;
 
 export const ModalBox = styled.div`
@@ -32,7 +33,7 @@ export const ModalBox = styled.div`
 
 export const LoginHeader = styled.div`
   position: relative;
-  padding: 1.5rem 3.5rem 1rem 3.5rem;
+  padding: 1.5rem 3.5rem 1rem 9.3rem;
   background-color: #fbf3ed;
   font-weight: 500;
   color: black;
@@ -59,7 +60,7 @@ export const LoginBody = styled.div`
   background-color: #fbf3ed;
 
   & > div {
-    padding: 0.3rem 0.7rem 0.7rem 0.7rem;
+    padding: 0rem 0.7rem 0.7rem 0.7rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,24 +82,25 @@ export const LoginBody = styled.div`
 `;
 
 export const LoginFooter = styled.div`
-  padding: 0.1rem 1rem 1rem 1rem;
+  padding: 0.1rem 1rem 1rem 6.8rem;
   background-color: #fbf3ed;
 `;
 
 export const SocialLoginHeader = styled.div`
   font-size: 0.8rem;
   padding-top: 0.1rem;
+  padding-left: 1.2rem; //추가된것
   padding-bottom: 1rem;
   background-color: #fbf3ed;
 `;
 
 // export const SocialLogin = styled(Link)``;
 export const SocialLogin = styled.a`
-  padding: 0.1rem 1rem 1rem 1rem;
+  padding: 0.1rem 1rem 1rem 0.8rem;
 `;
 
 export const Button = styled.button`
-  margin: 0.7rem 2rem;
+  margin: 0rem 2rem;
   background: #6ec5ff;
   white-space: nowrap;
   padding: 0.6rem 7.3rem;
@@ -120,16 +122,23 @@ export const ModalContainer = styled.div`
   border: 8%;
 `;
 
-export const ErrMsg = styled.div`
+export const Msg = styled.div`
   color: red;
+  font-size: 13px;
 `;
 
 function SigninModal({ open, close, handleResponseSuccess }) {
-  const [errMsg, setErrMsg] = useState("");
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
   });
+
+  const reset = () => {
+    setUserInfo({
+      email: "",
+      password: "",
+    });
+  };
 
   const handleInputChange = (key) => (e) => {
     setUserInfo({
@@ -139,56 +148,83 @@ function SigninModal({ open, close, handleResponseSuccess }) {
   };
 
   const handleSignIn = () => {
-    // console.log("로그인");
-    axios
-      .post("http://localhost:80/common/signin", userInfo, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        // console.log("auth번호!", res.data.data.auth);
-        if (res.data.error === 1) {
-          setErrMsg("이메일과 비밀번호를 확인해 주세요");
-          // console.log("res.data.error : ", res.data.error);
-        } else if (res.data.error === 2) {
-          Swal.fire({
-            icon: "error",
-            title: "Apang 로그인",
-            text: "회원가입 신청이 승낙되지 않았습니다.",
-          });
-        } else {
-          handleResponseSuccess(res.data.data.auth);
-          // console.log("로그인 완료");
-          // console.log(res.status);
-          Swal.fire({
-            icon: "success",
-            title: "Apang 로그인",
-            text: "로그인이 완료되었습니다.",
-          });
-          close();
-        }
+    const { email, password } = userInfo;
+    if (email === "") {
+      Swal.fire({
+        icon: "error",
+        title: "로그인 실패",
+        text: message.emptyMessage,
       });
+      return;
+    } else if (password === "") {
+      Swal.fire({
+        icon: "error",
+        title: "로그인 실패",
+        text: message.emptyMessage,
+      });
+      return;
+    } else {
+      axios
+        .post("https://localhost:80/common/signin", userInfo, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          // console.log("auth번호!", res.data.data.auth);
+          if (res.data.error === 1) {
+            Swal.fire({
+              icon: "warning",
+              title: "Apang 로그인",
+              text: message.loginFail,
+            });
+          } else if (res.data.error === 2) {
+            Swal.fire({
+              icon: "error",
+              title: "Apang 로그인",
+              text: message.doctorFail,
+            });
+          } else {
+            handleResponseSuccess(res.data.data.auth);
+            // console.log("로그인 완료");
+            // console.log(res.status);
+            Swal.fire({
+              icon: "success",
+              title: "Apang 로그인",
+              text: message.loginSuccess,
+            });
+            close();
+          }
+        });
+    }
   };
   return open ? (
-    <ModalBackGround onClick={close}>
+    <ModalBackGround
+      onClick={() => {
+        reset();
+        close();
+      }}
+    >
       <ModalBox onClick={(e) => e.stopPropagation()}>
         <LoginHeader>
           로그인
           <button onClick={close}> &times; </button>
         </LoginHeader>
-        <ErrMsg>{errMsg}</ErrMsg>
         <LoginBody>
           <div>
             <input
+              id="loginEmail"
               type="email"
               placeholder="이메일"
               onChange={handleInputChange("email")}
+              value={userInfo.email}
             />
           </div>
           <div>
             <input
+              id="loginPassword"
               type="password"
               placeholder="비밀번호"
               onChange={handleInputChange("password")}
+              value={userInfo.password}
             />
           </div>
           <Button onClick={handleSignIn}>로그인</Button>

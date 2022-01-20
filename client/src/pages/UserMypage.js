@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
+import { BsTrash } from "react-icons/bs";
+import Swal from "sweetalert2";
+import { message } from "../modules/message";
+import { valid } from "../modules/validator";
 
 export const UserContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -18,6 +23,8 @@ const Title = styled.h1`
   padding: 1rem;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 20px;
+    padding: 1vw;
+    margin-bottom: 2vw;
   }
 `;
 
@@ -29,8 +36,8 @@ const UserContainerLine = styled.div`
   margin: 0 auto;
   margin-bottom: 15px;
   @media ${({ theme }) => theme.device.mobile} {
-    max-width: 100%;
-    height: 20rem;
+    width: 100%;
+    height: 25rem;
   }
 `;
 
@@ -41,7 +48,6 @@ const Profilecontainer = styled.div`
   height: 80%;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
-    max-width: 100%;
     height: 50%;
   }
 `;
@@ -54,6 +60,7 @@ const ProfileEditing = styled.label`
   padding: 0.5vw;
   color: #fff;
   border-radius: 30px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }
@@ -62,7 +69,7 @@ const ProfileEditing = styled.label`
   margin: auto;
 
   @media ${({ theme }) => theme.device.mobile} {
-    width: 50%;
+    width: 100%;
     max-width: 8rem;
     font-size: 13px;
   }
@@ -74,9 +81,10 @@ const UserTitle = styled.div`
   font-weight: bold;
   width: 20%;
   @media ${({ theme }) => theme.device.mobile} {
-    float: center;
-    width: 40%;
-    font-size: 12px;
+    text-align: center;
+    width: 100%;
+    font-size: 15px;
+    padding: 1px;
   }
 `;
 
@@ -88,7 +96,7 @@ const UserInput = styled.input`
   width: 30%;
   margin-bottom: 20px;
   @media ${({ theme }) => theme.device.mobile} {
-    width: 60%;
+    width: 100%;
   }
 `;
 
@@ -98,6 +106,7 @@ const Edting = styled.button`
   border-radius: 30px;
   color: #fff;
   padding: 10px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }
@@ -109,7 +118,7 @@ const Edting = styled.button`
     width: 10%;
   }
   @media ${({ theme }) => theme.device.mobile} {
-    width: 5rem;
+    width: 60%;
     font-size: 12px;
   }
 `;
@@ -121,25 +130,26 @@ const Edting = styled.button`
 const PasswordLine = styled.div`
   border: 1px solid #b5afaf;
   padding: 1rem;
-  height: 220px;
+  height: 240px;
   text-align: center;
   width: 80%;
   margin: 0 auto;
   margin-top: 10px;
   @media ${({ theme }) => theme.device.mobile} {
-    height: 14rem;
+    height: 18.5rem;
+    width: 100%;
   }
 `;
 
 const PassWordTitle = styled.span`
-  width: 50%;
+  width: 45%;
   padding: 20px;
   float: left;
   font-weight: bold;
   @media ${({ theme }) => theme.device.mobile} {
-    float: left;
-    font-size: 10px;
-    width: 50%;
+    font-size: 12px;
+    width: 100%;
+    padding: 1px;
   }
 `;
 
@@ -152,8 +162,10 @@ const PassWordInput = styled.input`
   border-radius: 30px;
   padding: 20px;
   @media ${({ theme }) => theme.device.mobile} {
-    float: center;
-    width: 40%;
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
@@ -169,40 +181,165 @@ const EditPasswordDeleted = styled.button`
   color: #fff;
   padding: 10px;
   margin: 20px;
+  cursor: pointer;
   &:hover {
     background-color: #002171;
   }
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 12px;
-    width: 30%;
+    width: 50%;
+    margin: 10px;
   }
 `;
 
 // 비밀번호 끝
 
-// 마이리뷰 시작
+// 마이리뷰 qna 시작
 
 const MyreviewTitle = styled.h2`
   color: #095cd8;
   margin: 20px 10px 20px 0px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 20px;
+  }
 `;
 
-// 마이리뷰 끝
+const MyreviewContainer = styled.div`
+  margin: 10px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    margin: 0;
+  }
+`;
 
-// 마이 큐엔에이 시작
-// 마이 큐엔에이 끝
+const MyreviewLine = styled.div`
+  border: 1px solid #b5afaf;
+  border-radius: 10px;
+  width: 20%;
+  height: 50%;
+  margin: 1vw;
+  float: left;
+  background-color: #f9f9f9;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    float: none;
+    margin-bottom: 3vw;
+  }
+`;
+
+const MyreviewTrash = styled.button`
+  text-align: right;
+  float: right;
+  margin: 0.5vw;
+  cursor: pointer;
+  border: none;
+  background-color: #f9f9f9;
+  &:hover {
+    background-color: #c7c7c7;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 3vw;
+  }
+`;
+
+const MyreviewContent = styled.div`
+  margin: 0.5vw 1vw 1vw 0.5vw;
+  border-bottom: 1px solid #b5afaf;
+  width: 90%;
+  padding: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 0 1.5vw 1.5vw 1.5vw;
+  }
+`;
+
+const TitleHeader = styled.h4`
+  margin: 1vw 0 0.5vw 0.5vw;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 2vw 1.5vw 1.5vw 2vw;
+  }
+`;
+
+// 마이리뷰, qna 끝
+
+// 유효성 시작
+
+const Clear = styled.div`
+  clear: both;
+`;
+
+const Prosecutor = styled.div`
+  font-size: 10px;
+  color: #e91e63;
+  width: 90%;
+  margin-left: 100px;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 0vw;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+`;
+
+// 유효성 끝
 
 // 상현 수정
 function UserMypage(props) {
+  const navigate = useNavigate();
+  const [myQnaInfo, setmyQnaInfo] = useState([]);
+  const [myReviewInfo, setmyReviewInfo] = useState([]);
+
+  //나의 qna 전부 불러오기
+  useEffect(() => {
+    axios
+      .post(
+        "https://localhost:80/qna/info",
+        { kakao_userid: localStorage.getItem("userid"), page: "usermypage" },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        console.log("myqnainfo?", res.data.myQnaInfo);
+        setmyQnaInfo(res.data.myQnaInfo);
+      });
+  }, []);
+
+  //나의 review 전부 불러오기
+  useEffect(() => {
+    axios
+      .post(
+        "https://localhost:80/review/info",
+        { kakao_userid: localStorage.getItem("userid"), page: "usermypage" },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        setmyReviewInfo(res.data.myReviewInfo);
+      });
+  }, []);
+
   console.log(props.userInfo);
+  console.log(myQnaInfo);
   const [imgInfo, setImgInfo] = useState({
+    // 사진수정
     file: [],
     filepreview: null,
   });
+
   const [userInfo, setUserInfo] = useState({
+    //개인정보수정
     nickname: "",
     password: "",
     newPassword: "",
+    passwordConfirm: "",
+  });
+  const [errorMessage, setErrorMessage] = useState({
+    newPassword: "",
+    passwordConfirm: "",
   });
   const handleImgChange = (e) => {
     setImgInfo({
@@ -216,156 +353,362 @@ function UserMypage(props) {
       ...userInfo,
       [key]: e.target.value,
     });
+    const id = e.target.id;
+    const value = e.target.value;
+    if (id === "passwordConfirm") {
+      if (userInfo.newPassword === e.target.value) {
+        setErrorMessage({ ...errorMessage, passwordConfirm: "" });
+      } else {
+        setErrorMessage({
+          ...errorMessage,
+          passwordConfirm: message.passwordConfirm,
+        });
+      }
+      return;
+    }
+    if (id === "passwordConfirm" || id === "newPassword") {
+      if (valid[id](value)) {
+        setErrorMessage((prev) => {
+          prev[id] = "";
+          return prev;
+        });
+      } else {
+        setErrorMessage((prev) => {
+          prev[id] = message[id];
+          return prev;
+        });
+      }
+    }
   };
 
   // 수정
-  // const [isSucces, setSuccess] = useState(null);
   const submit = () => {
-    // console.log("저장");
-    const formdata = new FormData();
-    formdata.append("apang", imgInfo.file);
-    // console.log(formdata);
-    formdata.append("nickname", userInfo.nickname);
-    formdata.append("token", localStorage.getItem("accessToken"));
-    axios.post("http://localhost:80/public/profile", formdata, {
-      headers: { "Content-type": "multipart/form-data" },
-      withCredentials: true,
-    });
-    // .then((res) => {
-    //   console.warn(res);
-    //   if (res.data.success === 1) {
-    //     setSuccess("이미지가 성공적으로 업데이트 되었습니다");
-    //   }
-    // });
+    if (!imgInfo.filepreview) {
+      axios
+        .post(
+          "https://localhost:80/public/profile",
+          { onlyNickname: userInfo.nickname },
+          {
+            withCredentials: true,
+          }
+        )
+        .then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 정보수정",
+            text: message.changeSuccess,
+          });
+        });
+    } else {
+      const formdata = new FormData();
+      formdata.append("apang", imgInfo.file);
+      // console.log(formdata);
+      formdata.append("nickname", userInfo.nickname);
+      formdata.append("token", localStorage.getItem("accessToken"));
+      axios
+        .post("https://localhost:80/public/profile", formdata, {
+          headers: { "Content-type": "multipart/form-data" },
+          withCredentials: true,
+        })
+        .then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 정보수정",
+            text: message.changeSuccess,
+          });
+        });
+    }
+    window.location.reload(); //근데 페이지가 새로고침되어지면 안됌 원래는
   };
   // 비밀번호 변경
   const passwordChange = () => {
     delete userInfo.nickname;
     // console.log("비밀번호 변경 : ", userInfo);
-    axios.post("http://localhost:80/public/profile", userInfo, {
-      withCredentials: true,
-    });
+    axios
+      .post("https://localhost:80/public/profile", userInfo, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.data.status === 401) {
+          Swal.fire({
+            icon: "error",
+            title: "Apang 정보수정",
+            text: message.errorPassword,
+          });
+        } else {
+          Swal.fire({
+            icon: "success",
+            title: "Apang 정보수정",
+            text: message.changeSuccess,
+          });
+          props.handleLogout();
+        }
+      });
   };
 
   // 회원탈퇴
   const deleteHandler = () => {
+    Swal.fire({
+      icon: "warning",
+      title: "회원탈퇴",
+      text: "정말로 탈퇴하시겠습니까?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "네, 탈퇴하겠습니다.",
+      cancelButtonText: "아니요.",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete("https://localhost:80/common/users", {
+            withCredentials: true,
+          })
+          .then(() => {
+            props.handleLogout();
+            navigate("/");
+          });
+      }
+    });
+  };
+
+  //내가 쓴 qna 삭제코드
+  const handleQnaDelete = (qnaid) => {
     axios
-      .delete("http://localhost:80/common/users", {
+      .delete("https://localhost:80/qna", {
+        data: {
+          qna_id: qnaid,
+          kakao_userid: localStorage.getItem("userid"),
+        },
         withCredentials: true,
       })
-      .then((res) => {
-        // 서버에서 넘겨준 auth 잘 불러오는지 확인.
-        // console.log(res.data.auth);
-        // 로그아웃 상태로 메인페이지로 보내줘야됨
+      .then(() => {
+        axios.delete("http://localhost:80/comments", {
+          data: {
+            qna_id: qnaid,
+          },
+          withCredentials: true,
+        });
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "질문이 성공적으로 삭제되었습니다",
+        });
+      })
+      .then(() => {
+        navigate("/");
+        navigate(`/mypage/publicprofile`);
       });
   };
 
+  //내가쓴 review 삭제코드
+  const handleReviewDelete = (reviewid) => {
+    axios
+      .delete("https://localhost:80/review", {
+        data: {
+          review_id: reviewid,
+          kakao_userid: localStorage.getItem("userid"),
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "리뷰가 성공적으로 삭제되었습니다",
+        });
+      })
+      .then(() => {
+        navigate("/");
+        navigate(`/mypage/publicprofile`);
+      });
+  };
+  const kakao = "kakao.png";
+
   return (
     <>
-      {props.userInfo ? (
+      {props.userInfo && myQnaInfo ? (
         <UserContainer>
           {/* 회원정보 시작 */}
           <Title>회원정보</Title>
-          <UserContainerLine>
-            {/* <Profile
-            type="file"
-            id="upload_file"
-            style={{ display: "none" }}
-            onChange={handleInputChange}
-          /> */}
-            <Profilecontainer>
-              <Profile
-                type="file"
-                id="upload_file"
-                style={{
-                  display: "none",
-                }}
-                onChange={handleImgChange}
-              />
+          {props.userInfo.auth ? (
+            <>
+              <UserContainerLine>
+                <Profilecontainer>
+                  <Profile
+                    type="file"
+                    id="upload_file"
+                    style={{
+                      display: "none",
+                    }}
+                    onChange={handleImgChange}
+                  />
 
-              <Box onChange={handleImgChange}>
-                {imgInfo.filepreview !== null ? (
+                  <Box onChange={handleImgChange}>
+                    {imgInfo.filepreview !== null ? (
+                      <img
+                        src={imgInfo.filepreview}
+                        alt="uploadimage"
+                        style={{
+                          width: "100px",
+                          height: "90px",
+                          objectFit: "scale-down",
+                        }}
+                      />
+                    ) : (
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "90px",
+                          objectFit: "scale-down",
+                        }}
+                        src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
+                        alt="publicimage"
+                      />
+                    )}
+                  </Box>
+                  <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
+                </Profilecontainer>
+
+                <UserTitle>이메일</UserTitle>
+                <UserInput
+                  type="text"
+                  value={props.userInfo.email}
+                  name="val"
+                  disabled
+                />
+                <UserTitle>닉네임</UserTitle>
+                <UserInput
+                  id="닉네임"
+                  type="text"
+                  defaultValue={props.userInfo.nickname}
+                  onChange={handleInputChange("nickname")}
+                />
+              </UserContainerLine>
+              <Edting onClick={submit}>저장하기</Edting>
+
+              {/* 회원정보 끝 */}
+              <br />
+              {/* 비밀번호 시작 */}
+
+              <PasswordLine>
+                <PassWordTitle>기존비밀번호</PassWordTitle>
+                <PassWordInput
+                  placeholder="기존"
+                  type="password"
+                  onChange={handleInputChange("password")}
+                ></PassWordInput>
+                <PassWordTitle>새로운 비밀번호</PassWordTitle>
+                <PassWordInput
+                  id="newPassword"
+                  placeholder="New"
+                  type="password"
+                  onChange={handleInputChange("newPassword")}
+                ></PassWordInput>
+                <Clear />
+                <Prosecutor>{errorMessage.newPassword}</Prosecutor>
+
+                <PassWordTitle>비밀번호 확인 </PassWordTitle>
+                <PassWordInput
+                  id="passwordConfirm"
+                  placeholder="New 한번 더"
+                  type="password"
+                  onChange={handleInputChange("passwordConfirm")}
+                ></PassWordInput>
+                <Clear />
+                <Prosecutor>{errorMessage.passwordConfirm}</Prosecutor>
+              </PasswordLine>
+              <Box>
+                <EditPasswordDeleted onClick={passwordChange}>
+                  비밀번호 변경
+                </EditPasswordDeleted>
+                <EditPasswordDeleted onClick={deleteHandler}>
+                  회원탈퇴
+                </EditPasswordDeleted>
+              </Box>
+              {/* 비밀번호 끝 */}
+            </>
+          ) : (
+            //<-- 내가쓴것 시작 --> 카카오 로그인 시
+            <UserContainerLine>
+              <Profilecontainer>
+                <Box>
                   <img
-                    src={imgInfo.filepreview}
-                    alt="uploadimage"
                     style={{
                       width: "100px",
                       height: "90px",
                       objectFit: "scale-down",
                     }}
-                  />
-                ) : (
-                  <img
-                    // src={require(`././uploads/${props.userInfo.profile_img}`)}
-                    //사진이름을 한글로 하면 에러뜬다....!
-                    src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
-                    // src={`../../public/uploads/${props.userInfo.profile_img}`}
+                    src={require(`../../public/uploads/${kakao}`)}
                     alt="publicimage"
                   />
-                )}
-              </Box>
-              <ProfileEditing htmlFor="upload_file">편집</ProfileEditing>
-            </Profilecontainer>
+                </Box>
+              </Profilecontainer>
 
-            <UserTitle>이메일</UserTitle>
-            <UserInput
-              type="text"
-              value={props.userInfo.email}
-              name="val"
-              disabled
-            />
-            <UserTitle>닉네임</UserTitle>
-            <UserInput
-              type="text"
-              defaultValue={props.userInfo.nickname}
-              onChange={handleInputChange("nickname")}
-            />
-          </UserContainerLine>
-          <Edting onClick={submit}>저장하기</Edting>
-
-          {/* 회원정보 끝 */}
-          <br />
-          {/* 비밀번호 시작 */}
-
-          <PasswordLine>
-            <PassWordTitle>기존비밀번호</PassWordTitle>
-            <PassWordInput
-              placeholder="기존"
-              type="password"
-              onChange={handleInputChange("password")}
-            ></PassWordInput>
-            <PassWordTitle>새로운 비밀번호</PassWordTitle>
-            <PassWordInput
-              placeholder="New"
-              type="password"
-              onChange={handleInputChange("newPassword")}
-            ></PassWordInput>
-            <PassWordTitle>비밀번호 확인</PassWordTitle>
-            <PassWordInput
-              placeholder="New 한번 더"
-              type="password"
-            ></PassWordInput>
-          </PasswordLine>
-          <Box>
-            <EditPasswordDeleted onClick={passwordChange}>
-              비밀번호 변경
-            </EditPasswordDeleted>
-            <EditPasswordDeleted onClick={deleteHandler}>
-              회원탈퇴
-            </EditPasswordDeleted>
-          </Box>
-          {/* 비밀번호 끝 */}
-
+              <UserTitle>이메일</UserTitle>
+              <UserInput
+                type="text"
+                value={props.userInfo.email}
+                name="val"
+                disabled
+              />
+              <UserTitle>닉네임</UserTitle>
+              <UserInput
+                id="닉네임"
+                type="text"
+                defaultValue={props.userInfo.nickname}
+                disabled
+              />
+            </UserContainerLine>
+            //<-- 내가쓴것 끝 -->
+          )}
           <hr />
           {/* MY Review 시작*/}
           <MyreviewTitle>My Review</MyreviewTitle>
-
+          {myReviewInfo.map((review) => {
+            return (
+              <MyreviewContainer key={review.id}>
+                <MyreviewLine>
+                  <MyreviewTrash>
+                    <BsTrash onClick={() => handleReviewDelete(review.id)} />
+                  </MyreviewTrash>
+                  <TitleHeader>병원명</TitleHeader>
+                  <Clear />
+                  <MyreviewContent>{review.hospital_name}</MyreviewContent>
+                  <TitleHeader>Review</TitleHeader>
+                  <MyreviewContent>{review.content}</MyreviewContent>
+                </MyreviewLine>
+              </MyreviewContainer>
+            );
+          })}
           {/* MY Review 끝*/}
 
+          {/* MY Review 끝*/}
+          <Clear />
+          <br></br>
           <hr />
+
           {/*MY Q&A 시작  */}
+
           <MyreviewTitle>My Q&A</MyreviewTitle>
+          {myQnaInfo.map((qna) => {
+            return (
+              <MyreviewContainer key={qna.id}>
+                <MyreviewLine>
+                  {/* <MyreviewNickname>{qna.user.nickname}</MyreviewNickname> */}
+                  <MyreviewTrash>
+                    <BsTrash onClick={() => handleQnaDelete(qna.id)} />
+                  </MyreviewTrash>
+                  <TitleHeader>진료과목</TitleHeader>
+                  <Clear />
+                  <MyreviewContent>{qna.category}</MyreviewContent>
+                  <TitleHeader>Q&A</TitleHeader>
+                  <MyreviewContent>{qna.title}</MyreviewContent>
+                </MyreviewLine>
+              </MyreviewContainer>
+            );
+          })}
           {/*MY Q&A 끝  */}
+          <Clear />
         </UserContainer>
       ) : (
         ""

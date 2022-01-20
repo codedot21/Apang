@@ -43,17 +43,35 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-// associations
-const { users, comments, doctors, hashtag, qna, reviews } = sequelize.models;
-users.hasMany(reviews);
-reviews.belongsTo(users);
-users.hasMany(qna);
-qna.belongsTo(users);
-qna.hasMany(comments);
-comments.belongsTo(qna);
-doctors.hasMany(comments);
-comments.belongsTo(doctors);
-hashtag.hasMany(qna);
-qna.hasMany(hashtag);
+const {
+  comments,
+  doctors,
+  hashtag,
+  qna_hashtag,
+  qna,
+  reviews,
+  users,
+} = sequelize.models;
+
+users.hasMany(qna, { foreignKey: "users_id" });
+users.hasMany(reviews, { foreignKey: "users_id" });
+qna.belongsTo(users, { foreignKey: "users_id" });
+reviews.belongsTo(users, { foreignKey: "users_id" });
+
+doctors.hasMany(comments, { foreignKey: "doctors_id" });
+comments.belongsTo(doctors, { foreignKey: "doctors_id" });
+
+qna.hasMany(qna_hashtag, { foreignKey: "qna_id" });
+qna_hashtag.belongsTo(qna, { foreignKey: "qna_id" });
+qna.belongsToMany(hashtag, { through: "qna_hashtag", foreignKey: "qna_id" });
+hashtag.hasMany(qna_hashtag, { foreignKey: "hashtag_id" });
+qna_hashtag.belongsTo(hashtag, { foreignKey: "hashtag_id" });
+hashtag.belongsToMany(qna, {
+  through: "qna_hashtag",
+  foreignKey: "hashtag_id",
+});
+
+qna.hasMany(comments, { foreignKey: "qna_id" });
+comments.belongsTo(qna, { foreignKey: "qna_id" });
 
 module.exports = db;

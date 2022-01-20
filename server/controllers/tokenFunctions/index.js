@@ -18,7 +18,7 @@ module.exports = {
         data: {
           auth: auth,
         },
-        message: "Ok",
+        message: "로그인 성공",
       });
   },
 

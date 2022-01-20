@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Container } from "../styles";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -52,10 +53,11 @@ const AgreeBtn = styled.button`
 
 function AuthPage() {
   const [doctors, setDoctors] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get("http://localhost:80/doctor/userinfo", {
+      .get("https://localhost:80/doctor/userinfo", {
         withCredentials: true,
       })
       .then((res) => {
@@ -67,7 +69,7 @@ function AuthPage() {
   const agreeHandler = (params, e) => {
     // console.log(params);
     axios
-      .post("http://localhost:80/doctor/profile", params.id, {
+      .post("https://localhost:80/doctor/profile", params.id, {
         withCredentials: true,
       })
       .then(() => {
@@ -85,6 +87,8 @@ function AuthPage() {
             email: `${params.email}`, // ${c.email}
           },
         });
+        navigate("/");
+        navigate("/authpage");
       });
   };
 

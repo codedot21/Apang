@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 export const FooterContainer = styled.div`
-  // background-color: #dee2e6;
+  background-color: #dee2e6;
   background-color: ${({ theme }) => theme.color.footer};
   padding: 0.5rem 2rem;
   flex-direction: row;
@@ -15,6 +15,7 @@ export const FooterContainer = styled.div`
   }
   @media ${({ theme }) => theme.device.mobile} {
     max-width: 900px;
+    width: 100%;
     font-size: 13px;
   }
 `;
@@ -27,6 +28,7 @@ const Title = styled.div`
   font-size: 18px;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 14px;
+    padding: 1vw;
   }
 `;
 
@@ -39,6 +41,10 @@ const Lines = styled.div`
   justify-content: space-around;
   @media ${({ theme }) => theme.device.mobile} {
     margin-bottom: 14vw;
+    padding-bottom: 10%;
+  }
+  @media ${({ theme }) => theme.device.ipad} {
+    margin-bottom: 5vw;
   }
 `;
 const Careeres = styled.div`
@@ -64,6 +70,7 @@ function Footer() {
           target="_blank"
           href={"https://github.com/codestates/Apang"}
           style={{ textDecoration: "none", color: "#095cd8" }}
+          rel="noreferrer"
         >
           {" "}
           Apang
@@ -78,6 +85,7 @@ function Footer() {
             target="_blank"
             href={"https://github.com/sangcode33"}
             style={{ textDecoration: "none", color: "#fff" }}
+            rel="noreferrer"
           >
             <FaGithub /> 권상현 Front end
           </a>
@@ -87,6 +95,7 @@ function Footer() {
             target="_blank"
             href={"https://github.com/gusdnvkfks/"}
             style={{ textDecoration: "none", color: "#fff" }}
+            rel="noreferrer"
           >
             <FaGithub /> 김경훈 Back end
           </a>
@@ -96,6 +105,7 @@ function Footer() {
             target="_blank"
             href={"https://github.com/codedot21/"}
             style={{ textDecoration: "none", color: "#fff" }}
+            rel="noreferrer"
           >
             <FaGithub /> 김장겸 Front end
           </a>

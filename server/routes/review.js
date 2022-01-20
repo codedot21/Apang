@@ -6,7 +6,7 @@ const reviewModify = require("../controllers/review/modify");
 const reviewDelete = require("../controllers/review/delete");
 
 router.post("/upload", reviewUpload);
-router.get("/info", reviewInfo);
+router.post("/info", reviewInfo);
 router.put("/modify", reviewModify);
 router.delete("/", reviewDelete);
 

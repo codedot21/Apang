@@ -6,52 +6,81 @@ import Main from "./pages/Main.js";
 import AuthPage from "./pages/AuthPage.js";
 import UserMypage from "./pages/UserMypage.js";
 import DocMypage from "./pages/DocMypage.js";
-import ReviewPage from "./pages/ReviewPage.js";
 import Footer from "./components/Footer.js";
 import Kakao from "./components/Kakao.js";
+import QnaPage from "./pages/QnaPage.js";
+import QnaDetail from "./pages/QnaDetail.js";
+import ScrollTop from "./components/Scroll.js";
+import Medical from "./pages/Medical.js";
+import Swal from "sweetalert2";
+import { message } from "./modules/message";
 
 import axios from "axios";
 
 function App() {
-  console.log("App.js랜더링");
+  // console.log("App.js랜더링");
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
-  // const [accessToken, setAccessToken] = useState("");
+  const [userInfo, setUserInfo] = useState(null); //사용자 정보
   const [auth, setAuth] = useState("");
+  // const [qnaDetail, setqnaDetail] = useState(null);
 
-  // useEffect(() => {
-  //   setUserInfo(localStorage.getItem("userInfo"));
-  // }, []);
   const isAuthenticated = () => {
-    //쿠키에 jwt가 있는지 없는지 랜더링될떄마다 확인하는 함수..?
-    // const authnumber = localStorage.getItem("auth");
     const authnumber = parseInt(localStorage.getItem("auth"));
-    console.log(authnumber);
+    //< --일반인 로그인 -->
     if (authnumber === 2 || authnumber === 0) {
       axios
-        .get("http://localhost:80/public/userinfo", {
+        .get("https://localhost:80/public/userinfo", {
           withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
         })
         .then((res) => {
-          //console.log(res);
-          console.log(res.data.userInfo);
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth); //nav에 내려주기 위해
           setIsLogin(true);
           // navigate("/");
         });
+
+      //<-- 의사 로그인 -->
     } else if (authnumber === 1) {
       axios
-        .get("http://localhost:80/doctor/userinfo", {
-          withCredentials: true, //이게 없으니까 cookies안에 토큰이 없다.
+        .get("https://localhost:80/doctor/userinfo", {
+          withCredentials: true,
         })
         .then((res) => {
-          console.log(res.data.userInfo);
+          console.log(res.data);
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth);
           setIsLogin(true);
           // navigate("/");
+        });
+
+      // <-- 카카오 로그인 -->
+    } else if (authnumber === 4) {
+      axios
+        .post("https://localhost:80/oauth/kakao", {
+          //서버로부터 사용자 정보 받아오기
+          access_token: localStorage.getItem("accessToken"),
+        })
+        .then((res) => {
+          if (res.status === 201 || res.status === 200) {
+            const user = res.data;
+            localStorage.setItem("userid", user.data.id);
+            console.log(localStorage.getItem("userid"));
+            const userInfo = {
+              id: user.data.id,
+              nickname: user.data.properties.nickname,
+              email: user.data.kakao_account.email,
+            };
+            setUserInfo(userInfo); //이것때문에 post 2번 간다.
+            setIsLogin(true);
+            navigate("/");
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Apang 로그인",
+              text: message.loginFail,
+            });
+          }
         });
     }
   };
@@ -60,85 +89,70 @@ function App() {
     localStorage.setItem("auth", authnumber);
     isAuthenticated();
   };
-  // const handleResponseSuccess = (authnumber) => {
-  //   isAuthenticated(authnumber);
-  // };
 
   useEffect(() => {
     isAuthenticated();
-  }, []); //이게 있으면 왜 로그인이 유지되지? 랜더링될때 한번만 실행. 없으면 새로고침하면 로그인풀림.
+  }, []);
 
-  const LoginHandler = (data) => {
-    setUserInfo(data);
-    console.log(userInfo);
-    setIsLogin(true);
+  const LoginHandler = () => {
+    isAuthenticated();
   };
 
   const handleLogout = () => {
     axios
       .post(
-        "http://localhost:80/common/signout",
+        "https://localhost:80/common/signout",
         {
           auth: auth,
           userid: localStorage.getItem("userid"),
-          // credentials: "include",
         },
-        { withCredentials: true } //서버-클라이언트 쿠키연결.
+        { withCredentials: true }
       )
       .then((res) => {
-        console.log("록아웃되니?");
         setUserInfo(null);
         setIsLogin(false);
         // setAccessToken("");
         localStorage.removeItem("userid");
         localStorage.removeItem("auth");
-        alert("로그아웃이 되었습니다.");
+        localStorage.removeItem("accessToken");
+        Swal.fire({
+          icon: "success",
+          title: "또 만나요",
+          text: "로그아웃 되었습니다",
+        });
         navigate("/");
       });
-    // // .catch(() =>
-    // axios
-    //   .post("http://localhost:80/common/kakaosignout", {
-    //     userid: localStorage.getItem("userid"),
-    //   })
-    //   .then((res) => {
-    //     setUserInfo("");
-    //     setIsLogin(false);
-    //     localStorage.removeItem("userid");
-    //     localStorage.removeItem("ACCESS_TOKEN");
-    //     alert("로그아웃이 되었습니다.");
-    //     navigate("/");
-    //   });
-    // );
   };
 
-  const getGoogleToken = async (authorizationCode) => {
-    await axios({
-      url: "http://localhost:80/oauth/google",
-      method: "post",
-      data: { authorizationCode },
-      withCredentials: true,
-    }).then((res) => {
-      console.log("여기", res.data);
-      console.log("여기", res.data.data.email);
-      console.log("여기", res.data.data.name);
-    });
-  };
+  // const getGoogleToken = async (authorizationCode) => {
+  //   await axios({
+  //     url: "https://localhost:80/oauth/google",
+  //     method: "post",
+  //     data: { authorizationCode },
+  //     withCredentials: true,
+  //   }).then((res) => {
+  //     console.log("여기", res.data);
+  //     console.log("여기", res.data.data.email);
+  //     console.log("여기", res.data.data.name);
+  //   });
+  // };
 
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    console.log(`url ${url}`);
-    const authorizationCode = url.searchParams.get("code");
-    console.log(`authorizationCode ${authorizationCode}`);
-    if (authorizationCode) {
-      getGoogleToken(authorizationCode);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const url = new URL(window.location.href);
+  //   console.log(`url ${url}`);
+  //   const authorizationCode = url.searchParams.get("code");
+  //   console.log(`authorizationCode ${authorizationCode}`);
+  //   if (authorizationCode) {
+  //     getGoogleToken(authorizationCode);
+  //   }
+  // }, []);
 
   return (
     <>
+      <ScrollTop />
       <Nav
         isLogin={isLogin}
-        auth={auth}
+        auth={parseInt(localStorage.getItem("auth"))}
         handleResponseSuccess={handleResponseSuccess}
         handleLogout={handleLogout}
       />
@@ -147,18 +161,53 @@ function App() {
         <Route path="/authpage" element={<AuthPage />} />
         <Route
           path="/mypage/publicprofile"
-          element={<UserMypage userInfo={userInfo} />}
+          element={
+            <UserMypage userInfo={userInfo} handleLogout={handleLogout} />
+          }
         />
         <Route
           path="/mypage/doctorprofile"
-          element={<DocMypage userInfo={userInfo} />}
+          element={
+            <DocMypage userInfo={userInfo} handleLogout={handleLogout} />
+          }
         />
-        <Route path="/reviewpage" element={<ReviewPage />} />
         <Route
           path="/oauth/callback/kakao"
           element={<Kakao LoginHandler={LoginHandler} />}
         />
+        <Route
+          path="/qna"
+          element={
+            <QnaPage
+              isLogin={isLogin}
+              // userInfo={userInfo}
+              auth={parseInt(localStorage.getItem("auth"))}
+            />
+          }
+        />
+
+        <Route
+          path="/medicallist"
+          element={
+            <Medical
+              isLogin={isLogin}
+              userInfo={userInfo}
+              auth={parseInt(localStorage.getItem("auth"))}
+            />
+          }
+        />
+        <Route
+          path="/qna/detail/:id"
+          element={
+            <QnaDetail
+              isLogin={isLogin}
+              userInfo={userInfo}
+              auth={parseInt(localStorage.getItem("auth"))}
+            />
+          }
+        />
       </Routes>
+
       <Footer />
     </>
   );

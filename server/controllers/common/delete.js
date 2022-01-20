@@ -19,6 +19,6 @@ module.exports = (req, res) => {
     res.status(200).send({ auth: 2, message: "일반유저 삭제 완료" });
     // 그것도 아니면 관리자 이기때문에 아이디 삭제 x
   } else {
-    res.status(400).send({ auth: 0, message: "삭제 권한이 없습니다." });
+    res.status(400).send({ auth: 0, message: "잘못된 요청" });
   }
 };
