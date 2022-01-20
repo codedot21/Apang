@@ -40,8 +40,8 @@ const Button = styled.button`
   }
 `;
 
-function Pagination({ length, limit, page, setPage }) {
-  const pages = Math.ceil(length / limit);
+function Pagination({ length, page, setPage }) {
+  const pages = Math.ceil(length / 5);
 
   return (
     <>

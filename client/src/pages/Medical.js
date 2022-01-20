@@ -146,13 +146,13 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
             // console.log("위치기반 : ", JSON.stringify(res.data));
             return res.data.documents[0].address;
           })
-          .then((address) => {
-            // setAddress({
-            //   area: address.region_1depth_name,
-            //   sigg: address.region_2depth_name,
-            //   addr: address.address_name,
-            // });
-          })
+          // .then((address) => {
+          // setAddress({
+          //   area: address.region_1depth_name,
+          //   sigg: address.region_2depth_name,
+          //   addr: address.address_name,
+          // });
+          // })
           .catch((err) => {
             console.log(err);
           });
@@ -267,11 +267,11 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
             "</div>"
           // 지도안의 마커 네임
         );
-
         infowindow.open(map, marker);
       });
     }
   }, [keyword]);
+
   // console.log("Place : ", Places);
   // 병원 상세 페이지
   const detailPage = (item, e) => {
@@ -302,6 +302,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
       <div>
         <HMap id="myMap"></HMap>
       </div>
+
       {/* 지도 end */}
       {/* 병원 리스트 start */}
       <ListDivBox>
