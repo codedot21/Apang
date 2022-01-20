@@ -302,24 +302,6 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
       });
   }, [medicalInfo]); //최초 렌더링 시 한번만 실행. componentDidmount
 
-  useEffect(() => {
-    axios
-      .post(
-        "https://localhost:80/hospital/info",
-        { hospital_name: medicalInfo.place_name },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        if (res.data.status === 400) {
-          setMedicalPhoto({ hospital_img: "" });
-        } else {
-          setMedicalPhoto({ hospital_img: res.data.hospital_img });
-        }
-      });
-  }, [medicalInfo]);
-
   const [reviewInfo, setreviewInfo] = useState({
     content: "",
   });

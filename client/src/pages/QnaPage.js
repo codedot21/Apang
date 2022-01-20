@@ -236,6 +236,7 @@ export const Nodata = styled(Container)`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  z-index: 0;
   .Img {
     width: 65rem;
     @media ${({ theme }) => theme.device.mobile} {
@@ -248,8 +249,7 @@ function QnaPage({ isLogin, auth }) {
   const [QuestionOpen, setQuestionOpen] = useState(false);
   const [qnaInfo, setqnaInfo] = useState([]); //qna 전부 가져오는것
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
-  const offset = (page - 1) * limit;
+  const offset = (page - 1) * 5;
   const [isLoading, setIsLoading] = useState(true);
   console.log(parseInt(localStorage.getItem("auth")));
   //qna 전부 불러오기
@@ -354,7 +354,7 @@ function QnaPage({ isLogin, auth }) {
                       <Button onClick={openQuestionModal}>질문하기</Button>
                     )}
                   </QnaWrap>
-                  {qnaInfo.slice(offset, offset + limit).map((qna) => {
+                  {qnaInfo.slice(offset, offset + 5).map((qna) => {
                     return (
                       <Linked to={`/qna/detail/${qna.id}`}>
                         <Qna
@@ -387,12 +387,7 @@ function QnaPage({ isLogin, auth }) {
           </QnaListContainer>
 
           {qnaInfo.length >= 1 ? (
-            <Pagination
-              length={qnaInfo.length}
-              limit={limit}
-              page={page}
-              setPage={setPage}
-            />
+            <Pagination length={qnaInfo.length} page={page} setPage={setPage} />
           ) : (
             <Nodata>
               <Nodata>
