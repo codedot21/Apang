@@ -264,7 +264,7 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
       });
     } else {
       axios
-        .post("https://localhost:80/public/signup", publicInfo, {
+        .post(`${process.env.REACT_APP_API_URL}/public/signup`, publicInfo, {
           withCredentials: true,
         })
         .then((res) => {
@@ -289,9 +289,13 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
             });
             delete publicInfo.nickname;
             axios
-              .post("https://localhost:80/common/signin", publicInfo, {
-                withCredentials: true,
-              })
+              .post(
+                `${process.env.REACT_APP_API_URL}/common/signin`,
+                publicInfo,
+                {
+                  withCredentials: true,
+                }
+              )
               .then((res) => {
                 console.log("여기로 오지않음?");
                 handleResponseSuccess(res.data.data.auth);
@@ -330,7 +334,7 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
       });
     } else {
       axios
-        .post("https://localhost:80/doctor/signup", doctorInfo, {
+        .post(`${process.env.REACT_APP_API_URL}/doctor/signup`, doctorInfo, {
           withCredentials: true,
         })
         .then((res) => {

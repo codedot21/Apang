@@ -269,7 +269,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
   useEffect(() => {
     axios
       .post(
-        "https://localhost:80/review/info",
+        `${process.env.REACT_APP_API_URL}/review/info`,
         { hospital_name: medicalInfo.place_name },
         {
           withCredentials: true,
@@ -287,7 +287,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
   useEffect(() => {
     axios
       .post(
-        "https://localhost:80/hospital/info",
+        `${process.env.REACT_APP_API_URL}/hospital/info`,
         { hospital_name: medicalInfo.place_name },
         {
           withCredentials: true,
@@ -351,7 +351,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
     formdata.append("receipts_img", imgInfo.file);
     formdata.append("hospital_name", medicalInfo.place_name);
     axios
-      .post("https://localhost:80/review/upload", formdata, {
+      .post(`${process.env.REACT_APP_API_URL}/review/upload`, formdata, {
         headers: { "Content-type": "multipart/form-data" },
         withCredentials: true,
       })
@@ -399,7 +399,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
     formdata.append("hospital_name", medicalInfo.place_name);
     formdata.append("hospital_img", fileImage.file);
     axios
-      .post("https://localhost:80/hospital/upload", formdata, {
+      .post(`${process.env.REACT_APP_API_URL}/hospital/upload`, formdata, {
         headers: { "Content-type": "multipart/form-data" },
         withCredentials: true,
       })

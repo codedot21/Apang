@@ -249,7 +249,7 @@ function QnaModal({ open, close, tagHandler }) {
   const handleUpload = () => {
     axios
       .post(
-        "https://localhost:80/qna/upload",
+        `${process.env.REACT_APP_API_URL}/qna/upload`,
         { ...qnaInfo, kakao_userid: localStorage.getItem("userid") },
         {
           withCredentials: true,
@@ -261,7 +261,7 @@ function QnaModal({ open, close, tagHandler }) {
         let payload = { tags: tags };
         axios(
           {
-            url: "https://localhost:80/hashtag/upload",
+            url: `${process.env.REACT_APP_API_URL}/hashtag/upload`,
             method: "post",
             data: payload,
           },
@@ -274,7 +274,7 @@ function QnaModal({ open, close, tagHandler }) {
           // console.log("해시태그 : ", res.data.data);
           axios
             .post(
-              "https://localhost:80/hashtag/qnahashtag",
+              `${process.env.REACT_APP_API_URL}/hashtag/qnahashtag`,
               { qnaId: qnaId, hashtag: res.data.data },
               {
                 withCredentials: true,
