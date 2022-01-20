@@ -57,7 +57,7 @@ function AuthPage() {
 
   useEffect(() => {
     axios
-      .get("https://localhost:80/doctor/userinfo", {
+      .get(`${process.env.REACT_APP_API_URL}/doctor/userinfo`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -69,7 +69,7 @@ function AuthPage() {
   const agreeHandler = (params, e) => {
     // console.log(params);
     axios
-      .post("https://localhost:80/doctor/profile", params.id, {
+      .post(`${process.env.REACT_APP_API_URL}/doctor/profile`, params.id, {
         withCredentials: true,
       })
       .then(() => {
