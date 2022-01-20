@@ -329,7 +329,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
   useEffect(() => {
     axios
       .post(
-        "https://localhost:80/comments/info",
+        `${process.env.REACT_APP_API_URL}/comments/info`,
         { qna_id: qna_id },
         {
           withCredentials: true,
@@ -355,7 +355,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
       // console.log("content몰까?", contentInfo);
       let payload = { content: inputRef.current.value, qna_id: qna_id };
       axios
-        .post("https://localhost:80/comments/upload", payload, {
+        .post(`${process.env.REACT_APP_API_URL}/comments/upload`, payload, {
           withCredentials: true,
         })
         .then((res) => {
@@ -373,7 +373,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
 
   const handleDelete = (commentid) => {
     axios
-      .delete("https://localhost:80/comments", {
+      .delete(`${process.env.REACT_APP_API_URL}/comments`, {
         data: {
           comment_id: commentid,
         },
@@ -409,7 +409,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
       doctor_id: doctorid,
     };
     axios
-      .put("https://localhost:80/comments/modify", payload, {
+      .put(`${process.env.REACT_APP_API_URL}/comments/modify`, payload, {
         withCredentials: true,
       })
       .then(() => {
