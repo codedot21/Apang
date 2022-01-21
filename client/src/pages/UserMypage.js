@@ -295,7 +295,7 @@ function UserMypage(props) {
   useEffect(() => {
     axios
       .post(
-        "https://localhost:80/qna/info",
+        `${process.env.REACT_APP_API_URL}/qna/info`,
         { kakao_userid: localStorage.getItem("userid"), page: "usermypage" },
         {
           withCredentials: true,
@@ -311,7 +311,7 @@ function UserMypage(props) {
   useEffect(() => {
     axios
       .post(
-        "https://localhost:80/review/info",
+        `${process.env.REACT_APP_API_URL}/review/info`,
         { kakao_userid: localStorage.getItem("userid"), page: "usermypage" },
         {
           withCredentials: true,
@@ -386,7 +386,7 @@ function UserMypage(props) {
     if (!imgInfo.filepreview) {
       axios
         .post(
-          "https://localhost:80/public/profile",
+          `${process.env.REACT_APP_API_URL}/public/profile`,
           { onlyNickname: userInfo.nickname },
           {
             withCredentials: true,
@@ -406,7 +406,7 @@ function UserMypage(props) {
       formdata.append("nickname", userInfo.nickname);
       formdata.append("token", localStorage.getItem("accessToken"));
       axios
-        .post("https://localhost:80/public/profile", formdata, {
+        .post(`${process.env.REACT_APP_API_URL}/public/profile`, formdata, {
           headers: { "Content-type": "multipart/form-data" },
           withCredentials: true,
         })
@@ -425,7 +425,7 @@ function UserMypage(props) {
     delete userInfo.nickname;
     // console.log("비밀번호 변경 : ", userInfo);
     axios
-      .post("https://localhost:80/public/profile", userInfo, {
+      .post(`${process.env.REACT_APP_API_URL}/public/profile`, userInfo, {
         withCredentials: true,
       })
       .then((res) => {
@@ -460,7 +460,7 @@ function UserMypage(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete("https://localhost:80/common/users", {
+          .delete(`${process.env.REACT_APP_API_URL}/common/users`, {
             withCredentials: true,
           })
           .then(() => {
@@ -474,7 +474,7 @@ function UserMypage(props) {
   //내가 쓴 qna 삭제코드
   const handleQnaDelete = (qnaid) => {
     axios
-      .delete("https://localhost:80/qna", {
+      .delete(`${process.env.REACT_APP_API_URL}/qna`, {
         data: {
           qna_id: qnaid,
           kakao_userid: localStorage.getItem("userid"),
@@ -482,7 +482,7 @@ function UserMypage(props) {
         withCredentials: true,
       })
       .then(() => {
-        axios.delete("http://localhost:80/comments", {
+        axios.delete(`${process.env.REACT_APP_API_URL}/comments`, {
           data: {
             qna_id: qnaid,
           },
@@ -504,7 +504,7 @@ function UserMypage(props) {
   //내가쓴 review 삭제코드
   const handleReviewDelete = (reviewid) => {
     axios
-      .delete("https://localhost:80/review", {
+      .delete(`${process.env.REACT_APP_API_URL}/review`, {
         data: {
           review_id: reviewid,
           kakao_userid: localStorage.getItem("userid"),

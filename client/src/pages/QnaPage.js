@@ -251,13 +251,13 @@ function QnaPage({ isLogin, auth }) {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * 5;
   const [isLoading, setIsLoading] = useState(true);
-  console.log(parseInt(localStorage.getItem("auth")));
+  // console.log(parseInt(localStorage.getItem("auth")));
   //qna 전부 불러오기
   useEffect(() => {
     setIsLoading(true);
     axios
       .post(
-        "https://localhost:80/qna/info",
+        `${process.env.REACT_APP_API_URL}/qna/info`,
         { kakao_userid: localStorage.getItem("userid") },
         {
           withCredentials: true,
@@ -296,7 +296,7 @@ function QnaPage({ isLogin, auth }) {
     // console.log(filter);
     axios
       .post(
-        "https://localhost:80/qna/info",
+        `${process.env.REACT_APP_API_URL}/qna/info`,
         { filter: filter },
         {
           withCredentials: true,

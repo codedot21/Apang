@@ -242,7 +242,7 @@ function SigninModal({ open, close, handleResponseSuccess }) {
       return;
     } else {
       axios
-        .post("https://localhost:80/common/signin", userInfo, {
+        .post(`${process.env.REACT_APP_API_URL}/common/signin`, userInfo, {
           withCredentials: true,
         })
         .then((res) => {
@@ -313,7 +313,7 @@ function SigninModal({ open, close, handleResponseSuccess }) {
               <ButtonKakao>
                 <form>
                   <img src={kakao} alt="kakaologin"></img>
-                  <button>카카오 로그인</button>
+                  <button type="button">카카오 로그인</button>
                 </form>
               </ButtonKakao>
             </SocialKakaoLogin>
@@ -324,7 +324,7 @@ function SigninModal({ open, close, handleResponseSuccess }) {
               <ButtonGoogle>
                 <form>
                   <img src={google} alt="googlelogin"></img>
-                  <button>구글 로그인</button>
+                  <button type="button">구글 로그인</button>
                 </form>
               </ButtonGoogle>
             </SocialGoogleLogin>
