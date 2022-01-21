@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { BsTrash } from "react-icons/bs";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export const Linked = styled(Link)`
   text-decoration: none;
@@ -97,8 +101,47 @@ export const ContentComment = styled.div`
   margin-right: 1rem;
 `;
 
-function Qna({ title, nickname, content, profile_img, tags, commentsCount }) {
+function Qna({
+  title,
+  nickname,
+  content,
+  profile_img,
+  tags,
+  commentsCount,
+  auth,
+  qnaId,
+}) {
   // console.log(tags.hashtags);
+  const navigate = useNavigate();
+  const handleQnaDelete = (qnaid) => {
+    axios
+      .delete("https://localhost:80/qna", {
+        data: {
+          qna_id: qnaid,
+          kakao_userid: localStorage.getItem("userid"),
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        axios.delete("https://localhost:80/comments", {
+          data: {
+            qna_id: qnaid,
+          },
+          withCredentials: true,
+        });
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "질문이 성공적으로 삭제되었습니다",
+        });
+      })
+      .then(() => {
+        navigate("/");
+        navigate(`/qna`);
+      });
+  };
+
   return (
     <>
       {title ? (
@@ -111,12 +154,25 @@ function Qna({ title, nickname, content, profile_img, tags, commentsCount }) {
                 width="20rem"
               />
               <div className="Id">{nickname}</div>
+              {auth === 0 ? (
+                <BsTrash
+                  onClick={() => handleQnaDelete(qnaId)}
+                  style={{ marginLeft: "1100px" }}
+                />
+              ) : (
+                ""
+              )}
             </Profile>
+
             <ContentTitle>{title}</ContentTitle>
             <ContentText>{content}</ContentText>
             <Tag>
-              {tags.hashtags.map((tag) => {
-                return <div className="tag">{tag.hashtag}</div>;
+              {tags.hashtags.map((tag, i) => {
+                return (
+                  <div key={i} className="tag">
+                    {tag.hashtag}
+                  </div>
+                );
               })}
             </Tag>
             <ContentComment>댓글 {commentsCount}</ContentComment>

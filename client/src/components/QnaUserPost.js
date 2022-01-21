@@ -108,6 +108,9 @@ function QnaUserPost() {
         setqnaDetail(res.data.qnaDetail);
       });
   }, []);
+
+  //관리자가 QnA삭제
+
   console.log(qnaDetail);
 
   return (

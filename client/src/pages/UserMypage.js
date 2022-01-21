@@ -393,6 +393,7 @@ function UserMypage(props) {
           }
         )
         .then(() => {
+          console.log("ria");
           Swal.fire({
             icon: "success",
             title: "Apang 정보수정",
@@ -416,9 +417,11 @@ function UserMypage(props) {
             title: "Apang 정보수정",
             text: message.changeSuccess,
           });
+          // navigate("/");
+          // navigate("/mypage/doctorprofile");
         });
     }
-    window.location.reload(); //근데 페이지가 새로고침되어지면 안됌 원래는
+    window.location.reload(); //근데 페이지가 새로고침되어지면 안됌 원래는. 이거 있으면 alert가 안된다.
   };
   // 비밀번호 변경
   const passwordChange = () => {

@@ -354,29 +354,31 @@ function QnaPage({ isLogin, auth }) {
                       <Button onClick={openQuestionModal}>질문하기</Button>
                     )}
                   </QnaWrap>
-                  {qnaInfo.slice(offset, offset + 5).map((qna) => {
+                  {qnaInfo.slice(offset, offset + 5).map((qna, i) => {
                     return (
-                      <Linked to={`/qna/detail/${qna.id}`}>
+                      <Linked to={`/qna/detail/${qna.id}`} key={i}>
                         <Qna
-                          // handleQnaInfo={handleQnaInfo}
+                          // key={i}
                           title={qna.title}
                           content={qna.content}
                           nickname={
                             qna.user
                               ? qna.user.nickname
-                              : parseInt(localStorage.getItem("auth")) === 4
+                              : qna.users_id.toString().length >= 6
                               ? "Kakao"
                               : "탈퇴한 유저"
                           }
                           profile_img={
                             qna.user
                               ? qna.user.profile_img
-                              : parseInt(localStorage.getItem("auth")) === 4
+                              : qna.users_id.toString().length >= 6
                               ? "kakao.png"
                               : "publicprofile.jpeg"
                           }
                           tags={qna}
                           commentsCount={qna.comments.length}
+                          auth={auth}
+                          qnaId={qna.id}
                         />
                       </Linked>
                     );
