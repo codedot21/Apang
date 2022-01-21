@@ -14,46 +14,20 @@ const storage = multer.diskStorage({
 });
 
 module.exports = async (req, res) => {
-  let upload = multer({
-    storage: storage,
-  }).single("receipts_img");
+  try {
+    let upload = multer({
+      storage: storage,
+    }).single("receipts_img");
 
-  upload(req, res, function (err) {
-    // console.log("req.body : ", req.body);
-    // console.log("req.file : ", req.file);
-    // console.log("auth : ", isAuthorized(req));
-    // 카카오 유저
-    if (req.body.kakao_userid !== "null") {
-      if (req.body.receipts_img === "" || req.body.content === "") {
-        res.send({ status: 400, message: "잘못된 요청" });
-      } else {
-        let filename = req.file.filename;
-        console.log("filename은?", filename);
-        if (!req.file) {
-          return res.send("영수증을 올려주세요");
-        } else if (err instanceof multer.MulterError) {
-          return res.send(err);
-        } else if (err) {
-          return res.send(err);
-        }
-        reviews
-          .create({
-            receipts_img: filename,
-            content: req.body.content,
-            hospital_name: req.body.hospital_name,
-            users_id: req.body.kakao_userid,
-          })
-          .then(() => {
-            res.status(201).send({ message: "리뷰등록 성공" });
-          });
-      }
-    } else {
-      if (req.body.receipts_img === "" || req.body.content === "") {
-        res.send({ status: 400, message: "영수증과 내용을 작성해 주세요" });
-      } else {
-        const userInfo = isAuthorized(req);
-        // console.log(userInfo);
-        if (userInfo) {
+    upload(req, res, function (err) {
+      // console.log("req.body : ", req.body);
+      // console.log("req.file : ", req.file);
+      // console.log("auth : ", isAuthorized(req));
+      // 카카오 유저
+      if (req.body.kakao_userid !== "null") {
+        if (req.body.receipts_img === "" || req.body.content === "") {
+          res.send({ status: 400, message: "잘못된 요청" });
+        } else {
           let filename = req.file.filename;
           console.log("filename은?", filename);
           if (!req.file) {
@@ -68,15 +42,45 @@ module.exports = async (req, res) => {
               receipts_img: filename,
               content: req.body.content,
               hospital_name: req.body.hospital_name,
-              users_id: userInfo.id,
+              users_id: req.body.kakao_userid,
             })
             .then(() => {
               res.status(201).send({ message: "리뷰등록 성공" });
             });
+        }
+      } else {
+        if (req.body.receipts_img === "" || req.body.content === "") {
+          res.send({ status: 400, message: "영수증과 내용을 작성해 주세요" });
         } else {
-          res.status(401).send({ message: "토큰이 유효하지 않음" });
+          const userInfo = isAuthorized(req);
+          // console.log(userInfo);
+          if (userInfo) {
+            let filename = req.file.filename;
+            console.log("filename은?", filename);
+            if (!req.file) {
+              return res.send("영수증을 올려주세요");
+            } else if (err instanceof multer.MulterError) {
+              return res.send(err);
+            } else if (err) {
+              return res.send(err);
+            }
+            reviews
+              .create({
+                receipts_img: filename,
+                content: req.body.content,
+                hospital_name: req.body.hospital_name,
+                users_id: userInfo.id,
+              })
+              .then(() => {
+                res.status(201).send({ message: "리뷰등록 성공" });
+              });
+          } else {
+            res.status(401).send({ message: "토큰이 유효하지 않음" });
+          }
         }
       }
-    }
-  });
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
