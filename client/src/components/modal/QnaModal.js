@@ -249,7 +249,7 @@ function QnaModal({ open, close, tagHandler }) {
   const handleUpload = () => {
     axios
       .post(
-        `${process.env.REACT_APP_API_URL}/qna/upload`,
+        process.env.REACT_APP_API_URL + "/qna/upload",
         { ...qnaInfo, kakao_userid: localStorage.getItem("userid") },
         {
           withCredentials: true,
