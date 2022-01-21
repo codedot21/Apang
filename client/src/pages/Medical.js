@@ -7,8 +7,6 @@ import { Container } from "../styles";
 import MedicalDetail from "../components/MedicalDetail";
 import { category } from "../modules/category";
 
-// import cn from "classnames";
-
 const { kakao } = window;
 
 export const MedicalContainer = styled(Container)`
@@ -195,6 +193,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
     ps.keywordSearch(keyword, placesSearchCB, {
       x: nowLocation.longitude,
       y: nowLocation.latitude,
+      size: 5,
     });
 
     //맵 컨트롤러
@@ -305,6 +304,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
 
       {/* 지도 end */}
       {/* 병원 리스트 start */}
+
       <ListDivBox>
         <div id="result-list">
           {Places.map((item, i) => (
