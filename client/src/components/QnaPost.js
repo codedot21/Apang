@@ -505,6 +505,33 @@ function QnaPost({ isLogin, userInfo, auth }) {
                       </Ren>
                     )}
                   </>
+                ) : userInfo && isLogin && auth === 0 ? (
+                  <>
+                    <ProfileDoc>
+                      <img
+                        src={require(`../../public/uploads/${comment.doctor.profile_img}`)}
+                        width="20rem"
+                        alt="doctor"
+                      />
+                      <div className="Id">
+                        {`${comment.doctor.name} 선생님`}
+                        <span className="commentNothing"></span>
+                        <span
+                          className="commentBack"
+                          onClick={() => handleDelete(comment.id)}
+                        >
+                          삭제
+                        </span>
+                      </div>
+                    </ProfileDoc>
+                    <Shu>
+                      <textarea
+                        disabled
+                        type="text"
+                        defaultValue={comment.content}
+                      />
+                    </Shu>
+                  </>
                 ) : (
                   //userInfo x || 로그인 x || 의사 x || 본인 작성 x
                   <>

@@ -422,6 +422,7 @@ function DocMypage(props) {
           });
         });
     }
+    window.location.reload();
   };
 
   // 비밀번호 변경

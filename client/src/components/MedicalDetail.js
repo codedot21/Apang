@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import Sample from "../images/sample.gif";
 import Receipt from "../images/receipt.jpg";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { BsTrash } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const DivBox = styled.div`
   width: 70%;
@@ -265,7 +267,11 @@ const Clear = styled.div`
 `;
 
 const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
+  const navigate = useNavigate();
   const [reviews, setReviews] = useState([]); //해당 병원 review 가져오기
+  // const [reload, setReload] = useState(false); //해당 병원 review 가져오기
+  const [, updateState] = useState();
+  const forceUpdate = useCallback(() => updateState({}), []);
   useEffect(() => {
     axios
       .post(
@@ -300,7 +306,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
           setMedicalPhoto({ hospital_img: res.data.hospital_img });
         }
       });
-  }, [medicalInfo]); //최초 렌더링 시 한번만 실행. componentDidmount
+  }, [medicalInfo]);
 
   const [reviewInfo, setreviewInfo] = useState({
     content: "",
@@ -413,6 +419,9 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
       file: [],
       filepreview: null,
     });
+    // .then(() => {
+    //   setReload(!reload);
+    // });
   };
 
   const noPhotoSave = () => {
@@ -443,6 +452,28 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
     });
   };
   //<-- 영수증 저장 끝 -->
+
+  //<-- 관리자 리뷰 삭제 시작 -->
+  const handleReviewDelete = (reviewid) => {
+    axios
+      .delete("https://localhost:80/review", {
+        data: {
+          review_id: reviewid,
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "리뷰가 성공적으로 삭제되었습니다",
+        });
+      })
+      .then(() => {
+        navigate("/");
+        navigate("/medicallist");
+      });
+  };
+  //<-- 관리자 리뷰 삭제 끝 -->
 
   return (
     <>
@@ -574,9 +605,9 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
           <hr></hr>
           <br></br>
           {/* 리뷰작성 끝 */}
-          {reviews.map((review) => {
+          {reviews.map((review, i) => {
             return (
-              <ReviewContainer>
+              <ReviewContainer key={i}>
                 <DivBox1>
                   <Box>
                     <ImgReview
@@ -593,12 +624,18 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
                   value={
                     review.user
                       ? review.user.nickname
-                      : parseInt(localStorage.getItem("auth") === 4)
+                      : review.users_id.toString().length >= 6
                       ? "Kakao"
                       : "탈퇴한 유저"
                   }
                 />
                 <ReviewNik disabled value={medicalInfo.place_name} />
+                {auth === 0 ? (
+                  <BsTrash onClick={() => handleReviewDelete(review.id)} />
+                ) : (
+                  ""
+                )}
+
                 <ReviewTextarea placeholder={review.content} />
               </ReviewContainer>
             );
