@@ -257,7 +257,7 @@ function QnaPage({ isLogin, auth }) {
     setIsLoading(true);
     axios
       .post(
-        "https://localhost:80/qna/info",
+        `${process.env.REACT_APP_API_URL}/qna/info`,
         { kakao_userid: localStorage.getItem("userid") },
         {
           withCredentials: true,
@@ -296,7 +296,7 @@ function QnaPage({ isLogin, auth }) {
     // console.log(filter);
     axios
       .post(
-        "https://localhost:80/qna/info",
+        `${process.env.REACT_APP_API_URL}/qna/info`,
         { filter: filter },
         {
           withCredentials: true,

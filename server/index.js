@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "https://localhost:3000",
+    origin: "https://a-pang.ga",
     credentials: true,
     methods: ["GET", "POST", "OPTION", "PUT", "DELETE"],
   })

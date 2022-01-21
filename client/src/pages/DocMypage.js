@@ -332,7 +332,7 @@ function DocMypage(props) {
   useEffect(() => {
     axios
       .post(
-        "https://localhost:80/comments/info",
+        `${process.env.REACT_APP_API_URL}/comments/info`,
         { page: "doctormypage" },
         {
           withCredentials: true,
@@ -390,7 +390,7 @@ function DocMypage(props) {
       delete userInfo.passwordConfirm;
       axios
         .post(
-          "https://localhost:80/doctor/profile",
+          `${process.env.REACT_APP_API_URL}/doctor/profile`,
           { onlyName: userInfo },
 
           {
@@ -410,7 +410,7 @@ function DocMypage(props) {
       formdata.append("name", userInfo.name);
       formdata.append("hospital", userInfo.hospital);
       axios
-        .post("https://localhost:80/doctor/profile", formdata, {
+        .post(`${process.env.REACT_APP_API_URL}/doctor/profile`, formdata, {
           headers: { "Content-type": "multipart/form-data" },
           withCredentials: true,
         })
@@ -431,7 +431,7 @@ function DocMypage(props) {
     delete userInfo.hospital;
     // console.log(userInfo);
     axios
-      .post("https://localhost:80/doctor/profile", userInfo, {
+      .post(`${process.env.REACT_APP_API_URL}/doctor/profile`, userInfo, {
         withCredentials: true,
       })
       .then((res) => {
@@ -466,7 +466,7 @@ function DocMypage(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete("https://localhost:80/common/users", {
+          .delete(`${process.env.REACT_APP_API_URL}/common/users`, {
             withCredentials: true,
           })
           .then((res) => {
@@ -480,7 +480,7 @@ function DocMypage(props) {
   //내가 적은 댓글 삭제
   const handleCommentDelete = (commentid) => {
     axios
-      .delete("https://localhost:80/comments", {
+      .delete(`${process.env.REACT_APP_API_URL}/comments`, {
         data: {
           comment_id: commentid,
         },

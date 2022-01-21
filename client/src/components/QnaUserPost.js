@@ -97,7 +97,7 @@ function QnaUserPost() {
   useEffect(() => {
     axios
       .post(
-        "https://localhost:80/qna/info",
+        `${process.env.REACT_APP_API_URL}/qna/info`,
         { qna_id: qna_id, page: "qnaDetail" },
         {
           withCredentials: true,
