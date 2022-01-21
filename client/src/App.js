@@ -1,3 +1,4 @@
+//app.js 1/21
 import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
@@ -23,7 +24,6 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState(null); //사용자 정보
   const [auth, setAuth] = useState("");
-  // const [qnaDetail, setqnaDetail] = useState(null);
 
   const isAuthenticated = () => {
     const authnumber = parseInt(localStorage.getItem("auth"));
@@ -56,6 +56,8 @@ function App() {
 
       // <-- 카카오 로그인 -->
     } else if (authnumber === 4) {
+      console.log("userInfo?", userInfo);
+      console.log("isLogin?", isLogin);
       axios
         .post("https://localhost:80/oauth/kakao", {
           //서버로부터 사용자 정보 받아오기
@@ -71,7 +73,7 @@ function App() {
               nickname: user.data.properties.nickname,
               email: user.data.kakao_account.email,
             };
-            setUserInfo(userInfo); //이것때문에 post 2번 간다.
+            setUserInfo(userInfo); //state변경될때마다 카카오로 토큰요청이 2번 간다. <Kakao> https://kauth.kakao.com/auth/token
             setIsLogin(true);
             navigate("/");
           } else {
@@ -173,7 +175,13 @@ function App() {
         />
         <Route
           path="/oauth/callback/kakao"
-          element={<Kakao LoginHandler={LoginHandler} />}
+          element={
+            <Kakao
+              LoginHandler={LoginHandler}
+              isLogin={isLogin}
+              userInfo={userInfo}
+            />
+          }
         />
         <Route
           path="/qna"

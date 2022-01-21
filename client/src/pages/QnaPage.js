@@ -354,10 +354,11 @@ function QnaPage({ isLogin, auth }) {
                       <Button onClick={openQuestionModal}>질문하기</Button>
                     )}
                   </QnaWrap>
-                  {qnaInfo.slice(offset, offset + 5).map((qna) => {
+                  {qnaInfo.slice(offset, offset + 5).map((qna, i) => {
                     return (
-                      <Linked to={`/qna/detail/${qna.id}`}>
+                      <Linked to={`/qna/detail/${qna.id}`} key={i}>
                         <Qna
+                          // key={i}
                           title={qna.title}
                           content={qna.content}
                           nickname={
@@ -376,6 +377,8 @@ function QnaPage({ isLogin, auth }) {
                           }
                           tags={qna}
                           commentsCount={qna.comments.length}
+                          auth={auth}
+                          qnaId={qna.id}
                         />
                       </Linked>
                     );

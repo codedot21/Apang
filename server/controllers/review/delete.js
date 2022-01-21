@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
       id: req.body.review_id,
     },
   });
-  console.log(receipts);
+  // console.log(receipts.dataValues);
   const img = receipts.dataValues.receipts_img;
   fs.unlink(
     path.join(__dirname, "../../../client/public/receipts/", img),

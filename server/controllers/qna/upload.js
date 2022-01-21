@@ -3,7 +3,6 @@ const { isAuthorized } = require("../tokenFunctions");
 
 module.exports = async (req, res) => {
   console.log("qna req.body? : ", req.body);
-  const accessTokenData = isAuthorized(req);
   const qnaInfo = req.body;
 
   //카카오로 로그인 시, accesstoken, kakao_userid 같이 받아오기
@@ -32,6 +31,7 @@ module.exports = async (req, res) => {
     }
     //<---- 일반 로그인 시 ---->
   } else if (!kakaoUserid) {
+    const accessTokenData = isAuthorized(req);
     //<---- 일반 로그인 시, 토큰이 유효하지 않을 때 ---->
 
     if (!accessTokenData) {
