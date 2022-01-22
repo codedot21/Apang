@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
             },
           });
           console.log("user : ", user);
-          if (user.dataValues.profile_img !== "publicprofile.jpeg") {
+          if (user.dataValues.profile_img !== "user.png") {
             const img = user.dataValues.profile_img;
             // console.log("이거찍히나? : ", img);
             fs.unlink(
