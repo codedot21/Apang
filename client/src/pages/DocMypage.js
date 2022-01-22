@@ -419,6 +419,8 @@ function DocMypage(props) {
             icon: "success",
             title: "Apang 정보수정",
             text: message.changeSuccess,
+            showConfirmButton: false,
+            timer: 1000,
           });
         });
     }
@@ -440,12 +442,16 @@ function DocMypage(props) {
             icon: "success",
             title: "Apang 정보수정",
             text: message.errorPassword,
+            showConfirmButton: false,
+            timer: 1000,
           });
         } else {
           Swal.fire({
             icon: "success",
             title: "Apang 정보수정",
             text: message.changeSuccess,
+            showConfirmButton: false,
+            timer: 1000,
           });
           props.handleLogout();
         }
@@ -455,14 +461,14 @@ function DocMypage(props) {
   // 회원탈퇴
   const deleteHandler = () => {
     Swal.fire({
-      icon: "warning",
-      title: "회원탈퇴",
-      text: "정말로 탈퇴하시겠습니까?",
+      icon: "info",
+      title: "모든 정보가 삭제됩니다",
+      text: "정말로 탈퇴하실건가요?",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "네, 탈퇴하겠습니다.",
-      cancelButtonText: "아니요.",
+      confirmButtonColor: "#63b5f6",
+      cancelButtonColor: "#dd3333",
+      confirmButtonText: "네, 탈퇴하겠습니다",
+      cancelButtonText: "다시 생각해볼게요",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -490,6 +496,8 @@ function DocMypage(props) {
         Swal.fire({
           icon: "success",
           text: "댓글이 성공적으로 삭제되었습니다",
+          showConfirmButton: false,
+          timer: 1000,
         });
       })
       .then(() => {
@@ -557,6 +565,7 @@ function DocMypage(props) {
               <DocInput
                 type="text"
                 placeholder="이름"
+                maxLength="5"
                 defaultValue={props.userInfo.name}
                 onChange={handleInputChange("name")}
               />
