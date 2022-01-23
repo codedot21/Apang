@@ -4,30 +4,38 @@ import Sample from "../images/sample.gif";
 import Receipt from "../images/receipt.jpg";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { BsTrash } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+import { BsFillTelephoneFill } from "react-icons/bs";
+import { FaHospital } from "react-icons/fa";
+import { MdOutlineRateReview } from "react-icons/md";
+import { RiHospitalLine } from "react-icons/ri";
+import { AiTwotoneFolderOpen } from "react-icons/ai";
+import { FaSave } from "react-icons/fa";
 
 const DivBox = styled.div`
-  width: 70%;
+  width: 27vw;
   height: 24vw;
   display: block;
   margin-right: auto;
   margin-left: auto;
-  background-size: 100% 30vw;
+  background-size: 70% 30vw;
   @media ${({ theme }) => theme.device.mobile} {
     width: 60%;
   }
 `;
 
 const DetailLine = styled.div`
-  border: 2px solid #63b5f6;
+  border: 3px solid #63b5f6;
+  border-radius: 20px;
   height: 100%;
-  width: 78%;
-  float: right;
-
+  width: 100%;
+  margin: 0 auto;
   & h1 {
     text-align: left;
-    margin: 3vw 0 3vw 1vw;
-    color: #095cd8;
-    font-size: 50px;
+    margin: 1vw 0 1vw 1vw;
+    color: #37474f;
+    font-size: 35px;
     @media ${({ theme }) => theme.device.mobile} {
       font-size: 2rem;
       margin: 5vw 0 4vw 1vw;
@@ -46,9 +54,11 @@ const DetailLine = styled.div`
 
 const Img = styled.img`
   width: 100%;
-  height: 23.7vw;
+  height: 20.7vw;
   background: #fff;
   objectfit: scale-down;
+  margin-right: auto;
+  margin-left: auto;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
   }
@@ -56,9 +66,11 @@ const Img = styled.img`
 
 const ImgHospital = styled.img`
   width: 100%;
-  height: 23.7vw;
+  height: 20.7vw;
   objectfit: scale-down;
   background: #fff;
+  margin-right: auto;
+  margin-left: auto;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
   }
@@ -67,9 +79,8 @@ const ImgHospital = styled.img`
 const Profile = styled.input``;
 
 const ProfileEditing = styled.label`
-  border: 2px solid #63b5f6;
-  background-color: #63b5f6;
-  color: #fff;
+  border: none;
+  color: black;
   cursor: pointer;
   &:hover {
     color: #320b86;
@@ -77,11 +88,10 @@ const ProfileEditing = styled.label`
   width: 50%;
   text-align: center;
   float: left;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 15px;
   margin-top: 5px;
   @media ${({ theme }) => theme.device.mobile} {
-    width: 100%;
+    width: 50%;
     font-size: 13px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -92,11 +102,10 @@ const ProfileEditing = styled.label`
 `;
 
 const SaveButton = styled.button`
-  border: 1px solid #63b5f6;
-  background-color: #63b5f6;
-  font-weight: bold;
+  border: none;
+  background: white;
   padding: 1px;
-  color: #fff;
+  color: black;
   cursor: pointer;
   width: 50%;
   font-size: 14px;
@@ -105,7 +114,7 @@ const SaveButton = styled.button`
   }
   margin-top: 5px;
   @media ${({ theme }) => theme.device.mobile} {
-    width: 100%;
+    width: 50%;
     font-size: 13px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -116,11 +125,11 @@ const SaveButton = styled.button`
 `;
 
 const DivBox1 = styled.div`
-  border: 1px solid #63b5f6;
+  // border: 1px solid #63b5f6;
   width: 20%;
   height: 140px;
   float: left;
-  margin: 0 10px 10px 10px;
+  margin: 0 10px 10px 25px;
   border-radius: 20px;
   background-size: 100% 148px;
   objectfit: scale-down;
@@ -134,7 +143,7 @@ const DivBox1 = styled.div`
 const Img2 = styled.img`
   width: 100%;
   border-radius: 20px;
-  height: 138px;
+  height: 152px;
   objectfit: scale-down;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
@@ -144,7 +153,7 @@ const Img2 = styled.img`
 const ImgReview = styled.img`
   width: 100%;
   border-radius: 20px;
-  height: 138px;
+  height: 152px;
   objectfit: scale-down;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
@@ -156,7 +165,7 @@ const ProfileEditing2 = styled.label`
   display: block;
   margin: 0 auto;
   text-align: center;
-  color: #7e57c2;
+  color: #37474f;
   font-weight: bold;
   &:hover {
     color: #4d2c91;
@@ -173,76 +182,125 @@ const Box = styled.div`
 `;
 
 const SmallTitle = styled.h2`
-  margin: 3.5vw 0 1vw 1vw;
+  margin: 1.5vw 0.3vw 0.5vw 1vw;
   padding: 0.5vw;
+  color: #37474f;
+  float: left;
   @media ${({ theme }) => theme.device.mobile} {
-    margin: 9vw 0 5vw 1vw;
+    margin: 7vw 1vw 5vw 1vw;
     padding: 1vw;
     text-align: left;
   }
 `;
 
 const Divtag = styled.div`
-  margin: 1.5vw;
+  margin: 1.8vw 0 1vw 1vw;
+  padding: 0.5vw;
   @media ${({ theme }) => theme.device.mobile} {
+    margin: 9vw 0 5vw 1vw;
     margin-bottom: 3vw;
     text-align: left;
   }
 `;
 
-const Divtag2 = styled.div`
-  margin: 1.5vw;
+const SmallTitle2 = styled.h2`
+  margin: 1vw 0.3vw 0.5vw 1vw;
+  padding: 0.5vw;
+  color: #37474f;
+  float: left;
   @media ${({ theme }) => theme.device.mobile} {
+    margin: 1vw 1vw 5vw 1vw;
+    padding: 1vw;
+    text-align: left;
+  }
+`;
+
+const Divtag2 = styled.div`
+  margin: 1.4vw 0 1vw 1vw;
+  padding: 0.5vw;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 3vw 0 5vw 1.5vw;
     margin-bottom: 3vw;
     text-align: left;
   }
 `;
 
 const Review = styled.h2`
-  margin: 2vw;
-  float: left;
+  margin: 2vw 3vw 1vw 3vw;
+  color: #37474f;
+  text-align: center;
+  font-size: 2.5rem;
   @media ${({ theme }) => theme.device.mobile} {
-    float: left;
-    text-align: left;
-    font-size: 20px;
+    font-size: 25px;
+  }
+`;
+
+const ReviewLine = styled.div`
+  border: 1px solid #37474f;
+  width: 27%;
+  margin-left: auto;
+  margin-right: auto;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 50%;
   }
 `;
 
 const Button = styled.button`
-  margin: 2vw;
-  float: right;
-  border: 2px solid #63b5f6;
-  border-radius: 30px;
+  // margin: 1.5vw 1vw 1.5vw 1vw;
+  border: 1px solid #63b5f6;
+  border-radius: 5px;
   background-color: #63b5f6;
   color: #fff;
   padding: 3px;
   cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  &:hover {
+    background-color: #002171;
+  }
   @media ${({ theme }) => theme.device.mobile} {
     width: 20%;
-    float: right;
+    float: none;
     font-size: 0.8rem;
     margin-bottom: 5vw;
   }
 `;
 
 const ReviewContainer = styled.div`
-  padding-bottom: 2rem;
+  padding: 1rem;
+  background: #e3f2fd;
+  border-radius: 20px;
+  width: 98%;
+  margin: 0.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 1vw;
+    widht: 95%;
+  }
+`;
+
+const ReviewContainer2 = styled.div`
+  padding: 1rem;
+  width: 100%;
+  margin: 0.5rem;
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 1vw;
+  }
 `;
 
 const ReviewNik = styled.input`
-  display: block;
-  width: 15%;
-  height: 2rem;
   border: none;
-  margin-bottom: 5px;
-  font-weight: bold;
-  background-color: white;
+  background: #fff;
   color: #095cd8;
-  padding: 1px;
+  display: block;
+  width: 20%;
+  height: 2rem;
+  margin-bottom: 5px;
   border-radius: 7px;
+  left: 20px;
   @media ${({ theme }) => theme.device.mobile} {
-    margin: 1vw;
-    width: 100%;
+    margin: 6vw 0 5vw 1vw;
+    width: 80%;
     background: none;
     font-size: 13px;
   }
@@ -250,10 +308,28 @@ const ReviewNik = styled.input`
 
 const ReviewTextarea = styled.textarea`
   width: 70%;
-  height: 4.8rem;
-  border: 2px solid #63b5f6;
+  height: 5rem;
+  border: 1px solid #63b5f6;
   resize: none;
   border-radius: 5px;
+  padding: 10px;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 95%;
+    height: 5rem;
+  }
+`;
+
+const ReviewTextareaOut = styled.textarea`
+  width: 70%;
+  height: 5rem;
+  border: 1px solid #63b5f6;
+  resize: none;
+  border-radius: 5px;
+  padding: 10px;
+  filter: blur(0.3rem);
+  -webkit-filter: blur(0.3rem);
+
   @media ${({ theme }) => theme.device.mobile} {
     width: 95%;
     height: 5rem;
@@ -265,6 +341,7 @@ const Clear = styled.div`
 `;
 
 const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
+  const navigate = useNavigate();
   const [reviews, setReviews] = useState([]); //해당 병원 review 가져오기
   useEffect(() => {
     axios
@@ -300,7 +377,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
           setMedicalPhoto({ hospital_img: res.data.hospital_img });
         }
       });
-  }, [medicalInfo]); //최초 렌더링 시 한번만 실행. componentDidmount
+  }, [medicalInfo]);
 
   const [reviewInfo, setreviewInfo] = useState({
     content: "",
@@ -315,9 +392,11 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
 
   const handleClick = () => {
     Swal.fire({
-      icon: "error",
+      icon: "info",
       title: "로그인이 필요해요",
       text: "회원이 아니시면 회원가입 해주세요",
+      showConfirmButton: false,
+      timer: 1000,
     });
     setImgInfo({
       file: [],
@@ -330,9 +409,11 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
 
   const handleDocClick = () => {
     Swal.fire({
-      icon: "error",
+      icon: "info",
       title: "의사선생님 또는 관리자인가요?",
       text: "일반 이용자만 리뷰를 작성하실 수 있어요",
+      showConfirmButton: false,
+      timer: 1000,
     });
     setImgInfo({
       file: [],
@@ -358,13 +439,17 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
       .then((res) => {
         if (res.data.status === 400) {
           Swal.fire({
-            icon: "error",
+            icon: "info",
             text: "영수증 사진, 리뷰내용 모두 올려주세요!",
+            showConfirmButton: false,
+            timer: 1000,
           });
         } else {
           Swal.fire({
             icon: "success",
             text: "리뷰가 성공적으로 등록되었습니다",
+            showConfirmButton: false,
+            timer: 1000,
           });
         }
       })
@@ -407,19 +492,26 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
         Swal.fire({
           icon: "success",
           text: "병원사진이 성공적으로 등록되었습니다",
+          showConfirmButton: false,
+          timer: 1000,
         });
       });
     setFileImage({
       file: [],
       filepreview: null,
     });
+    // .then(() => {
+    //   setReload(!reload);
+    // });
   };
 
   const noPhotoSave = () => {
     Swal.fire({
-      icon: "error",
+      icon: "info",
       title: "병원 관계자인가요?",
       text: "병원 관계자만 사진을 저장하실 수 있어요",
+      showConfirmButton: false,
+      timer: 1000,
     });
     setFileImage({
       file: [],
@@ -444,10 +536,35 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
   };
   //<-- 영수증 저장 끝 -->
 
+  const handleReviewDelete = (reviewid) => {
+    axios
+      .delete("https://localhost:80/review", {
+        data: {
+          review_id: reviewid,
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          text: "리뷰가 성공적으로 삭제되었습니다",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      })
+      .then(() => {
+        navigate("/");
+        navigate("/medicallist");
+      });
+  };
+
   return (
     <>
       <DetailLine>
-        <h1>{medicalInfo.place_name}</h1>
+        <h1>
+          <RiHospitalLine style={{ verticalAlign: "top" }} />{" "}
+          {medicalInfo.place_name}
+        </h1>
         {/* 사진업로드 시작 */}
         {/* 수정하는것 시작 */}
         {medicalPhoto.hospital_img !== "" ? (
@@ -491,15 +608,27 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
                 htmlFor="upload-hospital"
                 onChange={saveFileImage}
               >
-                1. 병원사진 업로드
+                <AiTwotoneFolderOpen
+                  style={{ verticalAlign: "top", fontSize: "17px" }}
+                />{" "}
+                병원사진
               </ProfileEditing>
 
               {isLogin === false ? (
-                <SaveButton onClick={handleClick}>2. 저장</SaveButton> //로그인 후 사진을 저장하실 수 있습니다.
+                <SaveButton onClick={handleClick}>
+                  <FaSave style={{ verticalAlign: "top", fontSize: "15px" }} />{" "}
+                  저장
+                </SaveButton> //로그인 후 사진을 저장하실 수 있습니다.
               ) : auth === 1 && medicalInfo.place_name === userInfo.hospital ? (
-                <SaveButton onClick={uploadhospital}>2. 저장</SaveButton>
+                <SaveButton onClick={uploadhospital}>
+                  <FaSave style={{ verticalAlign: "top", fontSize: "15px" }} />{" "}
+                  저장
+                </SaveButton>
               ) : (
-                <SaveButton onClick={noPhotoSave}>2. 저장</SaveButton> //병원 관계자만 사진저장 가능합니다.
+                <SaveButton onClick={noPhotoSave}>
+                  <FaSave style={{ verticalAlign: "top", fontSize: "15px" }} />{" "}
+                  저장
+                </SaveButton> //병원 관계자만 사진저장 가능합니다.
               )}
             </DivBox>
             <Clear />
@@ -510,27 +639,36 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
         {/* 수정하는것 끝 */}
 
         {/* 리스트 */}
-        <SmallTitle>병원주소</SmallTitle>
+
+        <SmallTitle>
+          <FaHospital style={{ verticalAlign: "top" }} /> 병원주소:
+        </SmallTitle>
         <Divtag>{medicalInfo.address_name} </Divtag>
-        <SmallTitle>전화</SmallTitle>
+        <Clear />
+        <SmallTitle2>
+          <BsFillTelephoneFill style={{ verticalAlign: "top" }} /> 전화:
+        </SmallTitle2>
         <Divtag2>{medicalInfo.phone} </Divtag2>
+        <Clear />
         {/* 리스트 끝 */}
-        <hr></hr>
+        <div
+          style={{
+            border: "1px solid #63b5f6",
+            width: "95%",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        ></div>
 
         {/* 리뷰작성 시작 */}
 
         <>
-          <Review>리뷰</Review>
-          {isLogin === false ? (
-            <Button onClick={handleClick}>리뷰쓰기</Button>
-          ) : auth === 1 || auth === 0 ? (
-            <Button onClick={handleDocClick}>리뷰쓰기</Button>
-          ) : (
-            <Button onClick={submit}>리뷰쓰기</Button>
-          )}
+          <Review>
+            Reviews <MdOutlineRateReview />
+            <ReviewLine />
+          </Review>
 
-          <Clear />
-          <ReviewContainer>
+          <ReviewContainer2>
             <DivBox1>
               <Profile
                 type="file"
@@ -548,35 +686,50 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
                   <ImgReview src={Receipt} alt="publicimage" />
                 )}
               </Box>
+
               <ProfileEditing2 htmlFor="upload-file" onChange={handleImgChange}>
+                <AiTwotoneFolderOpen
+                  style={{ verticalAlign: "top", fontSize: "17px" }}
+                />{" "}
                 영수증 업로드
               </ProfileEditing2>
             </DivBox1>
 
             <ReviewNik
-              placeholder="닉네임"
               type="text"
               disabled
+
               // value={userInfo.nickname}
             />
+
             <ReviewNik
               placeholder="병원명"
               type="text"
               disabled
               value={medicalInfo.place_name}
             />
+
             <ReviewTextarea
               onChange={reviewChange("content")}
-              placeholder="'내용' 입력 후 '리뷰쓰기' 버튼을 눌러주세요."
+              placeholder="'내용' 입력 후 '리뷰' 버튼을 눌러주세요."
               value={reviewInfo.content}
             />
-          </ReviewContainer>
-          <hr></hr>
+
+            {isLogin === false ? (
+              <Button onClick={handleClick}>리뷰</Button>
+            ) : auth === 1 || auth === 0 ? (
+              <Button onClick={handleDocClick}>리뷰</Button>
+            ) : (
+              <Button onClick={submit}>리뷰</Button>
+            )}
+            <Clear />
+          </ReviewContainer2>
+
           <br></br>
           {/* 리뷰작성 끝 */}
-          {reviews.map((review) => {
+          {reviews.map((review, i) => {
             return (
-              <ReviewContainer>
+              <ReviewContainer key={i}>
                 <DivBox1>
                   <Box>
                     <ImgReview
@@ -585,7 +738,6 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
                     />
                   </Box>
                 </DivBox1>
-
                 <ReviewNik
                   disabled
                   placeholder="닉네임"
@@ -593,13 +745,32 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
                   value={
                     review.user
                       ? review.user.nickname
-                      : parseInt(localStorage.getItem("auth") === 4)
+                      : review.users_id.toString().length >= 6
                       ? "Kakao"
                       : "탈퇴한 유저"
                   }
+                  style={{ background: "#e3f2fd", border: "none" }}
                 />
-                <ReviewNik disabled value={medicalInfo.place_name} />
-                <ReviewTextarea placeholder={review.content} />
+
+                <ReviewNik
+                  disabled
+                  value={medicalInfo.place_name}
+                  style={{ background: "#e3f2fd", border: "none" }}
+                />
+                {isLogin ? (
+                  <ReviewTextarea value={review.content} />
+                ) : (
+                  <ReviewTextareaOut value={review.content} />
+                )}
+
+                {auth === 0 ? (
+                  <Button style={{ padding: "3px", fontSize: "15px" }}>
+                    {" "}
+                    <BsTrash onClick={() => handleReviewDelete(review.id)} />
+                  </Button>
+                ) : (
+                  ""
+                )}
               </ReviewContainer>
             );
           })}

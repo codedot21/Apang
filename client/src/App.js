@@ -1,3 +1,4 @@
+//app.js 1/21
 import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
@@ -24,6 +25,7 @@ function App() {
   const [userInfo, setUserInfo] = useState(null); //사용자 정보
   const [auth, setAuth] = useState("");
   // const [qnaDetail, setqnaDetail] = useState(null);
+  // const [googleToken, setGoogleToken] = useState("");
 
   const isAuthenticated = () => {
     const authnumber = parseInt(localStorage.getItem("auth"));
@@ -56,6 +58,8 @@ function App() {
 
       // <-- 카카오 로그인 -->
     } else if (authnumber === 4) {
+      console.log("userInfo?", userInfo);
+      console.log("isLogin?", isLogin);
       axios
         .post(`${process.env.REACT_APP_API_URL}/oauth/kakao`, {
           //서버로부터 사용자 정보 받아오기
@@ -71,13 +75,20 @@ function App() {
               nickname: user.data.properties.nickname,
               email: user.data.kakao_account.email,
             };
-            setUserInfo(userInfo); //이것때문에 post 2번 간다.
+            setUserInfo(userInfo); //state변경될때마다 카카오로 토큰요청이 2번 간다. <Kakao> https://kauth.kakao.com/auth/token
             setIsLogin(true);
             navigate("/");
+            Swal.fire({
+              icon: "success",
+              title: "카카오로 간편로그인",
+              text: message.loginSuccess,
+              showConfirmButton: false,
+              timer: 1000,
+            });
           } else {
             Swal.fire({
               icon: "error",
-              title: "Apang 로그인",
+              title: "카카오로 간편로그인",
               text: message.loginFail,
             });
           }
@@ -105,6 +116,7 @@ function App() {
         {
           auth: auth,
           userid: localStorage.getItem("userid"),
+          // googleToken,
         },
         { withCredentials: true }
       )
@@ -115,37 +127,69 @@ function App() {
         localStorage.removeItem("userid");
         localStorage.removeItem("auth");
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("googleId");
         Swal.fire({
           icon: "success",
-          title: "또 만나요",
+          title: "다음에 또 만나요",
           text: "로그아웃 되었습니다",
+          showConfirmButton: false,
+          timer: 1000,
         });
         navigate("/");
       });
   };
 
-  // const getGoogleToken = async (authorizationCode) => {
-  //   await axios({
-  //     url: `${process.env.REACT_APP_API_URL}/oauth/google`,
-  //     method: "post",
-  //     data: { authorizationCode },
-  //     withCredentials: true,
-  //   }).then((res) => {
-  //     console.log("여기", res.data);
-  //     console.log("여기", res.data.data.email);
-  //     console.log("여기", res.data.data.name);
-  //   });
-  // };
+  const getGoogleToken = async (authorizationCode) => {
+    await axios({
+      url: `${process.env.REACT_APP_API_URL}/oauth/google`,
+      method: "post",
+      data: { authorizationCode },
+      withCredentials: true,
+    }).then((res) => {
+      // console.log("이건 데이터", res.data);
+      // console.log("이건 이메일", res.data.data.email);
+      // console.log("이건 이름", res.data.data.name);
+      if (res.status === 200) {
+        const user = res.data;
+        const userInfo = {
+          id: user.data.sub,
+          nickname: user.data.name,
+          email: user.data.email,
+        };
+        // setGoogleToken(res.data.token);
+        setUserInfo(userInfo);
+        localStorage.setItem("auth", 3);
+        setAuth(localStorage.getItem("auth"));
+        console.log("어스", localStorage.auth);
+        setIsLogin(true);
+        navigate("/");
+        console.log("유저인포", userInfo);
+        Swal.fire({
+          icon: "success",
+          title: "구글로 간편로그인",
+          text: message.loginSuccess,
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "구글로 간편로그인",
+          text: message.loginFail,
+        });
+      }
+    });
+  };
 
-  // useEffect(() => {
-  //   const url = new URL(window.location.href);
-  //   console.log(`url ${url}`);
-  //   const authorizationCode = url.searchParams.get("code");
-  //   console.log(`authorizationCode ${authorizationCode}`);
-  //   if (authorizationCode) {
-  //     getGoogleToken(authorizationCode);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    // console.log(`url ${url}`);
+    const authorizationCode = url.searchParams.get("code");
+    // console.log(`authorizationCode ${authorizationCode}`);
+    if (authorizationCode) {
+      getGoogleToken(authorizationCode);
+    }
+  }, []);
 
   return (
     <>
@@ -173,8 +217,15 @@ function App() {
         />
         <Route
           path="/oauth/callback/kakao"
-          element={<Kakao LoginHandler={LoginHandler} />}
+          element={
+            <Kakao
+              LoginHandler={LoginHandler}
+              isLogin={isLogin}
+              userInfo={userInfo}
+            />
+          }
         />
+
         <Route
           path="/qna"
           element={

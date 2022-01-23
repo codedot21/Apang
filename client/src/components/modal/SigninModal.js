@@ -25,15 +25,15 @@ export const ModalBox = styled.div`
   width: 100%;
   height: 100%;
   max-width: 23rem;
-  max-height: 25rem;
-  border-radius: 1rem;
+  max-height: 26rem;
+  border-radius: 10px;
   background-color: #fbf3ed;
   overflow: hidden;
 `;
 
 export const LoginHeader = styled.div`
   position: relative;
-  padding: 1.5rem 3.5rem 1rem 9.3rem;
+  padding: 0.5rem 3.5rem 1rem 9.3rem;
   background-color: #fbf3ed;
   font-weight: 500;
   color: black;
@@ -58,12 +58,22 @@ export const LoginBody = styled.div`
   padding: 1rem;
   color: black;
   background-color: #fbf3ed;
+  border-radius: 10px;
+  &:focus {
+    outline: 0.1rem solid #63b5f6;
+    border-radius: 10px;
+  }
 
   & > div {
     padding: 0rem 0.7rem 0.7rem 0.7rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 10px;
+    &:focus {
+      outline: 0.1rem solid #63b5f6;
+      border-radius: 10px;
+    }
   }
 
   & > div > input {
@@ -77,24 +87,40 @@ export const LoginBody = styled.div`
     border-radius: 10px;
     &:focus {
       outline: 0.1rem solid #63b5f6;
+      border-radius: 10px;
     }
   }
 `;
 
 export const LoginFooter = styled.div`
-  padding: 0.1rem 1rem 1rem 6.8rem;
+  padding: 0.1rem 1rem 1rem 1rem;
   background-color: #fbf3ed;
+  .line {
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    color: #b5afaf;
+    font-size: 0.5rem;
+    margin: 0.5rem;
+  }
+  .line::before,
+  .line::after {
+    content: "";
+    flex-grow: 1;
+    background: #dee2e6;
+    height: 0.1rem;
+    margin: 0 2rem;
+  }
 `;
 
 export const SocialLoginHeader = styled.div`
   font-size: 0.8rem;
   padding-top: 0.1rem;
-  padding-left: 1.2rem; //추가된것
+  padding-left: 1.2rem;
   padding-bottom: 1rem;
   background-color: #fbf3ed;
 `;
 
-// export const SocialLogin = styled(Link)``;
 export const SocialLogin = styled.a`
   padding: 0.1rem 1rem 1rem 0.8rem;
 `;
@@ -110,16 +136,8 @@ export const Button = styled.button`
   cursor: pointer;
   border-radius: 10px;
   &:hover {
-    background: #fff;
     background-color: #002171;
   }
-`;
-
-export const ModalContainer = styled.div`
-  // TODO : Modal을 구현하는데 전체적으로 필요한 CSS를 구현합니다.
-  text-align: center;
-  padding: 8%;
-  border: 8%;
 `;
 
 export const Msg = styled.div`
@@ -127,7 +145,85 @@ export const Msg = styled.div`
   font-size: 13px;
 `;
 
-function SigninModal({ open, close, handleResponseSuccess }) {
+export const SocialKakaoLogin = styled.a`
+  text-decoration: none;
+  font-size: 0.8rem;
+`;
+
+export const SocialGoogleLogin = styled.a`
+  text-decoration: none;
+  font-size: 0.8rem;
+`;
+
+export const LoginFeet = styled.div`
+  padding: 1rem 0rem 0rem 0rem;
+  background-color: #fbf3ed;
+`;
+
+export const ButtonGoogle = styled.div`
+  & form {
+    margin: 0rem 2rem;
+    // background: #4285f4;
+    background: #ffffff;
+    white-space: nowrap;
+    padding: 0.6rem 0.8rem;
+    // color: #ffffff;
+    color: black;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+
+    &:hover {
+      // background-color: #0059c1;
+      background-color: #4285f4;
+      color: #ffffff;
+    }
+  }
+  & img {
+    width: 1rem;
+    margin-right: 3.5rem;
+  }
+`;
+
+export const ButtonKakao = styled.div`
+  & form {
+    margin: 0rem 2rem;
+    background: #f7e600;
+    white-space: nowrap;
+    padding: 0.6rem 0.8rem;
+    color: black;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    &:hover {
+      background-color: #e0d400;
+    }
+  & img {
+    width: 1rem;
+    margin-right: 3.5rem;
+  }
+`;
+
+export const LoginFeets = styled.div`
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: #b5afaf;
+  font-size: 0.8rem;
+  margin: 0.5rem;
+  background-color: #fbf3ed;
+  margin-left: 2.3rem;
+  margin-top: 1.2rem;
+  .span {
+    margin-left: 0.5rem;
+    color: #63b5f6;
+    cursor: pointer;
+  }
+`;
+
+function SigninModal({ open, close, handleResponseSuccess, swi }) {
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
@@ -151,16 +247,18 @@ function SigninModal({ open, close, handleResponseSuccess }) {
     const { email, password } = userInfo;
     if (email === "") {
       Swal.fire({
-        icon: "error",
-        title: "로그인 실패",
+        icon: "info",
         text: message.emptyMessage,
+        showConfirmButton: false,
+        timer: 1000,
       });
       return;
     } else if (password === "") {
       Swal.fire({
-        icon: "error",
-        title: "로그인 실패",
+        icon: "info",
         text: message.emptyMessage,
+        showConfirmButton: false,
+        timer: 1000,
       });
       return;
     } else {
@@ -172,15 +270,19 @@ function SigninModal({ open, close, handleResponseSuccess }) {
           // console.log("auth번호!", res.data.data.auth);
           if (res.data.error === 1) {
             Swal.fire({
-              icon: "warning",
+              icon: "info",
               title: "Apang 로그인",
               text: message.loginFail,
+              showConfirmButton: false,
+              timer: 1000,
             });
           } else if (res.data.error === 2) {
             Swal.fire({
               icon: "error",
               title: "Apang 로그인",
               text: message.doctorFail,
+              showConfirmButton: false,
+              timer: 1000,
             });
           } else {
             handleResponseSuccess(res.data.data.auth);
@@ -190,6 +292,8 @@ function SigninModal({ open, close, handleResponseSuccess }) {
               icon: "success",
               title: "Apang 로그인",
               text: message.loginSuccess,
+              showConfirmButton: false,
+              timer: 1000,
             });
             close();
           }
@@ -205,7 +309,6 @@ function SigninModal({ open, close, handleResponseSuccess }) {
     >
       <ModalBox onClick={(e) => e.stopPropagation()}>
         <LoginHeader>
-          로그인
           <button onClick={close}> &times; </button>
         </LoginHeader>
         <LoginBody>
@@ -230,13 +333,34 @@ function SigninModal({ open, close, handleResponseSuccess }) {
           <Button onClick={handleSignIn}>로그인</Button>
         </LoginBody>
         <LoginFooter>
-          <SocialLoginHeader>소셜계정으로 로그인</SocialLoginHeader>
-          <SocialLogin href={KAKAO_AUTH_URL} onClick={close}>
-            <img src={kakao} alt="kakaologin" width="48rem"></img>
-          </SocialLogin>
-          <SocialLogin href={GOOGLE_AUTHORIZE_URL} onClick={close}>
-            <img src={google} alt="googlelogin" width="48rem"></img>
-          </SocialLogin>
+          <div className="line">또는</div>
+          <LoginFeet>
+            <SocialKakaoLogin href={KAKAO_AUTH_URL}>
+              <ButtonKakao>
+                <form>
+                  <img src={kakao} alt="kakaologin"></img>
+                  카카오로 간편로그인
+                </form>
+              </ButtonKakao>
+            </SocialKakaoLogin>
+          </LoginFeet>
+
+          <LoginFeet>
+            <SocialGoogleLogin href={GOOGLE_AUTHORIZE_URL} onClick={close}>
+              <ButtonGoogle>
+                <form>
+                  <img src={google} alt="googlelogin"></img>
+                  구글로 간편로그인
+                </form>
+              </ButtonGoogle>
+            </SocialGoogleLogin>
+          </LoginFeet>
+          <LoginFeets>
+            <div>아팡이 처음이신가요?</div>
+            <span className="span" onClick={swi}>
+              회원가입
+            </span>
+          </LoginFeets>
         </LoginFooter>
       </ModalBox>
     </ModalBackGround>

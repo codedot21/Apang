@@ -247,11 +247,11 @@ export const Nodata = styled(Container)`
 
 function QnaPage({ isLogin, auth }) {
   const [QuestionOpen, setQuestionOpen] = useState(false);
-  const [qnaInfo, setqnaInfo] = useState([]); //qna 전부 가져오는것
+  const [qnaInfo, setqnaInfo] = useState([]);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * 5;
   const [isLoading, setIsLoading] = useState(true);
-  console.log(parseInt(localStorage.getItem("auth")));
+  // console.log(parseInt(localStorage.getItem("auth")));
   //qna 전부 불러오기
   useEffect(() => {
     setIsLoading(true);
@@ -271,23 +271,26 @@ function QnaPage({ isLogin, auth }) {
   }, []);
 
   const openQuestionModal = () => {
-    console.log("질문하기 모달 오픈되었나요?");
     setQuestionOpen(!QuestionOpen);
   };
 
   const handleClick = () => {
     Swal.fire({
-      icon: "error",
+      icon: "info",
       title: "로그인이 필요해요",
       text: "회원이 아니시면 회원가입 해주세요",
+      showConfirmButton: false,
+      timer: 1000,
     });
   };
 
   const handleDocClick = () => {
     Swal.fire({
-      icon: "error",
+      icon: "info",
       title: "의사선생님이신가요?",
       text: "선생님은 댓글만 작성하실 수 있어요",
+      showConfirmButton: false,
+      timer: 1000,
     });
   };
   // 카테고리 필터하기
@@ -354,29 +357,30 @@ function QnaPage({ isLogin, auth }) {
                       <Button onClick={openQuestionModal}>질문하기</Button>
                     )}
                   </QnaWrap>
-                  {qnaInfo.slice(offset, offset + 5).map((qna) => {
+                  {qnaInfo.slice(offset, offset + 5).map((qna, i) => {
                     return (
-                      <Linked to={`/qna/detail/${qna.id}`}>
+                      <Linked to={`/qna/detail/${qna.id}`} key={i}>
                         <Qna
-                          // handleQnaInfo={handleQnaInfo}
                           title={qna.title}
                           content={qna.content}
                           nickname={
                             qna.user
                               ? qna.user.nickname
-                              : parseInt(localStorage.getItem("auth")) === 4
+                              : qna.users_id.toString().length >= 6
                               ? "Kakao"
                               : "탈퇴한 유저"
                           }
                           profile_img={
                             qna.user
                               ? qna.user.profile_img
-                              : parseInt(localStorage.getItem("auth")) === 4
+                              : qna.users_id.toString().length >= 6
                               ? "kakao.png"
-                              : "publicprofile.jpeg"
+                              : "user.png"
                           }
                           tags={qna}
                           commentsCount={qna.comments.length}
+                          auth={auth}
+                          qnaId={qna.id}
                         />
                       </Linked>
                     );
@@ -396,11 +400,7 @@ function QnaPage({ isLogin, auth }) {
             </Nodata>
           )}
 
-          <QnaModal
-            // forceUpdate={forceUpdate}
-            open={QuestionOpen}
-            close={openQuestionModal}
-          />
+          <QnaModal open={QuestionOpen} close={openQuestionModal} />
         </>
       )}
     </>

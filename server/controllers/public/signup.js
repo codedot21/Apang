@@ -1,6 +1,8 @@
 const { users } = require("../../models");
 
 module.exports = async (req, res) => {
+  console.log(req.body);
+
   try {
     console.log("일반 회원가입 : ", req.body);
     // req.body에 회원가입 할 정보가 담겨있음.
@@ -29,7 +31,7 @@ module.exports = async (req, res) => {
             defaults: {
               password: userInfo.password,
               nickname: userInfo.nickname,
-              profile_img: "publicprofile.jpeg",
+              profile_img: "user.png",
               auth: 2,
             },
           })

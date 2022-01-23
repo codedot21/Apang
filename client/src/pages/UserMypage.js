@@ -285,7 +285,6 @@ const Prosecutor = styled.div`
 
 // 유효성 끝
 
-// 상현 수정
 function UserMypage(props) {
   const navigate = useNavigate();
   const [myQnaInfo, setmyQnaInfo] = useState([]);
@@ -393,6 +392,7 @@ function UserMypage(props) {
           }
         )
         .then(() => {
+          console.log("ria");
           Swal.fire({
             icon: "success",
             title: "Apang 정보수정",
@@ -416,9 +416,11 @@ function UserMypage(props) {
             title: "Apang 정보수정",
             text: message.changeSuccess,
           });
+          // navigate("/");
+          // navigate("/mypage/doctorprofile");
         });
     }
-    window.location.reload(); //근데 페이지가 새로고침되어지면 안됌 원래는
+    window.location.reload(); //근데 페이지가 새로고침되어지면 안됌 원래는. 이거 있으면 alert가 안된다.
   };
   // 비밀번호 변경
   const passwordChange = () => {
@@ -449,14 +451,14 @@ function UserMypage(props) {
   // 회원탈퇴
   const deleteHandler = () => {
     Swal.fire({
-      icon: "warning",
-      title: "회원탈퇴",
-      text: "정말로 탈퇴하시겠습니까?",
+      icon: "info",
+      title: "모든 정보가 삭제될 수 있습니다",
+      text: "정말로 탈퇴하실건가요?",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "네, 탈퇴하겠습니다.",
-      cancelButtonText: "아니요.",
+      confirmButtonColor: "#63b5f6",
+      cancelButtonColor: "#dd3333",
+      confirmButtonText: "네, 탈퇴하겠습니다",
+      cancelButtonText: "다시 생각해볼게요",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -582,6 +584,7 @@ function UserMypage(props) {
                   type="text"
                   defaultValue={props.userInfo.nickname}
                   onChange={handleInputChange("nickname")}
+                  maxLength="18"
                 />
               </UserContainerLine>
               <Edting onClick={submit}>저장하기</Edting>

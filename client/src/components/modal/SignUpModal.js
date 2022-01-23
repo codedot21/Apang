@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { valid } from "../../modules/validator";
 import { message } from "../../modules/message";
-
-// axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 export const ModalBackGround = styled.div`
   position: fixed;
@@ -25,15 +22,15 @@ export const ModalBox = styled.div`
   width: 100%;
   height: 100%;
   max-width: 23rem;
-  height: 37rem;
-  border-radius: 1rem;
+  height: 33rem;
+  border-radius: 10px;
   background-color: #fbf3ed;
   overflow: hidden;
 `;
 
 export const LoginHeader = styled.div`
   position: relative;
-  padding: 1.5rem 3.5rem 1rem 9rem;
+  padding: 0.7rem 3.5rem 1rem 9rem;
   background-color: #fbf3ed;
   font-weight: 500;
   color: black;
@@ -67,14 +64,23 @@ export const LoginBody = styled.div`
   padding: 1rem;
   color: black;
   background-color: #fbf3ed;
+  border-radius: 10px;
+  &:focus {
+    outline: 0.1rem solid #63b5f6;
+    border-radius: 10px;
+  }
 
   & > div {
     padding: 0 0.7rem 0.7rem 2rem;
     display: block;
     align-items: center;
     justify-content: center;
+    border-radius: 10px;
+    &:focus {
+      outline: 0.1rem solid #63b5f6;
+      border-radius: 10px;
+    }
   }
-
   & > div > input {
     display: block;
     padding-top: 0.5rem;
@@ -87,6 +93,7 @@ export const LoginBody = styled.div`
     border-radius: 10px;
     &:focus {
       outline: 0.1rem solid #63b5f6;
+      border-radius: 10px;
     }
     ::-webkit-outer-spin-button,
     ::-webkit-inner-spin-button {
@@ -97,7 +104,21 @@ export const LoginBody = styled.div`
 `;
 
 export const LoginFooter = styled.div`
-  padding: 0.1rem 1rem 1rem 1rem;
+  padding: 0rem 1rem 0rem 1rem;
+  background-color: #fbf3ed;
+  .line {
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    color: #b5afaf;
+    font-size: 0.5rem;
+    margin: 0.5rem;
+    margin-left: 5.4rem;
+  }
+`;
+
+export const LoginFoot = styled.div`
+  padding: 0.1rem 0rem 0rem 3.8rem;
   background-color: #fbf3ed;
 `;
 
@@ -105,7 +126,9 @@ export const SocialLoginHeader = styled.div`
   background-color: #fbf3ed;
 `;
 
-export const SocialLogin = styled(Link)``;
+export const SocialLogin = styled.a`
+  padding: 0.1rem 1rem 1rem 2rem;
+`;
 
 export const Button = styled.button`
   margin: 0rem 2rem;
@@ -118,7 +141,6 @@ export const Button = styled.button`
   cursor: pointer;
   border-radius: 10px;
   &:hover {
-    background: #fff;
     background-color: #002171;
   }
 `;
@@ -133,13 +155,43 @@ export const BtnMenu = styled.button`
 `;
 
 export const Msg = styled.span`
-  margin: 0 3.5rem;
+  display: block;
+  margin: 0 3.3rem;
   color: red;
   margin-top: 0;
   font-size: 0.8rem;
 `;
 
-function SignUpModal({ open, close, handleResponseSuccess }) {
+export const LoginFeet = styled.div`
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: #b5afaf;
+  font-size: 0.8rem;
+  margin: 0.5rem;
+  background-color: #fbf3ed;
+  margin-left: 2.3rem;
+  .span {
+    margin-left: 0.5rem;
+    color: #63b5f6;
+    cursor: pointer;
+  }
+`;
+
+export const LoginFeets = styled.div`
+  padding: 0.5rem 0rem 0.47rem 2rem;
+  flex-basis: 100%;
+  align-items: center;
+  color: black;
+  font-size: 0.8rem;
+  margin: 0.5rem;
+  background-color: white;
+  margin-left: 3.2rem;
+  margin-right: 3.2rem;
+  border-radius: 10px;
+`;
+
+function SignUpModal({ open, close, handleResponseSuccess, swi }) {
   const [isSelect, setIsSelect] = useState("public");
 
   // input값, 에러메세지 초기화
@@ -367,7 +419,6 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
     >
       <ModalBox onClick={(e) => e.stopPropagation()}>
         <LoginHeader>
-          회원가입
           <button
             onClick={() => {
               setIsSelect("public");
@@ -397,99 +448,125 @@ function SignUpModal({ open, close, handleResponseSuccess }) {
           <BtnMenu>의사</BtnMenu>
         </SelectHeader>
         {isSelect === "public" ? (
-          <LoginBody>
-            <div>
-              <input
-                id="email"
-                type="email"
-                placeholder="이메일"
-                onChange={publicChange("email")}
-                value={publicInfo.email}
-              />
-              <Msg>{errorMessage.email}</Msg>
-            </div>
+          <>
+            <LoginFeets>
+              아팡 리뷰 평가 및 Q&A 상담 관련 정보는 <br />
+              개인 의료 정보 보호가 필요한 의료법 상 <br />
+              가입한 회원들만 조회할 수 있어요 <br />
+              로그인 후 궁금한 정보를 확인하세요
+            </LoginFeets>
+            <LoginBody>
+              <div>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="이메일"
+                  onChange={publicChange("email")}
+                  value={publicInfo.email}
+                />
+                <Msg>{errorMessage.email}</Msg>
+              </div>
 
-            <div>
-              <input
-                id="password"
-                type="password"
-                placeholder="비밀번호"
-                onChange={publicChange("password")}
-                value={publicInfo.password}
-              />
-              <Msg>{errorMessage.password}</Msg>
-            </div>
+              <div>
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="비밀번호"
+                  onChange={publicChange("password")}
+                  value={publicInfo.password}
+                />
+                <Msg>{errorMessage.password}</Msg>
+              </div>
 
-            <div>
-              <input
-                id="nickname"
-                type="text"
-                placeholder="닉네임"
-                onChange={publicChange("nickname")}
-                value={publicInfo.nickname}
-              />
-              <Msg>{errorMessage.nickname}</Msg>
-              <Msg>{errorMessage.confirm}</Msg>
-            </div>
-            <Button onClick={publicSignUp}>가입하기</Button>
-          </LoginBody>
+              <div>
+                <input
+                  id="nickname"
+                  type="text"
+                  placeholder="닉네임"
+                  onChange={publicChange("nickname")}
+                  value={publicInfo.nickname}
+                />
+                <Msg>{errorMessage.nickname}</Msg>
+                <Msg>{errorMessage.confirm}</Msg>
+              </div>
+              <Button onClick={publicSignUp}>가입하기</Button>
+            </LoginBody>
+            <>
+              <LoginFooter>
+                <LoginFeet>
+                  <div>아팡 회원이신가요?</div>
+                  <span className="span" onClick={swi}>
+                    로그인
+                  </span>
+                </LoginFeet>
+              </LoginFooter>
+            </>
+          </>
         ) : (
-          <LoginBody>
-            <div>
-              <input
-                id="email"
-                type="email"
-                placeholder="이메일"
-                onChange={doctorChange("email")}
-              />
-              <Msg>{errorMessage.email}</Msg>
-            </div>
+          <>
+            <LoginBody>
+              <div>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="이메일"
+                  onChange={doctorChange("email")}
+                />
+                <Msg>{errorMessage.email}</Msg>
+              </div>
 
-            <div>
-              <input
-                id="password"
-                type="password"
-                placeholder="비밀번호"
-                onChange={doctorChange("password")}
-              />
-              <Msg>{errorMessage.password}</Msg>
-            </div>
+              <div>
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="비밀번호"
+                  onChange={doctorChange("password")}
+                />
+                <Msg>{errorMessage.password}</Msg>
+              </div>
 
-            <div>
-              <input
-                id="name"
-                type="text"
-                placeholder="이름"
-                onChange={doctorChange("name")}
-              />
-              <Msg>{errorMessage.name}</Msg>
-            </div>
+              <div>
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="이름"
+                  onChange={doctorChange("name")}
+                />
+                <Msg>{errorMessage.name}</Msg>
+              </div>
 
-            <div>
-              <input
-                id="license"
-                type="number"
-                placeholder="면허 번호"
-                onChange={doctorChange("license")}
-              />
-              <Msg>{errorMessage.license}</Msg>
-            </div>
+              <div>
+                <input
+                  id="license"
+                  type="number"
+                  placeholder="면허 번호"
+                  onChange={doctorChange("license")}
+                />
+                <Msg>{errorMessage.license}</Msg>
+              </div>
 
-            <div>
-              <input
-                id="hospital"
-                type="text"
-                placeholder="병원 이름"
-                onChange={doctorChange("hospital")}
-              />
-              <Msg>{errorMessage.hospital}</Msg>
-              <Msg>{errorMessage.confirm}</Msg>
-            </div>
+              <div>
+                <input
+                  id="hospital"
+                  type="text"
+                  placeholder="병원 이름"
+                  onChange={doctorChange("hospital")}
+                />
+                <Msg>{errorMessage.confirm}</Msg>
+              </div>
 
-            <Button onClick={doctorSignUp}>신청하기</Button>
-          </LoginBody>
+              <Button onClick={doctorSignUp}>신청하기</Button>
+            </LoginBody>
+            <LoginFooter>
+              <LoginFeet>
+                <div>아팡 회원이신가요?</div>
+                <span className="span" onClick={swi}>
+                  로그인
+                </span>
+              </LoginFeet>
+            </LoginFooter>
+          </>
         )}
-        <LoginFooter></LoginFooter>
       </ModalBox>
     </ModalBackGround>
   ) : null;
