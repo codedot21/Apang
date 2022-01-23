@@ -4,6 +4,7 @@ import { Container } from "../styles";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
+import Doctor_img from "../images/doctor.png";
 
 export const QnaDocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -493,6 +494,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
     <>
       {/* 답변 시작 끝 */}
       {commentList.map((comment, index) => {
+        // console.log(comment);
         return (
           <QnaDocContainer key={index}>
             <QnaDocBox>
@@ -597,14 +599,22 @@ function QnaPost({ isLogin, userInfo, auth }) {
                   <>
                     <ProfileDoc>
                       <img
-                        src={require(`../../public/uploads/${comment.doctor.profile_img}`)}
+                        src={
+                          comment.doctor
+                            ? require(`../../public/uploads/${comment.doctor.profile_img}`)
+                            : Doctor_img
+                        }
                         width="20rem"
                         alt="doctor"
                       />
                       <input
                         disabled
                         type="text"
-                        defaultValue={`${comment.doctor.name} 선생님`}
+                        defaultValue={
+                          comment.doctor
+                            ? `${comment.doctor.name} 선생님`
+                            : "의사 선생님"
+                        }
                       ></input>
                       <span className="commentNothing"></span>
                     </ProfileDoc>

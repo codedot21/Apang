@@ -268,7 +268,11 @@ function QnaModal({ open, close, tagHandler }) {
     axios
       .post(
         process.env.REACT_APP_API_URL + "/qna/upload",
-        { ...qnaInfo, kakao_userid: localStorage.getItem("userid") },
+        {
+          ...qnaInfo,
+          kakao_userid: localStorage.getItem("userid"),
+          google_userid: localStorage.getItem("googleId"),
+        },
         {
           withCredentials: true,
         }

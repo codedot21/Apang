@@ -16,6 +16,7 @@ module.exports = async (req, res) => {
     .then((data) => {
       const id_token = data.data.id_token;
       const userInfo = jwtDecode(id_token);
+
       // console.log(userInfo);
       res.status(200).send({
         data: userInfo,
