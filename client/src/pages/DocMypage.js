@@ -226,13 +226,13 @@ const MyreviewContainer = styled.div`
 `;
 
 const MyreviewLine = styled.div`
-  border: 1px solid #b5afaf;
+  border: 1px solid #63b5f6;
   border-radius: 10px;
   width: 21%;
   height: 50%;
   margin: 1vw;
   float: left;
-  background-color: #f9f9f9;
+  background-color: #e3f2fd;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
     float: none;
@@ -246,9 +246,9 @@ const MyreviewTrash = styled.button`
   margin: 0.5vw;
   cursor: pointer;
   border: none;
-  background-color: #f9f9f9;
+  background-color: #e3f2fd;
   &:hover {
-    background-color: #c7c7c7;
+    background-color: #fff;
   }
   @media ${({ theme }) => theme.device.mobile} {
     margin: 3vw;
@@ -282,6 +282,7 @@ const UserTitle = styled.div`
 
 const TitleHeader = styled.h4`
   margin: 1vw 0 0.5vw 0.5vw;
+  color: #007ac1;
   @media ${({ theme }) => theme.device.mobile} {
     margin: 2vw 1.5vw 1.5vw 2vw;
   }
