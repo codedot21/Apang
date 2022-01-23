@@ -127,6 +127,7 @@ function App() {
         localStorage.removeItem("userid");
         localStorage.removeItem("auth");
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("googleId");
         Swal.fire({
           icon: "success",
           title: "다음에 또 만나요",
