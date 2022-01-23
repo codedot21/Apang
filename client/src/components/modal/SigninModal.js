@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import kakao from "../../images/kakao.png";
-import google from "../../images/google.png";
+// import google from "../../images/google.png";
 import { KAKAO_AUTH_URL } from "../OAuthKakao";
-import { GOOGLE_AUTHORIZE_URL } from "../OAuthGoogle";
+// import { GOOGLE_AUTHORIZE_URL } from "../OAuthGoogle";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { message } from "../../modules/message";
@@ -200,9 +200,10 @@ export const ButtonKakao = styled.div`
     &:hover {
       background-color: #e0d400;
     }
-  & img {
-    width: 1rem;
-    margin-right: 3.5rem;
+    & img {
+      width: 1rem;
+      margin-right: 3.5rem;
+    }
   }
 `;
 
@@ -345,16 +346,20 @@ function SigninModal({ open, close, handleResponseSuccess, swi }) {
             </SocialKakaoLogin>
           </LoginFeet>
 
-          <LoginFeet>
+          {/* <LoginFeet>
             <SocialGoogleLogin href={GOOGLE_AUTHORIZE_URL} onClick={close}>
               <ButtonGoogle>
                 <form>
-                  <img src={google} alt="googlelogin"></img>
+                  <img
+                    src={google}
+                    alt="googlelogin"
+                    onClick={handleGoogle}
+                  ></img>
                   구글로 간편로그인
                 </form>
               </ButtonGoogle>
             </SocialGoogleLogin>
-          </LoginFeet>
+          </LoginFeet> */}
           <LoginFeets>
             <div>아팡이 처음이신가요?</div>
             <span className="span" onClick={swi}>

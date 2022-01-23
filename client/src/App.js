@@ -26,7 +26,6 @@ function App() {
   const [auth, setAuth] = useState("");
   // const [qnaDetail, setqnaDetail] = useState(null);
   // const [googleToken, setGoogleToken] = useState("");
-
   const isAuthenticated = () => {
     const authnumber = parseInt(localStorage.getItem("auth"));
     //< --일반인 로그인 -->
@@ -58,8 +57,8 @@ function App() {
 
       // <-- 카카오 로그인 -->
     } else if (authnumber === 4) {
-      console.log("userInfo?", userInfo);
-      console.log("isLogin?", isLogin);
+      // console.log("userInfo?", userInfo);
+      // console.log("isLogin?", isLogin);
       axios
         .post(`${process.env.REACT_APP_API_URL}/oauth/kakao`, {
           //서버로부터 사용자 정보 받아오기
@@ -69,7 +68,7 @@ function App() {
           if (res.status === 201 || res.status === 200) {
             const user = res.data;
             localStorage.setItem("userid", user.data.id);
-            console.log(localStorage.getItem("userid"));
+            // console.log(localStorage.getItem("userid"));
             const userInfo = {
               id: user.data.id,
               nickname: user.data.properties.nickname,
@@ -138,58 +137,6 @@ function App() {
         navigate("/");
       });
   };
-
-  const getGoogleToken = async (authorizationCode) => {
-    await axios({
-      url: `${process.env.REACT_APP_API_URL}/oauth/google`,
-      method: "post",
-      data: { authorizationCode },
-      withCredentials: true,
-    }).then((res) => {
-      // console.log("이건 데이터", res.data);
-      // console.log("이건 이메일", res.data.data.email);
-      // console.log("이건 이름", res.data.data.name);
-      if (res.status === 200) {
-        const user = res.data;
-        const userInfo = {
-          id: user.data.sub,
-          nickname: user.data.name,
-          email: user.data.email,
-        };
-        // setGoogleToken(res.data.token);
-        setUserInfo(userInfo);
-        localStorage.setItem("auth", 3);
-        setAuth(localStorage.getItem("auth"));
-        console.log("어스", localStorage.auth);
-        setIsLogin(true);
-        navigate("/");
-        console.log("유저인포", userInfo);
-        Swal.fire({
-          icon: "success",
-          title: "구글로 간편로그인",
-          text: message.loginSuccess,
-          showConfirmButton: false,
-          timer: 1000,
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "구글로 간편로그인",
-          text: message.loginFail,
-        });
-      }
-    });
-  };
-
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    // console.log(`url ${url}`);
-    const authorizationCode = url.searchParams.get("code");
-    // console.log(`authorizationCode ${authorizationCode}`);
-    if (authorizationCode) {
-      getGoogleToken(authorizationCode);
-    }
-  }, []);
 
   return (
     <>
