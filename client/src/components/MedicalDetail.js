@@ -12,6 +12,7 @@ import { MdOutlineRateReview } from "react-icons/md";
 import { RiHospitalLine } from "react-icons/ri";
 import { AiTwotoneFolderOpen } from "react-icons/ai";
 import { FaSave } from "react-icons/fa";
+import AWS from "aws-sdk";
 
 const DivBox = styled.div`
   width: 27vw;
@@ -341,8 +342,16 @@ const Clear = styled.div`
 `;
 
 const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
+  AWS.config.update({
+    region: "ap-northeast-2",
+    credentials: new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: process.env.REACT_APP_IDENTITYPOOLID,
+    }),
+  });
+
   const navigate = useNavigate();
   const [reviews, setReviews] = useState([]); //해당 병원 review 가져오기
+  const [fileName, setFileName] = useState("");
   useEffect(() => {
     axios
       .post(
@@ -353,7 +362,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
         }
       )
       .then((res) => {
-        console.log("whatwhat?", res);
+        // console.log("whatwhat?", res);
         setReviews(res.data.reviewInfo);
       });
   }, [medicalInfo]);
@@ -425,17 +434,19 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
   };
 
   const submit = () => {
-    const formdata = new FormData();
-    formdata.append("content", reviewInfo.content);
-    formdata.append("kakao_userid", localStorage.getItem("userid"));
-    // formdata.append("users_id", userInfo.id);
-    formdata.append("receipts_img", imgInfo.file);
-    formdata.append("hospital_name", medicalInfo.place_name);
     axios
-      .post(`${process.env.REACT_APP_API_URL}/review/upload`, formdata, {
-        headers: { "Content-type": "multipart/form-data" },
-        withCredentials: true,
-      })
+      .post(
+        `${process.env.REACT_APP_API_URL}/review/upload`,
+        {
+          content: reviewInfo.content,
+          kakao_userid: localStorage.getItem("userid"),
+          receipts_img: fileName,
+          hospital_name: medicalInfo.place_name,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.data.status === 400) {
           Swal.fire({
@@ -476,18 +487,40 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
       file: e.target.files[0],
       filepreview: URL.createObjectURL(e.target.files[0]),
     });
+    // console.log(e.target.files[0]);
+    const upload = new AWS.S3.ManagedUpload({
+      params: {
+        Bucket: "apang-images-bucket",
+        Key: e.target.files[0].name + ".png",
+        Body: e.target.files[0],
+      },
+    });
+    const promise = upload.promise();
+    promise.then(
+      function (data) {
+        // console.log(data);
+        setFileName(data.Key);
+        alert("이미지 업로드 성공");
+      },
+      function (err) {
+        return alert("오류발생 : ", err.message);
+      }
+    );
   };
 
   //<--다시 봐야할것 -->
   const uploadhospital = () => {
-    const formdata = new FormData();
-    formdata.append("hospital_name", medicalInfo.place_name);
-    formdata.append("hospital_img", fileImage.file);
     axios
-      .post(`${process.env.REACT_APP_API_URL}/hospital/upload`, formdata, {
-        headers: { "Content-type": "multipart/form-data" },
-        withCredentials: true,
-      })
+      .post(
+        `${process.env.REACT_APP_API_URL}/hospital/upload`,
+        {
+          hospital_name: medicalInfo.place_name,
+          hospital_img: fileName,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then(() => {
         Swal.fire({
           icon: "success",
@@ -533,6 +566,25 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
       file: e.target.files[0],
       filepreview: URL.createObjectURL(e.target.files[0]),
     });
+    // console.log(e.target.files[0]);
+    const upload = new AWS.S3.ManagedUpload({
+      params: {
+        Bucket: "apang-images-bucket",
+        Key: e.target.files[0].name + ".png",
+        Body: e.target.files[0],
+      },
+    });
+    const promise = upload.promise();
+    promise.then(
+      function (data) {
+        // console.log(data);
+        setFileName(data.Key);
+        alert("이미지 업로드 성공");
+      },
+      function (err) {
+        return alert("오류발생 : ", err.message);
+      }
+    );
   };
   //<-- 영수증 저장 끝 -->
 
@@ -572,7 +624,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
             <DivBox>
               <Box onChange={saveFileImage}>
                 <ImgHospital
-                  src={require(`../../public/hospitals/${medicalPhoto.hospital_img}`)}
+                  src={`${process.env.REACT_APP_IMAGES_BUCKET}/${medicalPhoto.hospital_img}`}
                   alt="uploadimage"
                 />
               </Box>
@@ -733,7 +785,7 @@ const MedicalDetail = ({ medicalInfo, userInfo, isLogin, auth }) => {
                 <DivBox1>
                   <Box>
                     <ImgReview
-                      src={require(`../../public/receipts/${review.receipts_img}`)}
+                      src={`${process.env.REACT_APP_IMAGES_BUCKET}/${review.receipts_img}`}
                       alt="uploadimg"
                     />
                   </Box>

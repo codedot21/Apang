@@ -264,7 +264,7 @@ function QnaPage({ isLogin, auth }) {
         }
       )
       .then((res) => {
-        console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
+        // console.log("res.data.qnaInfo는모야?", res.data.qnaInfo);
         setqnaInfo(res.data.qnaInfo);
         setIsLoading(false);
       });
