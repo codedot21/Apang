@@ -7,6 +7,7 @@ import { BsTrash } from "react-icons/bs";
 import Swal from "sweetalert2";
 import { message } from "../modules/message";
 import { valid } from "../modules/validator";
+import AWS from "aws-sdk";
 
 export const UserContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -286,9 +287,17 @@ const Prosecutor = styled.div`
 // 유효성 끝
 
 function UserMypage(props) {
+  AWS.config.update({
+    region: "ap-northeast-2",
+    credentials: new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: process.env.REACT_APP_IDENTITYPOOLID,
+    }),
+  });
+
   const navigate = useNavigate();
   const [myQnaInfo, setmyQnaInfo] = useState([]);
   const [myReviewInfo, setmyReviewInfo] = useState([]);
+  const [fileName, setFileName] = useState("");
 
   //나의 qna 전부 불러오기
   useEffect(() => {
@@ -301,7 +310,7 @@ function UserMypage(props) {
         }
       )
       .then((res) => {
-        console.log("myqnainfo?", res.data.myQnaInfo);
+        // console.log("myqnainfo?", res.data.myQnaInfo);
         setmyQnaInfo(res.data.myQnaInfo);
       });
   }, []);
@@ -321,8 +330,8 @@ function UserMypage(props) {
       });
   }, []);
 
-  console.log(props.userInfo);
-  console.log(myQnaInfo);
+  // console.log(props.userInfo);
+  // console.log(myQnaInfo);
   const [imgInfo, setImgInfo] = useState({
     // 사진수정
     file: [],
@@ -340,12 +349,32 @@ function UserMypage(props) {
     newPassword: "",
     passwordConfirm: "",
   });
+
   const handleImgChange = (e) => {
     setImgInfo({
       ...imgInfo,
       file: e.target.files[0],
       filepreview: URL.createObjectURL(e.target.files[0]),
     });
+    // console.log(e.target.files[0]);
+    const upload = new AWS.S3.ManagedUpload({
+      params: {
+        Bucket: "apang-images-bucket",
+        Key: e.target.files[0].name + ".png",
+        Body: e.target.files[0],
+      },
+    });
+    const promise = upload.promise();
+    promise.then(
+      function (data) {
+        // console.log(data);
+        setFileName(data.Key);
+        alert("이미지 업로드 성공");
+      },
+      function (err) {
+        return alert("오류발생 : ", err.message);
+      }
+    );
   };
   const handleInputChange = (key) => (e) => {
     setUserInfo({
@@ -392,7 +421,7 @@ function UserMypage(props) {
           }
         )
         .then(() => {
-          console.log("ria");
+          // console.log("ria");
           Swal.fire({
             icon: "success",
             title: "Apang 정보수정",
@@ -400,16 +429,18 @@ function UserMypage(props) {
           });
         });
     } else {
-      const formdata = new FormData();
-      formdata.append("apang", imgInfo.file);
-      // console.log(formdata);
-      formdata.append("nickname", userInfo.nickname);
-      formdata.append("token", localStorage.getItem("accessToken"));
       axios
-        .post(`${process.env.REACT_APP_API_URL}/public/profile`, formdata, {
-          headers: { "Content-type": "multipart/form-data" },
-          withCredentials: true,
-        })
+        .post(
+          `${process.env.REACT_APP_API_URL}/public/profile`,
+          {
+            fileName: fileName,
+            nickname: userInfo.nickname,
+            token: localStorage.getItem("accessToken"),
+          },
+          {
+            withCredentials: true,
+          }
+        )
         .then(() => {
           Swal.fire({
             icon: "success",
@@ -563,7 +594,7 @@ function UserMypage(props) {
                           height: "90px",
                           objectFit: "scale-down",
                         }}
-                        src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
+                        src={`${process.env.REACT_APP_IMAGES_BUCKET}/${props.userInfo.profile_img}`}
                         alt="publicimage"
                       />
                     )}
@@ -641,7 +672,7 @@ function UserMypage(props) {
                       height: "90px",
                       objectFit: "scale-down",
                     }}
-                    src={require(`../../public/uploads/${kakao}`)}
+                    src={`${process.env.REACT_APP_IMAGES_BUCKET}/kakao.png`}
                     alt="publicimage"
                   />
                 </Box>

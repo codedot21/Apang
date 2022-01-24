@@ -48,7 +48,7 @@ function App() {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setUserInfo(res.data.userInfo);
           setAuth(res.data.userInfo.auth);
           setIsLogin(true);

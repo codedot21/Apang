@@ -74,7 +74,7 @@ function AuthPage() {
       })
       .then(() => {
         // 이메일js
-        console.log("이메일 js");
+        // console.log("이메일 js");
         axios.post("https://api.emailjs.com/api/v1.0/email/send", {
           service_id: "service_3qi21lj",
           template_id: "template_dm416d4",

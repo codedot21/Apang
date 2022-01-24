@@ -349,7 +349,7 @@ function SignUpModal({ open, close, handleResponseSuccess, swi }) {
                 }
               )
               .then((res) => {
-                console.log("여기로 오지않음?");
+                // console.log("여기로 오지않음?");
                 handleResponseSuccess(res.data.data.auth);
               });
             close();
@@ -390,7 +390,7 @@ function SignUpModal({ open, close, handleResponseSuccess, swi }) {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res.status);
+          // console.log(res.status);
           if (res.data.error === 2) {
             Swal.fire({
               icon: "warning",
