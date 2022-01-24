@@ -1,25 +1,13 @@
 const { doctors } = require("../../models");
 const { isAuthorized } = require("../tokenFunctions");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-
-const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../../../client/public/", "uploads"),
-  filename: function (req, file, cb) {
-    fileName = file.originalname;
-    console.log("들어왔나?", file);
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
 
 module.exports = async (req, res) => {
   try {
     const userInfo = isAuthorized(req);
-    console.log(userInfo);
+    // console.log(userInfo);
     if (userInfo.auth === 0) {
       const id = Object.keys(req.body).toString();
-      console.log(id);
+      // console.log(id);
       await doctors.update(
         {
           agree: "true",
@@ -32,13 +20,13 @@ module.exports = async (req, res) => {
       );
       res.status(200).send({ message: "의사 신청 완료" });
     } else {
-      console.log("이름이랑 병원명 어째뜸? : ", req.body);
+      // console.log("이름이랑 병원명 어째뜸? : ", req.body);
       const user = await doctors.findOne({
         where: {
           id: userInfo.id,
         },
       });
-      console.log("user : ", user);
+      // console.log("user : ", user);
       if (req.body.password === undefined) {
         if (req.body.onlyName) {
           if (req.body.onlyName.name === "") {
@@ -85,67 +73,39 @@ module.exports = async (req, res) => {
               id: userInfo.id,
             },
           });
-          console.log("user : ", user);
-          if (user.dataValues.profile_img !== "doctor.png") {
-            const img = user.dataValues.profile_img;
-            // console.log(img);
-            fs.unlink(
-              path.join(__dirname, "../../../client/public/uploads/", img),
-              (err) => {
-                if (err) {
-                  console.log(err);
-                }
+          // console.log("user : ", user);
+
+          const name = req.body.name;
+          const hospital = req.body.hospital;
+          const filename = req.body.fileName;
+          if (name === "" && hospital === "") {
+            doctors.update(
+              {
+                profile_img: filename,
+              },
+              {
+                where: {
+                  id: userInfo.id,
+                },
               }
             );
-          }
-          try {
-            let upload = multer({
-              storage: storage,
-            }).single("apang");
-
-            upload(req, res, function (err) {
-              const name = req.body.name;
-              const hospital = req.body.hospital;
-              const filename = req.file.filename;
-              if (!req.file) {
-                return res.send("이미지를 올려주세요");
-              } else if (err instanceof multer.MulterError) {
-                return res.send(err);
-              } else if (err) {
-                return res.send(err);
+            res.status(200).send({ message: "의사 프로필 수정 완료" });
+          } else {
+            doctors.update(
+              {
+                profile_img: filename,
+                name: name,
+                hospital: hospital,
+              },
+              {
+                where: {
+                  id: userInfo.id,
+                },
               }
-              if (name === "" && hospital === "") {
-                doctors.update(
-                  {
-                    profile_img: filename,
-                  },
-                  {
-                    where: {
-                      id: userInfo.id,
-                    },
-                  }
-                );
-                res.status(200).send({ message: "의사 프로필 수정 완료" });
-              } else {
-                doctors.update(
-                  {
-                    profile_img: filename,
-                    name: name,
-                    hospital: hospital,
-                  },
-                  {
-                    where: {
-                      id: userInfo.id,
-                    },
-                  }
-                );
-                res
-                  .status(200)
-                  .send({ message: "이름, 병원명, 프로필사진 수정 완료" });
-              }
-            });
-          } catch (err) {
-            console.log(err);
+            );
+            res
+              .status(200)
+              .send({ message: "이름, 병원명, 프로필사진 수정 완료" });
           }
         }
       } else {

@@ -7,6 +7,7 @@ import axios from "axios";
 import { BsTrash } from "react-icons/bs";
 import { message } from "../modules/message";
 import { valid } from "../modules/validator";
+import AWS from "aws-sdk";
 
 export const DocContainer = styled(Container)`
   background-color: ${({ theme }) => theme.color.white};
@@ -311,7 +312,14 @@ const Prosecutor = styled.div`
 // 유효성 끝
 
 function DocMypage(props) {
+  AWS.config.update({
+    region: "ap-northeast-2",
+    credentials: new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: process.env.REACT_APP_IDENTITYPOOLID,
+    }),
+  });
   const navigate = useNavigate();
+  const [fileName, setFileName] = useState("");
   const [imgInfo, setImgInfo] = useState({
     file: [],
     filepreview: null,
@@ -350,6 +358,24 @@ function DocMypage(props) {
       file: e.target.files[0],
       filepreview: URL.createObjectURL(e.target.files[0]),
     });
+    const upload = new AWS.S3.ManagedUpload({
+      params: {
+        Bucket: "apang-images-bucket",
+        Key: e.target.files[0].name + ".png",
+        Body: e.target.files[0],
+      },
+    });
+    const promise = upload.promise();
+    promise.then(
+      function (data) {
+        // console.log(data);
+        setFileName(data.Key);
+        alert("이미지 업로드 성공");
+      },
+      function (err) {
+        return alert("오류발생 : ", err.message);
+      }
+    );
   };
   const handleInputChange = (key) => (e) => {
     setUserInfo({
@@ -406,15 +432,18 @@ function DocMypage(props) {
           });
         });
     } else {
-      const formdata = new FormData();
-      formdata.append("apang", imgInfo.file);
-      formdata.append("name", userInfo.name);
-      formdata.append("hospital", userInfo.hospital);
       axios
-        .post(`${process.env.REACT_APP_API_URL}/doctor/profile`, formdata, {
-          headers: { "Content-type": "multipart/form-data" },
-          withCredentials: true,
-        })
+        .post(
+          `${process.env.REACT_APP_API_URL}/doctor/profile`,
+          {
+            fileName: fileName,
+            name: userInfo.name,
+            hospital: userInfo.hospital,
+          },
+          {
+            withCredentials: true,
+          }
+        )
         .then(() => {
           Swal.fire({
             icon: "success",
@@ -541,7 +570,7 @@ function DocMypage(props) {
                       height: "90px",
                       objectFit: "scale-down",
                     }}
-                    src={require(`../../public/uploads/${props.userInfo.profile_img}`)}
+                    src={`${process.env.REACT_APP_IMAGES_BUCKET}/${props.userInfo.profile_img}`}
                     alt="publicimage"
                   />
                 )}

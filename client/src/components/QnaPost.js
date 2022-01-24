@@ -363,7 +363,7 @@ function QnaPost({ isLogin, userInfo, auth }) {
       )
       .then((res) => {
         setCommentList(res.data.comments);
-        console.log("QnaPost : ", res.data.comments.length);
+        // console.log("QnaPost : ", res.data.comments.length);
       });
   }, []);
 

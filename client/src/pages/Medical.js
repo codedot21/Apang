@@ -184,7 +184,7 @@ const Medical = ({ medical, medicalInfoHandling, userInfo, isLogin, auth }) => {
           // });
           // })
           .catch((err) => {
-            console.log(err);
+            // console.log(err);
           });
       },
       (err) => {
