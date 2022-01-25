@@ -12,3 +12,23 @@ Apang(아팡)은 방문한 사람들의 후기를 통해 병원을 선택하는 
 
 ### [아팡사용하기](http://a-pang.ga)
 ### [More Infomation](https://github.com/codestates/Apang/wiki)
+
+## 사용 스택
+<img src="https://user-images.githubusercontent.com/69062156/147723855-192db964-c0aa-4d41-b7d4-99c4ff888164.png"></img>
+#### Front
+<span><img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"/></span>
+<img src="https://img.shields.io/badge/StyledComponents-DB7093?style=flat-square&logo=styled-components&logoColor=white"/>
+<img src="https://img.shields.io/badge/React Router-CA4245?style=flat-square&logo=React Router&logoColor=white"/>
+<img src="https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=HTML5&logoColor=white"/>
+<img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=CSS3&logoColor=white"/></span>
+
+#### Back
+<span><img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/>
+<img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=Express&logoColor=white"/>
+<img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=flat-square&logo=JSON Web Tokens&logoColor=white"/>
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/>
+<img src="https://img.shields.io/badge/Sequelize-52B0E7?style=flat-square&logo=Sequelize&logoColor=white"/>
+<img src="https://img.shields.io/badge/Axios-1572B6?style=flat-square&logo=Axios&logoColor=white"/></span>
+
+## 팀 소개
+
