@@ -42,7 +42,7 @@ Apang(아팡)은 방문한 사람들의 후기를 통해 병원을 선택하는 
 |김경훈|팀장|Back-end|
 |권상현|팀원|Front-end|
 |김장겸|팀원|Front-end|
-|오예림|팀원|Back-end|
+|오예림|팀원|Back-end
 
 
 
